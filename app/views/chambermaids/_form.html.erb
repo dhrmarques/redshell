@@ -1,0 +1,33 @@
+<%= form_for(@chambermaid) do |f| %>
+  <% if @chambermaid.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@chambermaid.errors.count, "error") %> prohibited this chambermaid from being saved:</h2>
+
+      <ul>
+      <% @chambermaid.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :login %><br>
+    <%= f.text_field :login %>
+  </div>
+  <div class="field">
+    <%= f.label :passcode %><br>
+    <%= f.text_field :passcode %>
+  </div>
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :surname %><br>
+    <%= f.text_field :surname %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

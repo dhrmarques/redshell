@@ -1,0 +1,24 @@
+<h1>Listing tasks for <%= @chambermaid.desc %></h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Room</th>
+      <th>Due</th>
+      <th>Checkin</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @list.each do |task| %>
+      <tr>
+        <td><%= task.description %></td>
+        <td><%= task.room.desc %></td>
+        <td><%= task.due %></td>
+        <td><%= link_to 'CHECKIN', checkin_task_path(task) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

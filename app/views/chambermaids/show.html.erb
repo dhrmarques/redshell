@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Login:</strong>
+  <%= @chambermaid.login %>
+</p>
+
+<p>
+  <strong>Passcode:</strong>
+  <%= @chambermaid.passcode %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @chambermaid.name %>
+</p>
+
+<p>
+  <strong>Surname:</strong>
+  <%= @chambermaid.surname %>
+</p>
+
+<%= link_to 'Edit', edit_chambermaid_path(@chambermaid) %> |
+<%= link_to 'Back', chambermaids_path %>

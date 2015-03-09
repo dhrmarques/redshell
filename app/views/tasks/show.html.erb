@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @task.description %>
+</p>
+
+<p>
+  <strong>Chambermaid assigned:</strong>
+  <%= @task.chambermaid.desc %>
+</p>
+
+<p>
+  <strong>Location (room):</strong>
+  <%= @task.room.desc %>
+</p>
+
+<p>
+  <strong>Due:</strong>
+  <%= @task.due %>
+</p>
+
+<p>
+  <strong>Checkin:</strong>
+  <%= @task.checkin %>
+</p>
+
+<%= link_to 'Edit', edit_task_path(@task) %> |
+<%= link_to 'Back', tasks_path %>
