@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  qty: 1.5
+  measure_unit: MyString
+  as_int: false
+  title: MyString
+  description: MyString
+
+two:
+  qty: 1.5
+  measure_unit: MyString
+  as_int: false
+  title: MyString
+  description: MyString
