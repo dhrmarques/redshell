@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @task_type.title %>
+</p>
+
+<p>
+  <strong>Week days:</strong>
+  <%= @task_type.week_days %>
+</p>
+
+<p>
+  <strong>Each n weeks:</strong>
+  <%= @task_type.each_n_weeks %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @task_type.description %>
+</p>
+
+<%= link_to 'Edit', edit_task_type_path(@task_type) %> |
+<%= link_to 'Back', task_types_path %>
