@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :task_domains
+
   resources :task_types
 
   resources :tasks

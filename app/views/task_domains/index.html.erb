@@ -1,0 +1,27 @@
+<h1>Listing task_domains</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @task_domains.each do |task_domain| %>
+      <tr>
+        <td><%= task_domain.title %></td>
+        <td><%= task_domain.description %></td>
+        <td><%= link_to 'Show', task_domain %></td>
+        <td><%= link_to 'Edit', edit_task_domain_path(task_domain) %></td>
+        <td><%= link_to 'Destroy', task_domain, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Task domain', new_task_domain_path %>
