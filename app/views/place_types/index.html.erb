@@ -1,0 +1,31 @@
+<h1>Listing place_types</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Restricted</th>
+      <th>Common</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @place_types.each do |place_type| %>
+      <tr>
+        <td><%= place_type.title %></td>
+        <td><%= place_type.description %></td>
+        <td><%= place_type.restricted %></td>
+        <td><%= place_type.common %></td>
+        <td><%= link_to 'Show', place_type %></td>
+        <td><%= link_to 'Edit', edit_place_type_path(place_type) %></td>
+        <td><%= link_to 'Destroy', place_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Place type', new_place_type_path %>

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>After:</strong>
+  <%= @task.after %>
+</p>
+
+<p>
+  <strong>Before:</strong>
+  <%= @task.before %>
+</p>
+
+<p>
+  <strong>Checkin start:</strong>
+  <%= @task.checkin_start %>
+</p>
+
+<p>
+  <strong>Checkin finish:</strong>
+  <%= @task.checkin_finish %>
+</p>
+
+<p>
+  <strong>Details:</strong>
+  <%= @task.details %>
+</p>
+
+<%= link_to 'Edit', edit_task_path(@task) %> |
+<%= link_to 'Back', tasks_path %>

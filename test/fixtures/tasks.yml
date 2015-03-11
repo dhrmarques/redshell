@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  after: 2015-03-10 21:35:30
+  before: 2015-03-10 21:35:30
+  checkin_start: 2015-03-10 21:35:30
+  checkin_finish: 2015-03-10 21:35:30
+  details: MyText
+
+two:
+  after: 2015-03-10 21:35:30
+  before: 2015-03-10 21:35:30
+  checkin_start: 2015-03-10 21:35:30
+  checkin_finish: 2015-03-10 21:35:30
+  details: MyText
