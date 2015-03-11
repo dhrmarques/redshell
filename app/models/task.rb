@@ -1,4 +1,7 @@
 class Task < ActiveRecord::Base
+
+	has_one :employee
+	has_one :place
   
   validate :start_task_time_and_after_validation
   validate :after_validation

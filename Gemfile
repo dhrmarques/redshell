@@ -33,6 +33,7 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+# Using byebug because debugger doesn't work with Ruby 2.0 and higher
 gem 'byebug', '~> 3.5.1', group: [:development, :test]
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
