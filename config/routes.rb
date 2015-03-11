@@ -1,4 +1,20 @@
 Rails.application.routes.draw do
+  resources :tools
+
+  resources :task_domains
+
+  resources :task_types
+
+  resources :tasks
+
+  resources :place_types
+
+  resources :places
+
+  resources :employee_types
+
+  resources :employees
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Qty:</strong>
+  <%= @tool.qty %>
+</p>
+
+<p>
+  <strong>Measure unit:</strong>
+  <%= @tool.measure_unit %>
+</p>
+
+<p>
+  <strong>As int:</strong>
+  <%= @tool.as_int %>
+</p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @tool.title %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @tool.description %>
+</p>
+
+<%= link_to 'Edit', edit_tool_path(@tool) %> |
+<%= link_to 'Back', tools_path %>

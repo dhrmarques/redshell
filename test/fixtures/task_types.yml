@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  week_days: MyString
+  each_n_weeks: 
+  description: MyText
+
+two:
+  title: MyString
+  week_days: MyString
+  each_n_weeks: 
+  description: MyText

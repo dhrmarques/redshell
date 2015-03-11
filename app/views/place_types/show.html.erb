@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @place_type.title %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @place_type.description %>
+</p>
+
+<p>
+  <strong>Restricted:</strong>
+  <%= @place_type.restricted %>
+</p>
+
+<p>
+  <strong>Common:</strong>
+  <%= @place_type.common %>
+</p>
+
+<%= link_to 'Edit', edit_place_type_path(@place_type) %> |
+<%= link_to 'Back', place_types_path %>

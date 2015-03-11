@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @task_domain.title %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @task_domain.description %>
+</p>
+
+<%= link_to 'Edit', edit_task_domain_path(@task_domain) %> |
+<%= link_to 'Back', task_domains_path %>
