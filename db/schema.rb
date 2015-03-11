@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150311004718) do
+ActiveRecord::Schema.define(version: 20150311201959) do
 
   create_table "employee_types", force: true do |t|
     t.string   "title"
@@ -46,6 +46,11 @@ ActiveRecord::Schema.define(version: 20150311004718) do
     t.datetime "updated_at"
   end
 
+  create_table "responsibilities", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "task_domains", force: true do |t|
     t.string   "title"
     t.string   "description"
@@ -73,9 +78,6 @@ ActiveRecord::Schema.define(version: 20150311004718) do
   end
 
   create_table "tools", force: true do |t|
-    t.float    "qty"
-    t.string   "measure_unit"
-    t.boolean  "as_int"
     t.string   "title"
     t.string   "description"
     t.datetime "created_at"
