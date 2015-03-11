@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :place_types
+
   resources :places
 
   resources :employee_types
