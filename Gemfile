@@ -7,6 +7,7 @@ gem 'rails', '4.1.8'
 gem 'sqlite3'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
+gem 'bootstrap-sass', '~> 3.3.3'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .js.coffee assets and views
@@ -32,9 +33,8 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-# Use debugger
-# gem 'debugger', group: [:development, :test]
-gem 'byebug', '~> 3.5.1'
+# Using byebug because debugger doesn't work with Ruby 2.0 and higher
+gem 'byebug', '~> 3.5.1', group: [:development, :test]
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin]
