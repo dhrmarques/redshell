@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :tasks
+
   resources :place_types
 
   resources :places
