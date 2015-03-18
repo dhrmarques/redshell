@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :employees
   resources :tools
 
   resources :task_domains
@@ -14,6 +15,8 @@ Rails.application.routes.draw do
   resources :employee_types
 
   resources :employees
+
+  root 'employees#index' 
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
