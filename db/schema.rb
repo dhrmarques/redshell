@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150318174801) do
+ActiveRecord::Schema.define(version: 20150318190944) do
 
   create_table "employee_types", force: true do |t|
     t.string   "title"
@@ -38,9 +38,11 @@ ActiveRecord::Schema.define(version: 20150318174801) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
+    t.integer  "employee_type_id"
   end
 
   add_index "employees", ["email"], name: "index_employees_on_email", unique: true
+  add_index "employees", ["employee_type_id"], name: "index_employees_on_employee_type_id"
   add_index "employees", ["reset_password_token"], name: "index_employees_on_reset_password_token", unique: true
 
   create_table "place_types", force: true do |t|
@@ -57,12 +59,20 @@ ActiveRecord::Schema.define(version: 20150318174801) do
     t.string   "compl"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "place_type_id"
   end
+
+  add_index "places", ["place_type_id"], name: "index_places_on_place_type_id"
 
   create_table "responsibilities", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "responsibility_id"
+    t.integer  "task_domain_id"
   end
+
+  add_index "responsibilities", ["responsibility_id"], name: "index_responsibilities_on_responsibility_id"
+  add_index "responsibilities", ["task_domain_id"], name: "index_responsibilities_on_task_domain_id"
 
   create_table "task_domains", force: true do |t|
     t.string   "title"
@@ -78,7 +88,10 @@ ActiveRecord::Schema.define(version: 20150318174801) do
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "task_domain_id"
   end
+
+  add_index "task_types", ["task_domain_id"], name: "index_task_types_on_task_domain_id"
 
   create_table "tasks", force: true do |t|
     t.datetime "after"
@@ -89,13 +102,23 @@ ActiveRecord::Schema.define(version: 20150318174801) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "json"
+    t.integer  "place_id"
+    t.integer  "employee_id"
+    t.integer  "task_type_id"
   end
+
+  add_index "tasks", ["employee_id"], name: "index_tasks_on_employee_id"
+  add_index "tasks", ["place_id"], name: "index_tasks_on_place_id"
+  add_index "tasks", ["task_type_id"], name: "index_tasks_on_task_type_id"
 
   create_table "tools", force: true do |t|
     t.string   "title"
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "task_id"
   end
+
+  add_index "tools", ["task_id"], name: "index_tools_on_task_id"
 
 end
