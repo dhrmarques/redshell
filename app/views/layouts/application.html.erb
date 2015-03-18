@@ -7,7 +7,10 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-
+<% if employee_signed_in? %>	
+	<p>Bem vindo, <%= current_employee.name %></p>
+	<%= link_to "Sair", destroy_employee_session_path, method: :delete %>
+<% end %>
 <%= yield %>
 
 </body>
