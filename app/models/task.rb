@@ -2,6 +2,7 @@ class Task < ActiveRecord::Base
 
 	belongs_to :employee
 	belongs_to :place
+  belongs_to :task_type
   
   validate :start_task_time_and_after_validation
   validate :after_validation
