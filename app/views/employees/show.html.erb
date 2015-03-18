@@ -24,6 +24,15 @@
   <strong>Birth:</strong>
   <%= @employee.birth %>
 </p>
-
+<p>
+  <strong>Tasks: </strong>
+  <%= @employee.tasks.each do |task|%>
+    <%= task%>
+  <% end %>
+</p>
+<%= form_for @employee, url: assign_task_employee_path(@employee.id) do |f|%>
+  <%= select_tag(:task_id, options_for_select(@tasks.collect { |task| [task.id, task.id] }), {:blank => false})%>
+  <%= f.submit %>
+<% end %>
 <%= link_to 'Edit', edit_employee_path(@employee) %> |
 <%= link_to 'Back', employees_path %>

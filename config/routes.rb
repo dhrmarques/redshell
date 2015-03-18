@@ -14,6 +14,12 @@ Rails.application.routes.draw do
   resources :employee_types
 
   resources :employees
+  resources :employees do
+    member do
+      patch 'assign_task', controller: :employees, action: :assign_task
+    end
+  end
+  match 'assign_task' => 'employees#assign_task', via: [:post]
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

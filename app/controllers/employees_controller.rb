@@ -10,6 +10,7 @@ class EmployeesController < ApplicationController
   # GET /employees/1
   # GET /employees/1.json
   def show
+    @tasks = Task.where(employee: nil)
   end
 
   # GET /employees/new
@@ -61,6 +62,22 @@ class EmployeesController < ApplicationController
     end
   end
 
+
+  def assign_task
+    @employee = Employee.find(params[:id])
+    @task = Task.find(params[:task_id])
+    @task.employee = @employee
+    respond_to do |format|
+      if @task.save
+        format.html { redirect_to @employee, notice: 'Employee was successfully updated.' }
+        format.json { render :show, status: :ok, location: @employee }
+      else
+        format.html { render :edit }
+        format.json { render json: @employee.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_employee
@@ -69,6 +86,7 @@ class EmployeesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def employee_params
+      # p params
       params.require(:employee).permit(:name, :last_name, :cpf, :rg, :birth)
     end
 end
