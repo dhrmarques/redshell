@@ -88,6 +88,7 @@ ActiveRecord::Schema.define(version: 20150318174801) do
     t.text     "details"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "json"
   end
 
   create_table "tools", force: true do |t|
