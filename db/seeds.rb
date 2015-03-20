@@ -240,13 +240,12 @@ if exec_list.include? :employees
 	employees = []
 	ntotal = 2 * n_places + Random.rand(n_places)
 	percents = [0.35, 0.20, 0.20, 0.10, 0.05, 0.05, 0.05, 0.05]
-	percents = [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.05]
 	percents.each_index do |i|
 
 		et_id = ets[i].id
 		et_t = ets[i].title
 		puts "(#{et_t})"
-		(100 * percents[i]).ceil.times do |j|
+		(100 * percents[i] / percents.sum).ceil.times do |j|
 			str = et_t[0]
 			str += et_t[8] if et_t =~ /Técnico/
 			str.downcase!
