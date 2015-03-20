@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'home/index'
+
+  devise_for :employees
+
   resources :tools
 
   resources :task_domains
@@ -20,6 +24,8 @@ Rails.application.routes.draw do
     end
   end
   match 'assign_task' => 'employees#assign_task', via: [:post]
+
+  root 'employees#index' 
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

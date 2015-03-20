@@ -1,13 +1,13 @@
-<h1>Listing tasks</h1>
+<h1>Lista de Tarefas</h1>
 
 <table>
   <thead>
     <tr>
-      <th>After</th>
-      <th>Before</th>
-      <th>Checkin start</th>
-      <th>Checkin finish</th>
-      <th>Details</th>
+      <th>Data de Início</th>
+      <th>Data de Término</th>
+      <th>Data de Check-in</th>
+      <th>Data de Check-out</th>
+      <th>Detalhes</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -20,9 +20,9 @@
         <td><%= task.checkin_start %></td>
         <td><%= task.checkin_finish %></td>
         <td><%= task.details %></td>
-        <td><%= link_to 'Show', task %></td>
-        <td><%= link_to 'Edit', edit_task_path(task) %></td>
-        <td><%= link_to 'Destroy', task, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Exibir', task %></td>
+        <td><%= link_to 'Editar', edit_task_path(task) %></td>
+        <td><%= link_to 'Remover', task, method: :delete, data: { confirm: 'Você deseja remover esta tarefa?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -30,4 +30,4 @@
 
 <br>
 
-<%= link_to 'New Task', new_task_path %>
+<%= link_to 'Nova Tarefa', new_task_path %>
