@@ -12,6 +12,7 @@ exec_list = [
 #	:tools,
 #	:employee_types,
 #	:employees,
+	:task_domains,
 ]
 verbose = true
 
@@ -238,7 +239,7 @@ if exec_list.include? :employees
 	alphabet = ('a'..'z').to_a
 
 	employees = []
-	ntotal = 2 * n_places + Random.rand(n_places)
+	ntotal = (1.5 * n_places + Random.rand(0.75 * n_places)).ceil
 	percents = [0.35, 0.20, 0.20, 0.10, 0.05, 0.05, 0.05, 0.05]
 	percents.each_index do |i|
 
@@ -251,7 +252,7 @@ if exec_list.include? :employees
 			str.downcase!
 			e = {
 				name: "#{j} #{et_t}",
-				last_name: alphabet.shuffle.join[0..(3 + Random.rand(8))],
+				last_name: alphabet.shuffle.join[0..(3 + Random.rand(8))].capitalize,
 				cpf: "%03d.%03d.%03d-%02d" % [Random.rand(1000), Random.rand(1000), Random.rand(1000), Random.rand(100)],
 				birth: Date.today - 18.years - Random.rand(37 * 365).days,
 				email: "#{str}#{j}@coopel.com.br",
@@ -262,6 +263,28 @@ if exec_list.include? :employees
 			Employee.create!(e)
 		end
 	end		
+	
+# ======================================================================================================
+end
+
+if exec_list.include? :task_domains
+# ======================================================================================================
+
+	# Task Domains creation
+
+	task_domains = [
+		{title: 'Limpeza', description: 'Serviços relacionados à limpeza, higiene de locais.'},
+		{title: 'Resíduos', description: 'Serviços relacionados ao manuseio do lixo.'},
+		{title: 'Infraestrutura', description: 'Serviços relacionados à manutenção da infraestrutura.'},
+		{title: 'Hóspede', description: 'Serviços relacionados ao atendimento do hóspede.'},
+		{title: 'Roupas', description: 'Serviços relacionados à lavagem de roupas (cama, mesa e banho).'},
+		{title: 'Jardinagem', description: 'Serviços relacionados à manutenção de áreas verdes.'},
+		{title: 'Eletrônicos', description: 'Serviços relacionados à manutenção de equipamentos eletrônicos.'},
+		{title: 'Encanamento', description: 'Serviços relacionados à manutenção de encanamentos.'}
+	]
+	tds = TaskDomain.create!(task_domains)
+	puts "\n\nDOMÍNIOS DE TAREFA:\n#{task_domains}\n\n" if verbose
+
 	
 # ======================================================================================================
 end
