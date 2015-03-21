@@ -31,6 +31,9 @@
     <%= f.label :details %><br>
     <%= f.text_area :details %>
   </div>
+  <div>
+    <%= select_tag(:employee_id, options_for_select(@employees.collect { |employee| [employee.id, employee.id] }), {:include_blank => true})%>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>
