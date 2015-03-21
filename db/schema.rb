@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150318190944) do
+ActiveRecord::Schema.define(version: 20150320225417) do
 
   create_table "employee_types", force: true do |t|
     t.string   "title"
@@ -89,6 +89,8 @@ ActiveRecord::Schema.define(version: 20150318190944) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "task_domain_id"
+    t.time     "before"
+    t.time     "after"
   end
 
   add_index "task_types", ["task_domain_id"], name: "index_task_types_on_task_domain_id"
