@@ -2,5 +2,5 @@
 
 <%= render 'form' %>
 
-<%= link_to 'Show', @tool %> |
-<%= link_to 'Back', tools_path %>
+<%= link_to '<i class="fa fa-eye"></i> Ver'.html_safe, @tool, class: "btn btn-default" %> |
+<%= link_to '<i class="fa fa-arrow-left"></i> Voltar'.html_safe, tools_path, class: "btn btn-default" %>

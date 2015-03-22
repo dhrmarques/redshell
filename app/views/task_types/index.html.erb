@@ -18,9 +18,9 @@
         <td><%= task_type.week_days %></td>
         <td><%= task_type.each_n_weeks %></td>
         <td><%= task_type.description %></td>
-        <td><%= link_to 'Show', task_type %></td>
-        <td><%= link_to 'Edit', edit_task_type_path(task_type) %></td>
-        <td><%= link_to 'Destroy', task_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to '<i class="fa fa-eye"></i> Ver'.html_safe, task_type, class: "btn btn-default" %></td>
+        <td><%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_task_type_path(task_type), class: "btn btn-warning" %></td>
+        <td><%= link_to '<i class="fa fa-trash"></i> Remover'.html_safe, task_type, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
       </tr>
     <% end %>
   </tbody>

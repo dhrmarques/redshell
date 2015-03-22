@@ -10,5 +10,5 @@
   <%= @employee_type.description %>
 </p>
 
-<%= link_to 'Edit', edit_employee_type_path(@employee_type) %> |
-<%= link_to 'Back', employee_types_path %>
+<%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_employee_type_path(@employee_type), class: "btn btn-warning" %> |
+<%= link_to '<i class="fa fa-arrow-left"></i> Voltar'.html_safe, employee_types_path, class: "btn btn-default" %>

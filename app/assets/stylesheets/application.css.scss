@@ -12,4 +12,15 @@
  *
  */
 
- @import "bootstrap";
+@import "bootstrap";
+
+@import "font-awesome-sprockets.css";
+@import "font-awesome";
+
+p#session_context {
+	float:right;
+	padding: 10px;
+	a {
+		margin-left: 10px;
+	}
+}
