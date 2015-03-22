@@ -24,6 +24,11 @@
         <td><%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_employee_path(employee), class: "btn btn-warning" %></td>
         <td><%= link_to '<i class="fa fa-trash"></i> Remover'.html_safe, employee, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
       </tr>
+      <tr>
+        <% employee.tasks.each do |task| %>
+          <td><%= task %></td>
+        <% end %>
+      </tr>
     <% end %>
   </tbody>
 </table>
