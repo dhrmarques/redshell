@@ -16,6 +16,7 @@ exec_list = [
 #	:task_domains,
 #	:task_types,
 #	:tasks,
+#	:responsibilities
 ]
 verbose = true
 
@@ -352,6 +353,39 @@ if exec_list.include? :tasks
 		puts "\t#{task}" if verbose
 
 		tasks << Task.create!(task)
+	end
+	
+# ======================================================================================================
+end
+
+if exec_list.include? :responsibilities
+# ======================================================================================================
+
+	# Responsibilities creation
+
+	tdis ||= TaskDomain.select(:id).map { |td| td.id }
+	etis ||= EmployeeType.select(:id).map { |et| et.id }
+
+	hsh = {
+		etis[0] => [tdis[0], tdis[3], tdis[4]],
+		etis[1] => [tdis[4]],
+		etis[2] => [tdis[0], tdis[1], tdis[5]],
+		etis[3] => [tdis[3]],
+		etis[4] => [tdis[2], tdis[6], tdis[7]],
+		etis[5] => [tdis[6]],
+		etis[6] => [tdis[2]],
+		etis[7] => [tdis[7]],
+	}
+
+	responsibilities = []
+	hsh.keys.each do |etid|
+		hsh[etid].each do |tdid|
+
+			resp = {employee_type_id: etid, task_domain_id: tdid}
+			puts "\t#{resp}" if verbose
+
+			responsibilities << Responsibility.create!(resp)
+		end
 	end
 	
 # ======================================================================================================
