@@ -6,13 +6,16 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+# Uncomment the lines you wish to seed
 exec_list = [
 #	:placetypes,
 #	:places,
 #	:tools,
 #	:employee_types,
 #	:employees,
-	:task_domains,
+#	:task_domains,
+#	:task_types,
+#	:tasks,
 ]
 verbose = true
 
@@ -95,9 +98,10 @@ if exec_list.include? :places
 				else
 					nil
 				end
+				vacant = Random.rand(100) > 60
 
 				puts "\t\t(#{code}) #{compl} #{pt.title}..." if verbose
-				places << Place.create!(code: code, compl: compl, place_type_id: pt.id)
+				places << Place.create!(code: code, compl: compl, vacant: vacant, place_type_id: pt.id)
 			end
 
 			pt = pts_[:lav]
@@ -259,8 +263,8 @@ if exec_list.include? :employees
 				password: "senha123",
 				employee_type_id: et_id
 			}
-			puts "\t#{e}"
-			Employee.create!(e)
+			puts "\t#{e}" if verbose
+			employees << Employee.create!(e)
 		end
 	end		
 	
@@ -288,4 +292,69 @@ if exec_list.include? :task_domains
 	
 # ======================================================================================================
 end
+
+if exec_list.include? :task_types
+# ======================================================================================================
+
+	# Task Types creation
+
+	tds ||= TaskDomain.all
+	n_places = Place.all.count
+	task_types = [
+		{title: 'Faxina', week_days: '0123456', each_n_weeks: 1, description: 'Descrição da faxina.',
+			task_domain_id: tds[0], after_in_minutes: 680, before_in_minutes: 720, ignore_if_vacant: true},
+		{title: 'Retirada de lixo', week_days: '0123456', each_n_weeks: 1, description: 'Descrição da retirada.',
+			task_domain_id: tds[1], after_in_minutes: 660, before_in_minutes: 680, ignore_if_vacant: true},
+		{title: 'Vistoria estrutural', week_days: '0', each_n_weeks: 2, description: 'Descrição da vistoria.',
+			task_domain_id: tds[2], after_in_minutes: 600, before_in_minutes: (600 + [3 * n_places, 300].min), ignore_if_vacant: false},
+		{title: 'Solicitação do hóspede', description: 'Descrição do tipo de tarefa.', task_domain_id: tds[3]},
+		{title: 'Troca de lençóis', week_days: '0123456', each_n_weeks: 1, description: 'Descrição da troca.',
+			task_domain_id: tds[4], after_in_minutes: 720, before_in_minutes: 780, ignore_if_vacant: true},
+		{title: 'Troca de toalhas', week_days: '0123456', each_n_weeks: 1, description: 'Descrição da troca.',
+			task_domain_id: tds[4], after_in_minutes: 720, before_in_minutes: 750, ignore_if_vacant: true},
+		{title: 'Rega', week_days: '0123456', each_n_weeks: 1, description: 'Descrição da rega.',
+			task_domain_id: tds[5], after_in_minutes: 330, before_in_minutes: 420, ignore_if_vacant: false},
+		{title: 'Poda', week_days: '5', each_n_weeks: 4, description: 'Descrição da poda.',
+			task_domain_id: tds[5], after_in_minutes: 360, before_in_minutes: 480, ignore_if_vacant: false},
+		{title: 'Aparagem', week_days: '5', each_n_weeks: 4, description: 'Descrição da aparagem.',
+			task_domain_id: tds[5], after_in_minutes: 480, before_in_minutes: 600, ignore_if_vacant: false},
+		{title: 'Vistoria dos aparelhos', week_days: '6', each_n_weeks: 2, description: 'Descrição da vistoria.',
+			task_domain_id: tds[6], after_in_minutes: 600, before_in_minutes: (600 + [5 * n_places, 480].min), ignore_if_vacant: false},
+		{title: 'Vistoria das tubulações', week_days: '6', each_n_weeks: 2, description: 'Descrição da vistoria.',
+			task_domain_id: tds[7], after_in_minutes: 600, before_in_minutes: (600 + [4 * n_places, 400].min), ignore_if_vacant: false},
+	]
+	tts = TaskType.create!(task_types)
+
+	puts "\n\nTIPOS DE TAREFA:\n#{task_types}\n\n" if verbose
+
+	
+# ======================================================================================================
+end
+
+if exec_list.include? :tasks
+# ======================================================================================================
+
+	# Tasks creation
+
+	tts ||= TaskType.all
+	ptis ||= PlaceType.select(:id)
+	room_ids = Place.where(place_type_id: (ptis[0..3].map { |pt| pt.id })).map { |r| r.id }
+	assistant_ids = Employee.where(employee_type_id: EmployeeType.fourth.id).map { |a| a.id }
+	tasks = []
+
+	room_ids.shuffle[0..(Random.rand(room_ids.count))].each do |rid|
+		after = DateTime.now + Random.rand(3 * 60).minutes
+		before = after + 10.minutes + Random.rand(60).minutes
+		task = {
+			after: after, before: before, place_id: rid,
+			employee_id: assistant_ids.shuffle.first, task_type_id: tts.fourth.id
+		}
+		puts "\t#{task}" if verbose
+
+		tasks << Task.create!(task)
+	end
+	
+# ======================================================================================================
+end
+
 
