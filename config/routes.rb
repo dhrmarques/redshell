@@ -17,6 +17,8 @@ Rails.application.routes.draw do
 
   resources :employee_types
 
+  resources :responsibilities
+
   resources :employees
   resources :employees do
     member do
