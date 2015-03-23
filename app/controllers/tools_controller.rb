@@ -4,7 +4,7 @@ class ToolsController < ApplicationController
   # GET /tools
   # GET /tools.json
   def index
-    @tools = Tool.all
+    @tools = Tool.where(active: true)
   end
 
   # GET /tools/1

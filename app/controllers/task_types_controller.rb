@@ -4,7 +4,7 @@ class TaskTypesController < ApplicationController
   # GET /task_types
   # GET /task_types.json
   def index
-    @task_types = TaskType.all
+    @task_types = TaskType.where(active: true)
   end
 
   # GET /task_types/1

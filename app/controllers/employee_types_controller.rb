@@ -4,7 +4,7 @@ class EmployeeTypesController < ApplicationController
   # GET /employee_types
   # GET /employee_types.json
   def index
-    @employee_types = EmployeeType.all
+    @employee_types = EmployeeType.where(active: true)
   end
 
   # GET /employee_types/1

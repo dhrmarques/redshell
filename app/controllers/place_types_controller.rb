@@ -4,7 +4,7 @@ class PlaceTypesController < ApplicationController
   # GET /place_types
   # GET /place_types.json
   def index
-    @place_types = PlaceType.all
+    @place_types = PlaceType.where(active: true)
   end
 
   # GET /place_types/1

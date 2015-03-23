@@ -5,13 +5,13 @@ class EmployeesController < ApplicationController
   # GET /employees
   # GET /employees.json
   def index
-    @employees = Employee.all
+    @employees = Employee.where(active: true)
   end
 
   # GET /employees/1
   # GET /employees/1.json
   def show
-    @tasks = Task.where(employee: nil)
+    @tasks = Task.where(employee: nil, active: true)
   end
 
   # GET /employees/new

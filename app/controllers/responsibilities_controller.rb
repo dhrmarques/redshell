@@ -4,7 +4,7 @@ class ResponsibilitiesController < ApplicationController
   # GET /responsibilities
   # GET /responsibilities.json
   def index
-    @responsibilities = Responsibility.all
+    @responsibilities = Responsibility.where(active: true)
   end
 
   # GET /responsibilities/1
@@ -15,14 +15,14 @@ class ResponsibilitiesController < ApplicationController
   # GET /responsibilities/new
   def new
     @responsibility = Responsibility.new
-    @task_domains = TaskDomain.all
-    @employee_types = EmployeeType.all
+    @task_domains = TaskDomain.where(active: true)
+    @employee_types = EmployeeType.where(active: true)
   end
 
   # GET /responsibilities/1/edit
   def edit
-    @task_domains = TaskDomain.all
-    @employee_types = EmployeeType.all
+    @task_domains = TaskDomain.where(active: true)
+    @employee_types = EmployeeType.where(active: true)
   end
 
   # POST /responsibilities

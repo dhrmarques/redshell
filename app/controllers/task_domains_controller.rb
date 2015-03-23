@@ -4,7 +4,7 @@ class TaskDomainsController < ApplicationController
   # GET /task_domains
   # GET /task_domains.json
   def index
-    @task_domains = TaskDomain.all
+    @task_domains = TaskDomain.where(active: true)
   end
 
   # GET /task_domains/1
