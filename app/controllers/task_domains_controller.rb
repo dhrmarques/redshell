@@ -54,10 +54,16 @@ class TaskDomainsController < ApplicationController
   # DELETE /task_domains/1
   # DELETE /task_domains/1.json
   def destroy
-    @task_domain.destroy
+    @task_domain.active = false
+
     respond_to do |format|
-      format.html { redirect_to task_domains_url, notice: 'Task domain was successfully destroyed.' }
-      format.json { head :no_content }
+      if @task_domain.save
+        format.html { redirect_to task_domains_url, notice: 'Task domain was successfully deactivated.' }
+        format.json { head :no_content }
+      else
+        format.html { render :index }
+        format.json { render json: @task_domain.errors, status: :unprocessable_entity }
+      end
     end
   end
 

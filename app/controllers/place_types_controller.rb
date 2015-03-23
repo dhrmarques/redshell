@@ -54,10 +54,16 @@ class PlaceTypesController < ApplicationController
   # DELETE /place_types/1
   # DELETE /place_types/1.json
   def destroy
-    @place_type.destroy
+    @place_type.active = false
+
     respond_to do |format|
-      format.html { redirect_to place_types_url, notice: 'Place type was successfully destroyed.' }
-      format.json { head :no_content }
+      if @place_type.save
+        format.html { redirect_to place_types_url, notice: 'Place type was successfully deactivated.' }
+        format.json { head :no_content }
+      else
+        format.html { render :index }
+        format.json { render json: @place_type.errors, status: :unprocessable_entity }
+      end
     end
   end
 

@@ -54,10 +54,16 @@ class TaskTypesController < ApplicationController
   # DELETE /task_types/1
   # DELETE /task_types/1.json
   def destroy
-    @task_type.destroy
+    @task_type.active = false
+
     respond_to do |format|
-      format.html { redirect_to task_types_url, notice: 'Task type was successfully destroyed.' }
-      format.json { head :no_content }
+      if @task_type.save
+        format.html { redirect_to task_types_url, notice: 'Task type was successfully deactivated.' }
+        format.json { head :no_content }
+      else
+        format.html { render :index }
+        format.json { render json: @task_type.errors, status: :unprocessable_entity }
+      end
     end
   end
 

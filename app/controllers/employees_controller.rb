@@ -61,10 +61,16 @@ class EmployeesController < ApplicationController
   # DELETE /employees/1
   # DELETE /employees/1.json
   def destroy
-    @employee.destroy
+    @employee.active = false
+
     respond_to do |format|
-      format.html { redirect_to employees_url, notice: 'Employee was successfully destroyed.' }
-      format.json { head :no_content }
+      if @employee.save
+        format.html { redirect_to employees_url, notice: 'Employee was successfully deactivated.' }
+        format.json { head :no_content }
+      else
+        format.html { render :index }
+        format.json { render json: @employee.errors, status: :unprocessable_entity }
+      end
     end
   end
 

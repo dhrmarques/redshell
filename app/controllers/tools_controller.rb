@@ -54,10 +54,16 @@ class ToolsController < ApplicationController
   # DELETE /tools/1
   # DELETE /tools/1.json
   def destroy
-    @tool.destroy
+    @tool.active = false
+
     respond_to do |format|
-      format.html { redirect_to tools_url, notice: 'Tool was successfully destroyed.' }
-      format.json { head :no_content }
+      if @tool.save
+        format.html { redirect_to tools_url, notice: 'Tool was successfully deactivated.' }
+        format.json { head :no_content }
+      else
+        format.html { render :index }
+        format.json { render json: @tool.errors, status: :unprocessable_entity }
+      end
     end
   end
 

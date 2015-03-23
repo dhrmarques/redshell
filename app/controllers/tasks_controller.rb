@@ -55,10 +55,16 @@ class TasksController < ApplicationController
   # DELETE /tasks/1
   # DELETE /tasks/1.json
   def destroy
-    @task.destroy
+    @task.active = false
+
     respond_to do |format|
-      format.html { redirect_to tasks_url, notice: 'Task was successfully destroyed.' }
-      format.json { head :no_content }
+      if @task.save
+        format.html { redirect_to tasks_url, notice: 'Task was successfully deactivated.' }
+        format.json { head :no_content }
+      else
+        format.html { render :index }
+        format.json { render json: @task.errors, status: :unprocessable_entity }
+      end
     end
   end
 
