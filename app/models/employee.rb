@@ -1,4 +1,4 @@
-class Employee < ActiveRecord::Base
+class Employee < RedShellModel
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -16,8 +16,9 @@ class Employee < ActiveRecord::Base
 	end
 
 	def self.label(field = nil)
-		return 'Funcionário' if field.nil?
-		return case field
+		case field
+		when nil
+			'Funcionário'
 		when :name
 			'Nome'
 		when :last_name
@@ -35,7 +36,11 @@ class Employee < ActiveRecord::Base
 		when :password_confirmation
 			'Confirmação de senha'
 		else
-			field.to_s.capitalize
+			superclass.label field
 		end
+	end
+
+	def self.icon
+		'user'
 	end
 end

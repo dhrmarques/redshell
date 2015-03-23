@@ -1,10 +1,11 @@
-class TaskType < ActiveRecord::Base
+class TaskType < RedShellModel
 	belongs_to :task_domain
 	has_many :tasks
 
 	def self.label(field = nil)
-		return 'Tipo de Tarefa' if field.nil?
-		return case field
+		case field
+		when nil
+			'Tipo de Tarefa'
 		when :title
 			'Título'
 		when :description
@@ -20,7 +21,11 @@ class TaskType < ActiveRecord::Base
 	    when :before_in_minutes
 	    	'Antes de'
 		else
-			field.to_s.capitalize
+			superclass.label field
 		end
+	end
+
+	def self.icon
+		'tasks'
 	end
 end

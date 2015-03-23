@@ -1,19 +1,20 @@
-class PlaceType < ActiveRecord::Base
+class PlaceType < RedShellModel
 	has_many :places
 
 	def self.label(field = nil)
-		return 'Tipo de Lugar' if field.nil?
-		return case field
-		when :title
-			'Título'
-		when :description
-			'Descrição'
+		case field
+		when nil
+			'Tipo de Lugar'
 		when :restricted
 			'Acesso restrito?'
 		when :common
 			'Área comum?'
 		else
-			field.to_s.capitalize
+			superclass.label field
 		end
+	end
+
+	def self.icon
+		'home'
 	end
 end

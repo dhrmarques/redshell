@@ -2,7 +2,8 @@
 <ul>
 <% @entity_classes.each do |ec| %>
 	<li>
-		<%= link_to "<i class=\"fa fa-#{ec.second}\"></i> #{ec.first.to_s.classify.constantize}".html_safe, polymorphic_path(ec.first), class: "btn btn-info" %>
+		<% cls = ec.to_s.classify.constantize %>
+		<%= link_to "<i class=\"fa fa-#{cls.icon}\"></i> #{cls.label}".html_safe, polymorphic_path(ec), class: "btn btn-info" %>
 	</li>
 <% end %>
 </ul>

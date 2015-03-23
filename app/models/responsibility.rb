@@ -1,12 +1,17 @@
-class Responsibility < ActiveRecord::Base
+class Responsibility < RedShellModel
 	belongs_to :task_domain
 	belongs_to :employee_type
 
 	def self.label(field = nil)
-		return 'Responsabilidade' if field.nil?
-		return case field
+		case field
+		when nil
+			'Responsabilidade'
 		else
-			field.to_s.capitalize
+			superclass.label field
 		end
+	end
+
+	def self.icon
+		'briefcase'
 	end
 end

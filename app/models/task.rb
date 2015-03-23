@@ -1,4 +1,4 @@
-class Task < ActiveRecord::Base
+class Task < RedShellModel
 
 	belongs_to :employee
 	belongs_to :place
@@ -33,8 +33,9 @@ class Task < ActiveRecord::Base
   end
 
   def self.label(field = nil)
-    return 'Tarefa' if field.nil?
-    return case field
+    case field
+    when nil
+      'Tarefa'
     when :after
       'Após'
     when :before
@@ -48,8 +49,12 @@ class Task < ActiveRecord::Base
     when :json
       'JSON (Recursos)'
     else
-      field.to_s.capitalize
+      superclass.label field
     end
+  end
+
+  def self.icon
+    'clock-o'
   end
 
 end

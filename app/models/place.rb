@@ -1,10 +1,11 @@
-class Place < ActiveRecord::Base
+class Place < RedShellModel
 	belongs_to :place_type
 	has_many :tasks
 
 	def self.label(field = nil)
-		return 'Lugar' if field.nil?
-		return case field
+		case field
+		when nil
+			'Lugar'
 		when :code
 			'Código'
 		when :compl
@@ -12,7 +13,11 @@ class Place < ActiveRecord::Base
 		when :vacant
 			'Vazio?'
 		else
-			field.to_s.capitalize
+			superclass.label field
 		end
+	end
+
+	def self.icon
+		'bed'
 	end
 end
