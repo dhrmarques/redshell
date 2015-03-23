@@ -12,18 +12,6 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :qty, Tool.label(:qty) %><br>
-    <%= f.text_field :qty %>
-  </div>
-  <div class="field">
-    <%= f.label :measure_unit, Tool.label(:measure_unit) %><br>
-    <%= f.text_field :measure_unit %>
-  </div>
-  <div class="field">
-    <%= f.label :as_int, Tool.label(:as_int) %><br>
-    <%= f.check_box :as_int %>
-  </div>
-  <div class="field">
     <%= f.label :title, Tool.label(:title) %><br>
     <%= f.text_field :title %>
   </div>
@@ -32,6 +20,6 @@
     <%= f.text_field :description %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit "Criar #{Tool.label}", class: 'btn btn-success' %>
   </div>
 <% end %>
