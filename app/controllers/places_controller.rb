@@ -4,7 +4,7 @@ class PlacesController < ApplicationController
   # GET /places
   # GET /places.json
   def index
-    @places = Place.all
+    @places = Place.where(active: true)
   end
 
   # GET /places/1
@@ -54,10 +54,16 @@ class PlacesController < ApplicationController
   # DELETE /places/1
   # DELETE /places/1.json
   def destroy
-    @place.destroy
+    @place.active = false
+
     respond_to do |format|
-      format.html { redirect_to places_url, notice: 'Place was successfully destroyed.' }
-      format.json { head :no_content }
+      if @place.save
+        format.html { redirect_to places_url, notice: 'Place was successfully deactivated.' }
+        format.json { head :no_content }
+      else
+        format.html { render :index }
+        format.json { render json: @place.errors, status: :unprocessable_entity }
+      end
     end
   end
 

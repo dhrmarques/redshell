@@ -17,6 +17,8 @@ Rails.application.routes.draw do
 
   resources :employee_types
 
+  resources :responsibilities
+
   resources :employees
   resources :employees do
     member do
@@ -25,7 +27,7 @@ Rails.application.routes.draw do
   end
   match 'assign_task' => 'employees#assign_task', via: [:post]
 
-  root 'employees#index' 
+  root 'home#index' 
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

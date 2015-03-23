@@ -1,6 +1,6 @@
-<h1>Editing task_domain</h1>
+<h1>Editando <%= (:task_domain).to_s.classify.constantize.label %></h1>
 
 <%= render 'form' %>
 
-<%= link_to 'Show', @task_domain %> |
-<%= link_to 'Back', task_domains_path %>
+<%= link_to '<i class="fa fa-eye"></i> Ver'.html_safe, @task_domain, class: "btn btn-default" %> |
+<%= link_to '<i class="fa fa-arrow-left"></i> Voltar'.html_safe, task_domains_path, class: "btn btn-default" %>
