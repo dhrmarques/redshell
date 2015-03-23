@@ -3,8 +3,8 @@
 <table class="table">
   <thead>
     <tr>
-      <th>Domínio de tarefa</th>
-      <th>Tipo de funcionário</th>
+      <th><%= TaskDomain.label %></th>
+      <th><%= EmployeeType.label %></th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -24,4 +24,4 @@
 
 <br>
 
-<%= link_to '<i class="fa fa-plus-circle fa-lg"></i> Nova Responsabilidade'.html_safe, new_responsibility_path, class: "btn btn-primary" %>
+<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{Responsibility.label}".html_safe, new_responsibility_path, class: "btn btn-primary" %>

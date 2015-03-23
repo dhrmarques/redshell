@@ -12,11 +12,11 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :code %><br>
+    <%= f.label :code, Place.label(:code) %><br>
     <%= f.text_field :code %>
   </div>
   <div class="field">
-    <%= f.label :compl %><br>
+    <%= f.label :compl, Place.label(:compl) %><br>
     <%= f.text_field :compl %>
   </div>
   <div class="actions">

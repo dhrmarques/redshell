@@ -1,12 +1,12 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Domínio de tarefa:</strong>
+  <strong><%= TaskDomain.label %></strong>
   <%= @responsibility.task_domain.title %>
 </p>
 
 <p>
-  <strong>Tipo de funcionário:</strong>
+  <strong><%= EmployeeType.label %></strong>
   <%= @responsibility.employee_type.title %>
 </p>
 

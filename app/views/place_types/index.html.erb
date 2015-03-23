@@ -1,12 +1,12 @@
-<h1>Listing place_types</h1>
+<h1>Listando <%= (:place_types).to_s.classify.constantize.label %></h1>
 
 <table class="table">
   <thead>
     <tr>
-      <th>Title</th>
-      <th>Description</th>
-      <th>Restricted</th>
-      <th>Common</th>
+      <th><%= PlaceType.label :title %></th>
+      <th><%= PlaceType.label :description %></th>
+      <th><%= PlaceType.label :restricted %></th>
+      <th><%= PlaceType.label :common %></th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -28,4 +28,4 @@
 
 <br>
 
-<%= link_to '<i class="fa fa-plus-circle fa-lg"></i> Novo Place type'.html_safe, new_place_type_path, class: "btn btn-primary" %>
+<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{PlaceType.label}".html_safe, new_place_type_path, class: "btn btn-primary" %>

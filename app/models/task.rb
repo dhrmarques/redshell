@@ -32,4 +32,24 @@ class Task < ActiveRecord::Base
     end
   end
 
+  def self.label(field = nil)
+    return 'Tarefa' if field.nil?
+    return case field
+    when :after
+      'Após'
+    when :before
+      'Antes de'
+    when :checkin_start
+      'Iniciada em'
+    when :checkin_finish
+      'Finalizada em'
+    when :details
+      'Detalhes'
+    when :json
+      'JSON (Recursos)'
+    else
+      field.to_s.capitalize
+    end
+  end
+
 end

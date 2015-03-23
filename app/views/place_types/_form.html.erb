@@ -12,19 +12,19 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :title %><br>
+    <%= f.label :title, PlaceType.label(:title) %><br>
     <%= f.text_field :title %>
   </div>
   <div class="field">
-    <%= f.label :description %><br>
+    <%= f.label :description, PlaceType.label(:description) %><br>
     <%= f.text_field :description %>
   </div>
   <div class="field">
-    <%= f.label :restricted %><br>
+    <%= f.label :restricted, PlaceType.label(:restricted) %><br>
     <%= f.check_box :restricted %>
   </div>
   <div class="field">
-    <%= f.label :common %><br>
+    <%= f.label :common, PlaceType.label(:common) %><br>
     <%= f.check_box :common %>
   </div>
   <div class="actions">

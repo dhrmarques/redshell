@@ -1,12 +1,12 @@
-<h1>Listing task_types</h1>
+<h1>Listando <%= (:task_types).to_s.classify.constantize.label %></h1>
 
 <table class="table">
   <thead>
     <tr>
-      <th>Title</th>
-      <th>Week days</th>
-      <th>Each n weeks</th>
-      <th>Description</th>
+      <th><%= TaskType.label :title %></th>
+      <th><%= TaskType.label :week_days %></th>
+      <th><%= TaskType.label :each_n_weeks %></th>
+      <th><%= TaskType.label :description %></th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -28,4 +28,4 @@
 
 <br>
 
-<%= link_to '<i class="fa fa-plus-circle fa-lg"></i> Novo Task type'.html_safe, new_task_type_path, class: "btn btn-primary" %>
+<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{TaskType.label}".html_safe, new_task_type_path, class: "btn btn-primary" %>

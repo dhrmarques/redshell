@@ -1,37 +1,37 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Name:</strong>
+  <strong><%= Employee.label :name %></strong>
   <%= @employee.name %>
 </p>
 
 <p>
-  <strong>Last name:</strong>
+  <strong><%= Employee.label :last_name %></strong>
   <%= @employee.last_name %>
 </p>
 
 <p>
-  <strong>E-mail:</strong>
+  <strong><%= Employee.label :email %></strong>
   <%= @employee.email %>
 </p>
 
 <p>
-  <strong>Cpf:</strong>
+  <strong><%= Employee.label :cpf %></strong>
   <%= @employee.cpf %>
 </p>
 
 <p>
-  <strong>Rg:</strong>
+  <strong><%= Employee.label :rg %></strong>
   <%= @employee.rg %>
 </p>
 
 <p>
-  <strong>Birth:</strong>
+  <strong><%= Employee.label :birth %></strong>
   <%= @employee.birth %>
 </p>
 
 <p>
-  <strong>Tasks: </strong>
+  <strong><%= Task.label.pluralize %></strong>
   <%= @employee.tasks.each do |task|%>
     <%= task%>
   <% end %>

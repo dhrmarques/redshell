@@ -1,27 +1,12 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Qty:</strong>
-  <%= @tool.qty %>
-</p>
-
-<p>
-  <strong>Measure unit:</strong>
-  <%= @tool.measure_unit %>
-</p>
-
-<p>
-  <strong>As int:</strong>
-  <%= @tool.as_int %>
-</p>
-
-<p>
-  <strong>Title:</strong>
+  <strong><%= Tool.label :title %></strong>
   <%= @tool.title %>
 </p>
 
 <p>
-  <strong>Description:</strong>
+  <strong><%= Tool.label :description %></strong>
   <%= @tool.description %>
 </p>
 

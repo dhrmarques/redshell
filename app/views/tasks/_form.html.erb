@@ -12,23 +12,23 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :after %><br>
+    <%= f.label :after, Task.label(:after) %><br>
     <%= f.datetime_select :after %>
   </div>
   <div class="field">
-    <%= f.label :before %><br>
+    <%= f.label :before, Task.label(:before) %><br>
     <%= f.datetime_select :before %>
   </div>
   <div class="field">
-    <%= f.label :checkin_start %><br>
+    <%= f.label :checkin_start, Task.label(:checkin_start) %><br>
     <%= f.datetime_select :checkin_start %>
   </div>
   <div class="field">
-    <%= f.label :checkin_finish %><br>
+    <%= f.label :checkin_finish, Task.label(:checkin_finish) %><br>
     <%= f.datetime_select :checkin_finish %>
   </div>
   <div class="field">
-    <%= f.label :details %><br>
+    <%= f.label :details, Task.label(:details) %><br>
     <%= f.text_area :details %>
   </div>
   <div>

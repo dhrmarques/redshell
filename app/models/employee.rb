@@ -15,4 +15,27 @@ class Employee < ActiveRecord::Base
 		masked_cpf[1] + "." + masked_cpf[2] + "." + masked_cpf[3] + "-" + masked_cpf[4]
 	end
 
+	def self.label(field = nil)
+		return 'Funcionário' if field.nil?
+		return case field
+		when :name
+			'Nome'
+		when :last_name
+			'Sobrenome'
+		when :cpf
+			'CPF'
+		when :rg
+			'RG'
+		when :birth
+			'Nascimento'
+		when :email
+			'Email'
+		when :password
+			'Senha'
+		when :password_confirmation
+			'Confirmação de senha'
+		else
+			field.to_s.capitalize
+		end
+	end
 end
