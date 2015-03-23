@@ -7,6 +7,7 @@ class HomeController < ApplicationController
   		[:employee_types, 'users'],
   		[:places, 'bed'],
   		[:place_types, 'home'],
+      [:responsibilities, 'briefcase'],
   		[:task_domains, 'puzzle-piece'],
   		[:task_types, 'tasks'],
   		[:tasks, 'clock-o'],
