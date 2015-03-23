@@ -2,5 +2,5 @@
 
 <%= render 'form' %>
 
-<%= link_to 'Show', @place %> |
-<%= link_to 'Back', places_path %>
+<%= link_to '<i class="fa fa-eye"></i> Ver'.html_safe, @place, class: "btn btn-default" %> |
+<%= link_to '<i class="fa fa-arrow-left"></i> Voltar'.html_safe, places_path, class: "btn btn-default" %>

@@ -10,5 +10,5 @@
   <%= @task_domain.description %>
 </p>
 
-<%= link_to 'Edit', edit_task_domain_path(@task_domain) %> |
-<%= link_to 'Back', task_domains_path %>
+<%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_task_domain_path(@task_domain), class: "btn btn-warning" %> |
+<%= link_to '<i class="fa fa-arrow-left"></i> Voltar'.html_safe, task_domains_path, class: "btn btn-default" %>

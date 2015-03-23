@@ -1,6 +1,6 @@
 <h1>Listing place_types</h1>
 
-<table>
+<table class="table">
   <thead>
     <tr>
       <th>Title</th>
@@ -18,9 +18,9 @@
         <td><%= place_type.description %></td>
         <td><%= place_type.restricted %></td>
         <td><%= place_type.common %></td>
-        <td><%= link_to 'Show', place_type %></td>
-        <td><%= link_to 'Edit', edit_place_type_path(place_type) %></td>
-        <td><%= link_to 'Destroy', place_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to '<i class="fa fa-eye"></i> Ver'.html_safe, place_type, class: "btn btn-default" %></td>
+        <td><%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_place_type_path(place_type), class: "btn btn-warning" %></td>
+        <td><%= link_to '<i class="fa fa-trash"></i> Remover'.html_safe, place_type, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
       </tr>
     <% end %>
   </tbody>
@@ -28,4 +28,4 @@
 
 <br>
 
-<%= link_to 'New Place type', new_place_type_path %>
+<%= link_to '<i class="fa fa-plus-circle fa-lg"></i> Novo Place type'.html_safe, new_place_type_path, class: "btn btn-primary" %>

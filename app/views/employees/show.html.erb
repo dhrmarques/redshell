@@ -30,5 +30,16 @@
   <%= @employee.birth %>
 </p>
 
-<%= link_to 'Edit', edit_employee_path(@employee) %> |
-<%= link_to 'Back', employees_path %>
+<p>
+  <strong>Tasks: </strong>
+  <%= @employee.tasks.each do |task|%>
+    <%= task%>
+  <% end %>
+</p>
+<%= form_for @employee, url: assign_task_employee_path(@employee.id) do |f|%>
+  <%= select_tag(:task_id, options_for_select(@tasks.collect { |task| [task.id, task.id] }), {:blank => false})%>
+  <%= f.submit %>
+<% end %>
+
+<%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_employee_path(@employee), class: "btn btn-warning" %> |
+<%= link_to '<i class="fa fa-arrow-left"></i> Voltar'.html_safe, employees_path, class: "btn btn-default" %>
