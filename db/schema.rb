@@ -11,7 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150320225417) do
+ActiveRecord::Schema.define(version: 20150323231054) do
+
+  create_table "delayed_jobs", force: true do |t|
+    t.integer  "priority",   default: 0, null: false
+    t.integer  "attempts",   default: 0, null: false
+    t.text     "handler",                null: false
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
 
   create_table "employee_types", force: true do |t|
     t.string   "title"
@@ -60,18 +76,21 @@ ActiveRecord::Schema.define(version: 20150320225417) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "place_type_id"
+    t.boolean  "vacant"
   end
 
+  add_index "places", ["code"], name: "index_places_on_code"
   add_index "places", ["place_type_id"], name: "index_places_on_place_type_id"
+  add_index "places", ["vacant"], name: "index_places_on_vacant"
 
   create_table "responsibilities", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "responsibility_id"
     t.integer  "task_domain_id"
+    t.integer  "employee_type_id"
   end
 
-  add_index "responsibilities", ["responsibility_id"], name: "index_responsibilities_on_responsibility_id"
+  add_index "responsibilities", ["employee_type_id"], name: "index_responsibilities_on_employee_type_id"
   add_index "responsibilities", ["task_domain_id"], name: "index_responsibilities_on_task_domain_id"
 
   create_table "task_domains", force: true do |t|
@@ -89,11 +108,14 @@ ActiveRecord::Schema.define(version: 20150320225417) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "task_domain_id"
-    t.time     "before"
-    t.time     "after"
+    t.boolean  "ignore_if_vacant"
+    t.integer  "after_in_minutes"
+    t.integer  "before_in_minutes"
   end
 
+  add_index "task_types", ["each_n_weeks"], name: "index_task_types_on_each_n_weeks"
   add_index "task_types", ["task_domain_id"], name: "index_task_types_on_task_domain_id"
+  add_index "task_types", ["week_days"], name: "index_task_types_on_week_days"
 
   create_table "tasks", force: true do |t|
     t.datetime "after"

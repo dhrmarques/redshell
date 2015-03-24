@@ -25,7 +25,7 @@ class TaskTypesController < ApplicationController
   # POST /task_types.json
   def create
     @task_type = TaskType.new(task_type_params)
-
+    Recurring::DailyTest.schedule!
     respond_to do |format|
       if @task_type.save
         format.html { redirect_to @task_type, notice: 'Task type was successfully created.' }
