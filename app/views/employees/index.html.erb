@@ -6,6 +6,8 @@
       <th><%= Employee.label :name %></th>
       <th><%= Employee.label :last_name %></th>
       <th><%= Employee.label :cpf %></th>
+      <th><%= Employee.label :email %></th>
+      <th><%= EmployeeType.label %></th>
       <th><%= Employee.label :rg %></th>
       <th><%= Employee.label :birth %></th>
       <th colspan="3"></th>
@@ -18,6 +20,8 @@
         <td><%= employee.name %></td>
         <td><%= employee.last_name %></td>
         <td><%= employee.cpf %></td>
+        <td><%= employee.email %></td>
+        <td><%= employee.employee_type.title %></td>
         <td><%= employee.rg %></td>
         <td><%= employee.birth %></td>
         <td><%= link_to '<i class="fa fa-eye"></i> Ver'.html_safe, employee, class: "btn btn-default" %></td>

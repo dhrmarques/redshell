@@ -20,6 +20,10 @@
     <%= f.text_field :last_name %>
   </div>
   <div class="field">
+    <%= f.label :employee_type_id, EmployeeType.label %><br>
+    <%= f.select(:employee_type_id, options_for_select(@employee_types.collect { |et| [et.title, et.id] }, @employee.employee_type_id), prompt: "Escolha um #{EmployeeType.label.downcase}")%>
+  </div>
+  <div class="field">
     <%= f.label :email, Employee.label(:email) %><br />
     <%= f.email_field :email, autofocus: true %>
   </div>
