@@ -8,15 +8,16 @@
 
 # Uncomment the lines you wish to seed
 exec_list = [
-	:placetypes,
-	:places,
-	:tools,
-	:employee_types,
-	:employees,
-	:task_domains,
-	:task_types,
-	:tasks,
-	:responsibilities
+#	:placetypes,
+#	:places,
+#	:tools,
+#	:employee_types,
+#	:employees,
+#	:task_domains,
+#	:task_types,
+#	:tasks,
+#	:responsibilities,
+	:place_types_task_types,
 ]
 verbose = true
 
@@ -391,4 +392,24 @@ if exec_list.include? :responsibilities
 # ======================================================================================================
 end
 
+if exec_list.include? :place_types_task_types
+# ======================================================================================================
+
+	# PlaceTypes x TaskTypes associations
+
+	pts = PlaceType.all
+	ttis = TaskType.pluck(:id).sort
+	byebug
+
+	pts[0].task_types << TaskType.find(ttis - ttis[6..8])
+	pts[1].task_types << TaskType.find(ttis - ttis[6..8])
+	pts[2].task_types << TaskType.find(ttis - ttis[6..8])
+	pts[3].task_types << TaskType.find(ttis - ttis[6..8])
+	pts[4].task_types << TaskType.find(ttis[9..10])
+	pts[6].task_types << TaskType.find(ttis[1..2] + ttis[6..10])
+
+	pts.each { |pt| puts "PLACETYPE #{pt.title}\n" ; pt.task_types.each { |tt| puts "\t#{tt.title}" } } if verbose
+
+# ======================================================================================================
+end
 

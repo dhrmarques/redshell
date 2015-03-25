@@ -12,4 +12,27 @@
  *
  */
 
- @import "bootstrap";
+@import "bootstrap";
+
+@import "font-awesome-sprockets";
+@import "font-awesome";
+
+p#session_context {
+	float:right;
+	padding: 10px;
+	a {
+		margin-left: 10px;
+	}
+}
+
+a.btn.btn-primary {
+	margin: 20px;
+}
+
+ul, nav {
+	list-style-type: none;
+	li {
+		display: inline-block;
+		padding: 5px 0px 5px 5px;
+	}
+}

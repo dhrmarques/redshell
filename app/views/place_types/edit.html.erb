@@ -1,6 +1,6 @@
-<h1>Editing place_type</h1>
+<h1>Editando <%= (:place_type).to_s.classify.constantize.label %></h1>
 
 <%= render 'form' %>
 
-<%= link_to 'Show', @place_type %> |
-<%= link_to 'Back', place_types_path %>
+<%= link_to '<i class="fa fa-eye"></i> Ver'.html_safe, @place_type, class: "btn btn-default" %> |
+<%= link_to '<i class="fa fa-arrow-left"></i> Voltar'.html_safe, place_types_path, class: "btn btn-default" %>
