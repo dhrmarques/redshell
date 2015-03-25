@@ -27,6 +27,7 @@ class TasksController < ApplicationController
   # POST /tasks.json
   def create
     @task = Task.new(task_params)
+    load_needed_resources
     
     respond_to do |format|
       if @task.save
