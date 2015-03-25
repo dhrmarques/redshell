@@ -4,7 +4,7 @@ class TasksController < ApplicationController
   # GET /tasks
   # GET /tasks.json
   def index
-    @tasks = Task.where(active: true)
+    @tasks = Task.where(active: true).includes(:employee, :task_type, :place)
   end
 
   # GET /tasks/1
@@ -15,11 +15,12 @@ class TasksController < ApplicationController
   # GET /tasks/new
   def new
     @task = Task.new
-    @employees = Employee.where(active: true)
+    load_needed_resources
   end
 
   # GET /tasks/1/edit
   def edit
+    load_needed_resources
   end
 
   # POST /tasks
@@ -76,6 +77,14 @@ class TasksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def task_params
-      params.require(:task).permit(:after, :before, :checkin_start, :checkin_finish, :details)
+      params.require(:task).permit(:after, :before, :checkin_start, :checkin_finish, :details, :employee_id, :place_id, :task_type_id)
+    end
+
+    def load_needed_resources
+      @employees = Employee.where(active: true)
+      @task_domains = TaskDomain.where(active: true)
+      @task_types = TaskType.where(active: true)
+      @place_types = PlaceType.where(active: true)
+      @places = Place.where(active: true)
     end
 end

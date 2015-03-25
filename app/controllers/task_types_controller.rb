@@ -15,10 +15,12 @@ class TaskTypesController < ApplicationController
   # GET /task_types/new
   def new
     @task_type = TaskType.new
+    @task_domains = TaskDomain.where(active: true)
   end
 
   # GET /task_types/1/edit
   def edit
+    @task_domains = TaskDomain.where(active: true)
   end
 
   # POST /task_types
@@ -75,6 +77,6 @@ class TaskTypesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def task_type_params
-      params.require(:task_type).permit(:title, :week_days, :each_n_weeks, :description)
+      params.require(:task_type).permit(:title, :week_days, :each_n_weeks, :description, :task_domain_id, :ignore_if_vacant, :after_in_minutes, :before_in_minutes)
     end
 end

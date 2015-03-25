@@ -1,6 +1,11 @@
 <p id="notice"><%= notice %></p>
 
 <p>
+  <strong><%= Place.label :vacant %></strong>
+  <%= @place.vacant? %>
+</p>
+
+<p>
   <strong><%= Place.label :code %></strong>
   <%= @place.code %>
 </p>
@@ -8,6 +13,11 @@
 <p>
   <strong><%= Place.label :compl %></strong>
   <%= @place.compl %>
+</p>
+
+<p>
+  <strong><%= PlaceType.label %></strong>
+  <%= @place.place_type.title %>
 </p>
 
 <%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_place_path(@place), class: "btn btn-warning" %> |

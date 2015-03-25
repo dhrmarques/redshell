@@ -300,7 +300,7 @@ if exec_list.include? :task_types
 
 	# Task Types creation
 
-	tds ||= TaskDomain.all
+	tds = TaskDomain.pluck(:id)
 	n_places = Place.all.count
 	task_types = [
 		{title: 'Faxina', week_days: '0123456', each_n_weeks: 1, description: 'Descrição da faxina.',
