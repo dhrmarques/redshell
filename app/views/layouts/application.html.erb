@@ -8,11 +8,20 @@
 </head>
 <body>
 <% if employee_signed_in? %>
-	<p id="session_context">
-		Bem vindo, <%= current_employee.name %>
+	<p id="session_context" class="text-right">
+		Bem vindo,<br/><%= current_employee.name %><br/>
 		<%= link_to '<i class="fa fa-sign-out"></i> Sair'.html_safe, destroy_employee_session_path, method: :delete, class: "btn btn-default" %>
 	</p>
 <% end %>
+	<nav>
+		<% ApplicationHelper.menu_items.each do |mi| %>
+		<li>
+			<% cls = mi.to_s.classify.constantize %>
+			<%= link_to "<i class=\"fa fa-#{cls.icon}\"></i> #{cls.label}".html_safe, polymorphic_path(mi), class: "btn btn-xs btn-info" %>
+		</li>
+		<% end %>
+	</nav>
+
 <%= yield %>
 
 </body>

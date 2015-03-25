@@ -4,7 +4,7 @@ class ResponsibilitiesController < ApplicationController
   # GET /responsibilities
   # GET /responsibilities.json
   def index
-    @responsibilities = Responsibility.where(active: true)
+    @responsibilities = Responsibility.all
   end
 
   # GET /responsibilities/1
