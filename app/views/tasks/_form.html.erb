@@ -11,6 +11,20 @@
     </div>
   <% end %>
 
+
+  <div class="field">
+    <%= f.label :task_domain, TaskDomain.label %><br>
+    <% tdom_id = @task.task_type_id.nil? ? nil : @task.task_type.task_domain_id %>
+    <%= select_tag(:task_domain_id, options_for_select(@task_domains.collect { |tdom| [tdom.title, tdom.id] }, tdom_id), prompt: "Escolha um #{TaskDomain.label.downcase}")%>
+  </div>
+  <div class="field">
+    <%= f.label :task_type, TaskType.label %><br>
+    <%= f.select(:task_type_id, options_for_select(@task_types.collect { |ttyp| [ttyp.title, ttyp.id] }, @task.task_type_id), prompt: "Escolha um #{TaskType.label.downcase}")%>
+  </div>
+  <div class="field">
+    <%= f.label :employee_id, Employee.label %><br>
+    <%= f.select(:employee_id, options_for_select(@employees.collect { |emp| [emp.fullname, emp.id] }, @task.employee_id), prompt: "Escolha um #{Employee.label.downcase}")%>
+  </div>
   <div class="field">
     <%= f.label :after, Task.label(:after) %><br>
     <%= f.datetime_select :after %>
@@ -30,9 +44,6 @@
   <div class="field">
     <%= f.label :details, Task.label(:details) %><br>
     <%= f.text_area :details %>
-  </div>
-  <div>
-    <%= select_tag(:employee_id, options_for_select(@employees.collect { |employee| [employee.id, employee.id] }), {:include_blank => true})%>
   </div>
   <div class="actions">
     <%= f.submit "Criar #{Task.label}", class: 'btn btn-success' %>
