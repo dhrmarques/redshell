@@ -1,27 +1,27 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Data de início:</strong>
+  <strong><%= Task.label :after %></strong>
   <%= @task.after %>
 </p>
 
 <p>
-  <strong>Data de término:</strong>
+  <strong><%= Task.label :before %></strong>
   <%= @task.before %>
 </p>
 
 <p>
-  <strong>Data de check-in:</strong>
+  <strong><%= Task.label :checkin_start %></strong>
   <%= @task.checkin_start %>
 </p>
 
 <p>
-  <strong>Data de check-out:</strong>
+  <strong><%= Task.label :checkin_finish %></strong>
   <%= @task.checkin_finish %>
 </p>
 
 <p>
-  <strong>Detalhes:</strong>
+  <strong><%= Task.label :details %></strong>
   <%= @task.details %>
 </p>
 

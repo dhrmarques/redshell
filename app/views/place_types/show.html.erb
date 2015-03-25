@@ -1,22 +1,22 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Title:</strong>
+  <strong><%= PlaceType.label :title %></strong>
   <%= @place_type.title %>
 </p>
 
 <p>
-  <strong>Description:</strong>
+  <strong><%= PlaceType.label :description %></strong>
   <%= @place_type.description %>
 </p>
 
 <p>
-  <strong>Restricted:</strong>
+  <strong><%= PlaceType.label :restricted %></strong>
   <%= @place_type.restricted %>
 </p>
 
 <p>
-  <strong>Common:</strong>
+  <strong><%= PlaceType.label :common %></strong>
   <%= @place_type.common %>
 </p>
 

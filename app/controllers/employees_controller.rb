@@ -5,28 +5,31 @@ class EmployeesController < ApplicationController
   # GET /employees
   # GET /employees.json
   def index
-    @employees = Employee.all
+    @employees = Employee.where(active: true).includes(:employee_type)
   end
 
   # GET /employees/1
   # GET /employees/1.json
   def show
-    @tasks = Task.where(employee: nil)
+    @tasks = Task.where(employee: nil, active: true)
   end
 
   # GET /employees/new
   def new
     @employee = Employee.new
+    @employee_types = EmployeeType.where(active: true)
   end
 
   # GET /employees/1/edit
   def edit
+    @employee_types = EmployeeType.where(active: true)
   end
 
   # POST /employees
   # POST /employees.json
   def create
     @employee = Employee.new(employee_params)
+    byebug
 
     respond_to do |format|
       if @employee.save
@@ -61,10 +64,16 @@ class EmployeesController < ApplicationController
   # DELETE /employees/1
   # DELETE /employees/1.json
   def destroy
-    @employee.destroy
+    @employee.active = false
+
     respond_to do |format|
-      format.html { redirect_to employees_url, notice: 'Employee was successfully destroyed.' }
-      format.json { head :no_content }
+      if @employee.save
+        format.html { redirect_to employees_url, notice: 'Employee was successfully deactivated.' }
+        format.json { head :no_content }
+      else
+        format.html { render :index }
+        format.json { render json: @employee.errors, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -92,6 +101,6 @@ class EmployeesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def employee_params
-      params.require(:employee).permit(:name, :last_name, :email, :password, :password_confirmation, :cpf, :rg, :birth)
+      params.require(:employee).permit(:name, :last_name, :email, :employee_type_id, :password, :password_confirmation, :cpf, :rg, :birth)
     end
 end

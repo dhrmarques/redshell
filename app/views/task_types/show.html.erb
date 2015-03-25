@@ -1,22 +1,22 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Title:</strong>
+  <strong><%= TaskType.label :title %></strong>
   <%= @task_type.title %>
 </p>
 
 <p>
-  <strong>Week days:</strong>
+  <strong><%= TaskType.label :week_days %></strong>
   <%= @task_type.week_days %>
 </p>
 
 <p>
-  <strong>Each n weeks:</strong>
+  <strong><%= TaskType.label :each_n_weeks %></strong>
   <%= @task_type.each_n_weeks %>
 </p>
 
 <p>
-  <strong>Description:</strong>
+  <strong><%= TaskType.label :description %></strong>
   <%= @task_type.description %>
 </p>
 

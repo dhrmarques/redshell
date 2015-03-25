@@ -15,14 +15,14 @@ class ResponsibilitiesController < ApplicationController
   # GET /responsibilities/new
   def new
     @responsibility = Responsibility.new
-    @task_domains = TaskDomain.all
-    @employee_types = EmployeeType.all
+    @task_domains = TaskDomain.where(active: true)
+    @employee_types = EmployeeType.where(active: true)
   end
 
   # GET /responsibilities/1/edit
   def edit
-    @task_domains = TaskDomain.all
-    @employee_types = EmployeeType.all
+    @task_domains = TaskDomain.where(active: true)
+    @employee_types = EmployeeType.where(active: true)
   end
 
   # POST /responsibilities
@@ -59,6 +59,7 @@ class ResponsibilitiesController < ApplicationController
   # DELETE /responsibilities/1.json
   def destroy
     @responsibility.destroy
+
     respond_to do |format|
       format.html { redirect_to responsibilities_url, notice: 'Responsibility was successfully destroyed.' }
       format.json { head :no_content }

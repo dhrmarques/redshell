@@ -1,13 +1,15 @@
-<h1>Listing employees</h1>
+<h1>Listando <%= (:employees).to_s.classify.constantize.label %></h1>
 
 <table class="table">
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Last name</th>
-      <th>Cpf</th>
-      <th>Rg</th>
-      <th>Birth</th>
+      <th><%= Employee.label :name %></th>
+      <th><%= Employee.label :last_name %></th>
+      <th><%= Employee.label :cpf %></th>
+      <th><%= Employee.label :email %></th>
+      <th><%= EmployeeType.label %></th>
+      <th><%= Employee.label :rg %></th>
+      <th><%= Employee.label :birth %></th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -18,6 +20,8 @@
         <td><%= employee.name %></td>
         <td><%= employee.last_name %></td>
         <td><%= employee.cpf %></td>
+        <td><%= employee.email %></td>
+        <td><%= employee.employee_type.title %></td>
         <td><%= employee.rg %></td>
         <td><%= employee.birth %></td>
         <td><%= link_to '<i class="fa fa-eye"></i> Ver'.html_safe, employee, class: "btn btn-default" %></td>
@@ -35,4 +39,4 @@
 
 <br>
 
-<%= link_to '<i class="fa fa-plus-circle fa-lg"></i> Novo Employee'.html_safe, new_employee_path, class: "btn btn-primary" %>
+<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{Employee.label}".html_safe, new_employee_path, class: "btn btn-primary" %>

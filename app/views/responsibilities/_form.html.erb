@@ -12,16 +12,16 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :task_domain_id, 'Domínio de tarefa' %><br>
+    <%= f.label :task_domain_id, TaskDomain.label %><br>
     <%= f.select(:task_domain_id, options_for_select(@task_domains.collect { |td| [td.title, td.id] }, @responsibility.task_domain_id), prompt: 'Escolha um domínio de tarefa')%>
   </div>
 
   <div class="field">
-    <%= f.label :employee_type_id, 'Tipo de funcionário' %><br>
+    <%= f.label :employee_type_id, EmployeeType.label %><br>
     <%= f.select(:employee_type_id, options_for_select(@employee_types.collect { |et| [et.title, et.id] }, @responsibility.employee_type_id), prompt: 'Escolha um tipo de funcionário')%>
   </div>
 
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit "Criar #{Responsibility.label}", class: 'btn btn-success' %>
   </div>
 <% end %>
