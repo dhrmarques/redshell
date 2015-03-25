@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   get 'home/index'
 
-  devise_for :employees
+  devise_for :employees, controllers: {sessions: 'employees/sessions'}, skip: [:registrations]
 
   resources :tools
 
@@ -17,8 +17,7 @@ Rails.application.routes.draw do
 
   resources :employee_types
 
-  resources :employees
-  resources :employees do
+  resources :employees, controller: :employees do
     member do
       patch 'assign_task', controller: :employees, action: :assign_task
     end

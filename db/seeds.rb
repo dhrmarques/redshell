@@ -8,15 +8,15 @@
 
 # Uncomment the lines you wish to seed
 exec_list = [
-#	:placetypes,
-#	:places,
-#	:tools,
-#	:employee_types,
-#	:employees,
-#	:task_domains,
-#	:task_types,
-#	:tasks,
-#	:responsibilities
+	:placetypes,
+	:places,
+	:tools,
+	:employee_types,
+	:employees,
+	:task_domains,
+	:task_types,
+	:tasks,
+	:responsibilities
 ]
 verbose = true
 
