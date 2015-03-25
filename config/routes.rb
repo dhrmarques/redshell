@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   get 'home/index'
 
-  devise_for :employees
+  devise_for :employees, controllers: {sessions: 'employees/sessions'}, skip: [:registrations]
 
   resources :tools
 
