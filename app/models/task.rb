@@ -1,4 +1,4 @@
-class Task < ActiveRecord::Base
+class Task < RedShellModel
 
 	belongs_to :employee
 	belongs_to :place
@@ -30,6 +30,31 @@ class Task < ActiveRecord::Base
         errors[:base] << "Não é possível criar tarefas com data de check-in antes de data de check-out!"
       end
     end
+  end
+
+  def self.label(field = nil)
+    case field
+    when nil
+      'Tarefa'
+    when :after
+      'Após'
+    when :before
+      'Antes de'
+    when :checkin_start
+      'Iniciada em'
+    when :checkin_finish
+      'Finalizada em'
+    when :details
+      'Detalhes'
+    when :json
+      'JSON (Recursos)'
+    else
+      superclass.label field
+    end
+  end
+
+  def self.icon
+    'clock-o'
   end
 
 end

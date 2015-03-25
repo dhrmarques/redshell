@@ -1,6 +1,6 @@
-<h1>Editing task_type</h1>
+<h1>Editando <%= (:task_type).to_s.classify.constantize.label %></h1>
 
 <%= render 'form' %>
 
-<%= link_to 'Show', @task_type %> |
-<%= link_to 'Back', task_types_path %>
+<%= link_to '<i class="fa fa-eye"></i> Ver'.html_safe, @task_type, class: "btn btn-default" %> |
+<%= link_to '<i class="fa fa-arrow-left"></i> Voltar'.html_safe, task_types_path, class: "btn btn-default" %>

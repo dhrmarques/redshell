@@ -12,41 +12,45 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :name %><br>
+    <%= f.label :name, Employee.label(:name) %><br>
     <%= f.text_field :name %>
   </div>
   <div class="field">
-    <%= f.label :last_name %><br>
+    <%= f.label :last_name, Employee.label(:last_name) %><br>
     <%= f.text_field :last_name %>
   </div>
   <div class="field">
-    <%= f.label :email %><br />
+    <%= f.label :employee_type_id, EmployeeType.label %><br>
+    <%= f.select(:employee_type_id, options_for_select(@employee_types.collect { |et| [et.title, et.id] }, @employee.employee_type_id), prompt: "Escolha um #{EmployeeType.label.downcase}")%>
+  </div>
+  <div class="field">
+    <%= f.label :email, Employee.label(:email) %><br />
     <%= f.email_field :email, autofocus: true %>
   </div>
   <div class="field">
-    <%= f.label :password %>
+    <%= f.label :password, Employee.label(:password) %>
     <% if @validatable %>
     <em>(<%= @minimum_password_length %> characters minimum)</em>
     <% end %><br />
     <%= f.password_field :password, autocomplete: "off" %>
   </div>
   <div class="field">
-    <%= f.label :password_confirmation %><br />
+    <%= f.label :password_confirmation, Employee.label(:password_confirmation) %><br />
     <%= f.password_field :password_confirmation, autocomplete: "off" %>
   </div>
   <div class="field">
-    <%= f.label :cpf %><br>
+    <%= f.label :cpf, Employee.label(:cpf) %><br>
     <%= f.text_field :cpf %>
   </div>
   <div class="field">
-    <%= f.label :rg %><br>
+    <%= f.label :rg, Employee.label(:rg) %><br>
     <%= f.text_field :rg %>
   </div>
   <div class="field">
-    <%= f.label :birth %><br>
+    <%= f.label :birth, Employee.label(:birth) %><br>
     <%= f.date_select :birth %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit "Criar #{Employee.label}", class: 'btn btn-success' %>
   </div>
 <% end %>
