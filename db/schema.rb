@@ -11,13 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150322034340) do
+ActiveRecord::Schema.define(version: 20150325201809) do
 
   create_table "employee_types", force: true do |t|
     t.string   "title"
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "active",      default: true
+    t.string   "code"
   end
 
   create_table "employees", force: true do |t|
@@ -28,17 +30,18 @@ ActiveRecord::Schema.define(version: 20150322034340) do
     t.date     "birth"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
+    t.string   "email",                  default: "",   null: false
+    t.string   "encrypted_password",     default: "",   null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
+    t.integer  "sign_in_count",          default: 0,    null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.integer  "employee_type_id"
+    t.boolean  "active",                 default: true
   end
 
   add_index "employees", ["email"], name: "index_employees_on_email", unique: true
@@ -52,7 +55,17 @@ ActiveRecord::Schema.define(version: 20150322034340) do
     t.boolean  "common"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "active",      default: true
   end
+
+  create_table "place_types_task_types", id: false, force: true do |t|
+    t.integer "place_type_id"
+    t.integer "task_type_id"
+  end
+
+  add_index "place_types_task_types", ["place_type_id", "task_type_id"], name: "index_place_types_task_types_on_place_type_id_and_task_type_id"
+  add_index "place_types_task_types", ["place_type_id"], name: "index_place_types_task_types_on_place_type_id"
+  add_index "place_types_task_types", ["task_type_id"], name: "index_place_types_task_types_on_task_type_id"
 
   create_table "places", force: true do |t|
     t.string   "code"
@@ -61,6 +74,7 @@ ActiveRecord::Schema.define(version: 20150322034340) do
     t.datetime "updated_at"
     t.integer  "place_type_id"
     t.boolean  "vacant"
+    t.boolean  "active",        default: true
   end
 
   add_index "places", ["code"], name: "index_places_on_code"
@@ -82,6 +96,7 @@ ActiveRecord::Schema.define(version: 20150322034340) do
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "active",      default: true
   end
 
   create_table "task_types", force: true do |t|
@@ -95,6 +110,7 @@ ActiveRecord::Schema.define(version: 20150322034340) do
     t.boolean  "ignore_if_vacant"
     t.integer  "after_in_minutes"
     t.integer  "before_in_minutes"
+    t.boolean  "active",            default: true
   end
 
   add_index "task_types", ["each_n_weeks"], name: "index_task_types_on_each_n_weeks"
@@ -113,6 +129,7 @@ ActiveRecord::Schema.define(version: 20150322034340) do
     t.integer  "place_id"
     t.integer  "employee_id"
     t.integer  "task_type_id"
+    t.boolean  "active",         default: true
   end
 
   add_index "tasks", ["employee_id"], name: "index_tasks_on_employee_id"
@@ -125,6 +142,7 @@ ActiveRecord::Schema.define(version: 20150322034340) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "task_id"
+    t.boolean  "active",      default: true
   end
 
   add_index "tools", ["task_id"], name: "index_tools_on_task_id"

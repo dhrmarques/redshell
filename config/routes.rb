@@ -19,7 +19,6 @@ Rails.application.routes.draw do
 
   resources :responsibilities
 
-  resources :employees
   resources :employees do
     member do
       patch 'assign_task', controller: :employees, action: :assign_task
