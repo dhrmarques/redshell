@@ -18,7 +18,7 @@
   <tbody>
     <% @task_types.each do |task_type| %>
       <tr>
-        <td><%= task_type.task_domain.title %></td>
+        <td><%= link_to task_type.task_domain.title, task_domain_path(task_type.task_domain) %></td>
         <td><%= task_type.title %></td>
         <td><%= task_type.week_days %></td>
         <td><%= task_type.each_n_weeks %></td>

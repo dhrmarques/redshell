@@ -2,7 +2,7 @@
 
 <p>
   <strong><%= TaskDomain.label %></strong>
-  <%= @task_type.task_domain.title %>
+  <%= link_to @task_type.task_domain.title, task_domain_path(@task_type.task_domain) %>
 </p>
 
 <p>
