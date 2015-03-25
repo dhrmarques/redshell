@@ -58,16 +58,11 @@ class ResponsibilitiesController < ApplicationController
   # DELETE /responsibilities/1
   # DELETE /responsibilities/1.json
   def destroy
-    @responsibility.active = false
+    @responsibility.destroy
 
     respond_to do |format|
-      if @responsibility.save
-        format.html { redirect_to responsibilities_url, notice: 'Responsibility was successfully deactivated.' }
-        format.json { head :no_content }
-      else
-        format.html { render :index }
-        format.json { render json: @responsibility.errors, status: :unprocessable_entity }
-      end
+      format.html { redirect_to responsibilities_url, notice: 'Responsibility was successfully destroyed.' }
+      format.json { head :no_content }
     end
   end
 

@@ -1,6 +1,7 @@
 class TaskType < RedShellModel
 	belongs_to :task_domain
 	has_many :tasks
+	has_and_belongs_to_many :place_types
 
 	def self.label(field = nil)
 		case field
