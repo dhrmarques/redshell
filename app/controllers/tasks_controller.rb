@@ -70,6 +70,21 @@ class TasksController < ApplicationController
     end
   end
 
+  # GET /tasks/pick_domain
+  def pick_domain
+    tdid = params[:domain_id]
+    @task_types = TaskType.where(task_domain_id: tdid)
+    employee_type_ids = Responsibility.where(task_domain_id: tdid).pluck(:employee_type_id).uniq
+    @employees = Employee.where(employee_type_id: employee_type_ids).order(:employee_type_id)
+
+    render json: {
+      task_types: @task_types.map { |tt| [tt.id, tt.title, tt.description] },
+      task_types_prompt: "Escolha um #{TaskType.label.downcase}",
+      employees: @employees.map { |emp| [emp.id, "(#{emp.employee_type.title}) - #{emp.fullname}"] },
+      employees_prompt: "Escolha um #{Employee.label.downcase}"
+    } if request.xhr?
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_task
