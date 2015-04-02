@@ -1,10 +1,12 @@
 class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
+  before_action :set_employees, only: [:new, :edit, :update]
+  before_action :set_general_tools, only: [:new, :edit]
 
   # GET /tasks
   # GET /tasks.json
   def index
-    @tasks = Task.where(active: true)
+    @tasks = Task.where(active: true).includes(:tools)
   end
 
   # GET /tasks/1
@@ -15,7 +17,6 @@ class TasksController < ApplicationController
   # GET /tasks/new
   def new
     @task = Task.new
-    @employees = Employee.where(active: true)
   end
 
   # GET /tasks/1/edit
@@ -26,7 +27,8 @@ class TasksController < ApplicationController
   # POST /tasks.json
   def create
     @task = Task.new(task_params)
-    @tools = Tool.all()
+    # @tools = Tool.where(id: tools_params["tools"])
+    # @task.tools << @tools
 
     respond_to do |format|
       if @task.save
@@ -41,7 +43,7 @@ class TasksController < ApplicationController
 
   # PATCH/PUT /tasks/1
   # PATCH/PUT /tasks/1.json
-  def update
+  def update    
     respond_to do |format|
       if @task.update(task_params)
         format.html { redirect_to @task, notice: 'Task was successfully updated.' }
@@ -75,8 +77,20 @@ class TasksController < ApplicationController
       @task = Task.find(params[:id])
     end
 
+    def set_employees
+      @employees = Employee.where(active: true)
+    end
+
+    def set_general_tools
+      @general_tools = Tool.where(active: true).where.not(id: @task.tools.map {|t| t.id})
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def task_params
-      params.require(:task).permit(:after, :before, :checkin_start, :checkin_finish, :details)
+      params.require(:task).permit(:after, :before, :checkin_start, :checkin_finish, :details, :employee_id, tool_ids: [])
     end
+
+    # def tools_params
+    #   params.require(:task).permit(tools: [])
+    # end
 end

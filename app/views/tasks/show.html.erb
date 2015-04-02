@@ -25,5 +25,13 @@
   <%= @task.details %>
 </p>
 
+<% if @task.tools.any? %><h2><%= Task.label :tools %></h2><% end %>
+<p>
+  <% @task.tools.each do |t| %>
+    <p><%= t.title %>: <%= t.description %></p>
+  <% end %>
+</p>
+
+
 <%= link_to 'Editar', edit_task_path(@task) %> |
 <%= link_to '</i> Voltar'.html_safe, tasks_path %>
