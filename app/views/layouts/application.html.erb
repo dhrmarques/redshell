@@ -29,5 +29,20 @@
 
 <%= yield %>
 
+<script type="text/javascript">
+  var orderingArray = []
+  $(".js-data-tables th").each(function(){
+    if($(this).hasClass("no-order")){
+      orderingArray.push({ "orderable": false });
+    } else {
+      orderingArray.push(null);
+    }
+  });
+  var dataTable = $('.js-data-tables').DataTable( {
+    pageLength: 10,
+    "columns": orderingArray
+  });
+</script>
+
 </body>
 </html>

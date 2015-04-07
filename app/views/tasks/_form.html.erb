@@ -55,7 +55,7 @@
       <table class="table table-condensed js-data-tables">
         <thead>
           <tr>
-            <th></th>
+            <th class="no-order"></th>
             <th>Nome</th>
             <th>Descrição</th>
           </tr>
@@ -80,9 +80,17 @@
 <% end %>
 
 <script type="text/javascript">
-  var array = "";
+  var orderingArray = []
+  $(".js-data-tables th").each(function(){
+    if($(this).hasClass("no-order")){
+      orderingArray.push({ "orderable": false });
+    } else {
+      orderingArray.push(null);
+    }
+  });
   var dataTable = $('.js-data-tables').DataTable( {
-    pageLength: 10
+    pageLength: 10,
+    "columns": orderingArray
   });
 
   // cuidado com delegate

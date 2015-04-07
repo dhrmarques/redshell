@@ -1,12 +1,14 @@
 <h1>Listando <%= (:employee_types).to_s.classify.constantize.label %></h1>
 
-<table class="table">
+<table class="table js-data-tables">
   <thead>
     <tr>
       <th><%= EmployeeType.label :title %></th>
       <th><%= EmployeeType.label :code %></th>
       <th><%= EmployeeType.label :description %></th>
-      <th colspan="3"></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
     </tr>
   </thead>
 
