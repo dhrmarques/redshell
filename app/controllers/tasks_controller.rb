@@ -27,6 +27,7 @@ class TasksController < ApplicationController
   # POST /tasks.json
   def create
     @task = Task.new(task_params)
+    load_needed_resources
     
     respond_to do |format|
       if @task.save
@@ -67,6 +68,33 @@ class TasksController < ApplicationController
         format.json { render json: @task.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  # GET /tasks/pick_domain
+  def pick_domain
+    tdid = params[:domain_id]
+    @task_types = TaskType.where(task_domain_id: tdid)
+    employee_type_ids = Responsibility.where(task_domain_id: tdid).pluck(:employee_type_id).uniq
+    @employees = Employee.where(employee_type_id: employee_type_ids).includes(:employee_type).order(:employee_type_id)
+
+    render json: {
+      task_types: @task_types.map { |tt| [tt.id, tt.title, tt.description] },
+      task_types_prompt: "Escolha um #{TaskType.label.downcase}",
+      employees: @employees.map { |emp| [emp.id, "(#{emp.employee_type.title}) - #{emp.fullname}"] },
+      employees_prompt: "Escolha um #{Employee.label.downcase}"
+    } if request.xhr?
+  end
+
+  # GET /tasks/pick_type
+  def pick_type
+    ttid = params[:type_id]
+    place_type_ids = TaskType.find(ttid).place_types.pluck(:id).uniq
+    @places = Place.where(place_type_id: place_type_ids).includes(:place_type).order(:place_type_id)
+
+    render json: {
+      places: @places.map { |pl| [pl.id, "(#{pl.place_type.title}) - #{pl.code}"] },
+      places_prompt: "Escolha um #{Place.label.downcase}"
+    } if request.xhr?
   end
 
   private

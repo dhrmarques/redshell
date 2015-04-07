@@ -17,7 +17,7 @@ exec_list = [
 #	:task_types,
 #	:tasks,
 #	:responsibilities,
-	:place_types_task_types,
+#	:place_types_task_types,
 ]
 verbose = true
 

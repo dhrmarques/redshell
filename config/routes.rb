@@ -9,7 +9,10 @@ Rails.application.routes.draw do
 
   resources :task_types
 
-  resources :tasks
+  resources :tasks do
+    get 'pick_domain', on: :collection
+    get 'pick_type',   on: :collection
+  end
 
   resources :place_types
 
