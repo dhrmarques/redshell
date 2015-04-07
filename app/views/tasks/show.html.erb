@@ -1,0 +1,37 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong><%= Task.label :after %></strong>
+  <%= @task.after %>
+</p>
+
+<p>
+  <strong><%= Task.label :before %></strong>
+  <%= @task.before %>
+</p>
+
+<p>
+  <strong><%= Task.label :checkin_start %></strong>
+  <%= @task.checkin_start %>
+</p>
+
+<p>
+  <strong><%= Task.label :checkin_finish %></strong>
+  <%= @task.checkin_finish %>
+</p>
+
+<p>
+  <strong><%= Task.label :details %></strong>
+  <%= @task.details %>
+</p>
+
+<% if @task.tools.any? %><h2><%= Task.label :tools %></h2><% end %>
+<p>
+  <% @task.tools.each do |t| %>
+    <p><%= t.title %>: <%= t.description %></p>
+  <% end %>
+</p>
+
+
+<%= link_to 'Editar', edit_task_path(@task) %> |
+<%= link_to '</i> Voltar'.html_safe, tasks_path %>

@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong><%= Place.label :code %></strong>
+  <%= @place.code %>
+</p>
+
+<p>
+  <strong><%= Place.label :compl %></strong>
+  <%= @place.compl %>
+</p>
+
+<%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_place_path(@place), class: "btn btn-warning" %> |
+<%= link_to '<i class="fa fa-arrow-left"></i> Voltar'.html_safe, places_path, class: "btn btn-default" %>

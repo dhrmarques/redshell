@@ -1,0 +1,9 @@
+<h1>Página inicial</h1>
+<ul>
+<% @entity_classes.each do |ec| %>
+	<li>
+		<% cls = ec.to_s.classify.constantize %>
+		<%= link_to "<i class=\"fa fa-#{cls.icon}\"></i> #{cls.label}".html_safe, polymorphic_path(ec), class: "btn btn-info" %>
+	</li>
+<% end %>
+</ul>

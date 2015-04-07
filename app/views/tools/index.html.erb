@@ -1,0 +1,29 @@
+<h1>Listando <%= (:tools).to_s.classify.constantize.label %></h1>
+
+<table class="table js-data-tables">
+  <thead>
+    <tr>
+      <th><%= Tool.label :title %></th>
+      <th><%= Tool.label :description %></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @tools.each do |tool| %>
+      <tr>
+        <td><%= tool.title %></td>
+        <td><%= tool.description %></td>
+        <td><%= link_to '<i class="fa fa-eye"></i> Ver'.html_safe, tool, class: "btn btn-default" %></td>
+        <td><%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_tool_path(tool), class: "btn btn-warning" %></td>
+        <td><%= link_to '<i class="fa fa-trash"></i> Remover'.html_safe, tool, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{Tool.label}".html_safe, new_tool_path, class: "btn btn-primary" %>

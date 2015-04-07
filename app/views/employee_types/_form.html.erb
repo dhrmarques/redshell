@@ -1,0 +1,29 @@
+<%= form_for(@employee_type) do |f| %>
+  <% if @employee_type.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@employee_type.errors.count, "error") %> prohibited this employee_type from being saved:</h2>
+
+      <ul>
+      <% @employee_type.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :title, EmployeeType.label(:title) %><br>
+    <%= f.text_field :title %>
+  </div>
+  <div class="field">
+    <%= f.label :code, EmployeeType.label(:code) %><br>
+    <%= f.text_field :code %>
+  </div>
+  <div class="field">
+    <%= f.label :description, EmployeeType.label(:description) %><br>
+    <%= f.text_field :description %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Criar #{EmployeeType.label}", class: 'btn btn-success' %>
+  </div>
+<% end %>

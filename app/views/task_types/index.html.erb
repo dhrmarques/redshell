@@ -1,0 +1,33 @@
+<h1>Listando <%= (:task_types).to_s.classify.constantize.label %></h1>
+
+<table class="table js-data-tables">
+  <thead>
+    <tr>
+      <th><%= TaskType.label :title %></th>
+      <th><%= TaskType.label :week_days %></th>
+      <th><%= TaskType.label :each_n_weeks %></th>
+      <th><%= TaskType.label :description %></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @task_types.each do |task_type| %>
+      <tr>
+        <td><%= task_type.title %></td>
+        <td><%= task_type.week_days %></td>
+        <td><%= task_type.each_n_weeks %></td>
+        <td><%= task_type.description %></td>
+        <td><%= link_to '<i class="fa fa-eye"></i> Ver'.html_safe, task_type, class: "btn btn-default" %></td>
+        <td><%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_task_type_path(task_type), class: "btn btn-warning" %></td>
+        <td><%= link_to '<i class="fa fa-trash"></i> Remover'.html_safe, task_type, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{TaskType.label}".html_safe, new_task_type_path, class: "btn btn-primary" %>

@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong><%= EmployeeType.label :title %></strong>
+  <%= @employee_type.title %>
+</p>
+
+<p>
+  <strong><%= EmployeeType.label :code %></strong>
+  <%= @employee_type.code %>
+</p>
+
+<p>
+  <strong><%= EmployeeType.label :description %></strong>
+  <%= @employee_type.description %>
+</p>
+
+<%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_employee_type_path(@employee_type), class: "btn btn-warning" %> |
+<%= link_to '<i class="fa fa-arrow-left"></i> Voltar'.html_safe, employee_types_path, class: "btn btn-default" %>

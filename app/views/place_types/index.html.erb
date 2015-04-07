@@ -1,0 +1,33 @@
+<h1>Listando <%= (:place_types).to_s.classify.constantize.label %></h1>
+
+<table class="table js-data-tables">
+  <thead>
+    <tr>
+      <th><%= PlaceType.label :title %></th>
+      <th><%= PlaceType.label :description %></th>
+      <th><%= PlaceType.label :restricted %></th>
+      <th><%= PlaceType.label :common %></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @place_types.each do |place_type| %>
+      <tr>
+        <td><%= place_type.title %></td>
+        <td><%= place_type.description %></td>
+        <td><%= place_type.restricted %></td>
+        <td><%= place_type.common %></td>
+        <td><%= link_to '<i class="fa fa-eye"></i> Ver'.html_safe, place_type, class: "btn btn-default" %></td>
+        <td><%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_place_type_path(place_type), class: "btn btn-warning" %></td>
+        <td><%= link_to '<i class="fa fa-trash"></i> Remover'.html_safe, place_type, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{PlaceType.label}".html_safe, new_place_type_path, class: "btn btn-primary" %>

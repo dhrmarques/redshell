@@ -1,0 +1,29 @@
+<h1>Listando <%= (:task_domains).to_s.classify.constantize.label %></h1>
+
+<table class="table js-data-tables">
+  <thead>
+    <tr>
+      <th><%= TaskDomain.label :title %></th>
+      <th><%= TaskDomain.label :description %></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @task_domains.each do |task_domain| %>
+      <tr>
+        <td><%= task_domain.title %></td>
+        <td><%= task_domain.description %></td>
+        <td><%= link_to '<i class="fa fa-eye"></i> Ver'.html_safe, task_domain, class: "btn btn-default" %></td>
+        <td><%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_task_domain_path(task_domain), class: "btn btn-warning" %></td>
+        <td><%= link_to '<i class="fa fa-trash"></i> Remover'.html_safe, task_domain, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{TaskDomain.label}".html_safe, new_task_domain_path, class: "btn btn-primary" %>

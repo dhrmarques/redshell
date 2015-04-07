@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong><%= TaskType.label :title %></strong>
+  <%= @task_type.title %>
+</p>
+
+<p>
+  <strong><%= TaskType.label :week_days %></strong>
+  <%= @task_type.week_days %>
+</p>
+
+<p>
+  <strong><%= TaskType.label :each_n_weeks %></strong>
+  <%= @task_type.each_n_weeks %>
+</p>
+
+<p>
+  <strong><%= TaskType.label :description %></strong>
+  <%= @task_type.description %>
+</p>
+
+<%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_task_type_path(@task_type), class: "btn btn-warning" %> |
+<%= link_to '<i class="fa fa-arrow-left"></i> Voltar'.html_safe, task_types_path, class: "btn btn-default" %>
