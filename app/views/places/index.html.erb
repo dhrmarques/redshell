@@ -14,7 +14,7 @@
   <tbody>
     <% @places.each do |place| %>
       <tr>
-        <td><%= place.vacant? %></td>
+        <td><%= show_checkmark(place.vacant?) %></td>
         <td><%= place.code %></td>
         <td><%= place.compl %></td>
         <td><%= link_to place.place_type.title, place_type_path(place.place_type) %></td>

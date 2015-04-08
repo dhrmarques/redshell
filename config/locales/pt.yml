@@ -25,6 +25,7 @@ pt:
     abbr_month_names: ["~", "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
     formats:
       short: "%d/%m"
+      shorty: "%d/%m/%y"
       default: "%d de %B de %Y"
   time:
     formats:

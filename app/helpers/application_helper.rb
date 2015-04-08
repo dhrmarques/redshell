@@ -21,4 +21,10 @@ module ApplicationHelper
     end
   end
 
+  def show_checkmark bool
+    return "" if bool.nil?
+    icon = bool ? 'check-circle text-success' : 'minus text-danger'
+    ("<i class=\"fa fa-#{icon} text-success\"></i> " << (bool ? 'Sim' : 'Não')).html_safe
+  end
+
 end
