@@ -16,6 +16,10 @@
     <%= f.text_field :title %>
   </div>
   <div class="field">
+    <%= f.label :code, EmployeeType.label(:code) %><br>
+    <%= f.text_field :code %>
+  </div>
+  <div class="field">
     <%= f.label :description, EmployeeType.label(:description) %><br>
     <%= f.text_field :description %>
   </div>
