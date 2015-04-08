@@ -26,6 +26,18 @@ Rails.application.routes.draw do
   resources :responsibilities
 
   resources :services, only: [:index, :new, :create, :destroy]
+  resources :services do
+    collection do
+      post 'create', controller: :services, action: :create
+      get 'list', controller: :services, action: :list 
+    end
+  end
+
+  resources :services do
+    member do
+      post 'create_task', controller: :services, action: :create_task
+    end
+  end
 
   resources :employees
   resources :employees do
