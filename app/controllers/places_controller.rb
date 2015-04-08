@@ -4,7 +4,7 @@ class PlacesController < ApplicationController
   # GET /places
   # GET /places.json
   def index
-    @places = Place.where(active: true)
+    @places = Place.where(active: true).includes(:place_type)
   end
 
   # GET /places/1
@@ -15,10 +15,12 @@ class PlacesController < ApplicationController
   # GET /places/new
   def new
     @place = Place.new
+    @place_types = PlaceType.where(active: true)
   end
 
   # GET /places/1/edit
   def edit
+    @place_types = PlaceType.where(active: true)
   end
 
   # POST /places
@@ -75,6 +77,6 @@ class PlacesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def place_params
-      params.require(:place).permit(:code, :compl)
+      params.require(:place).permit(:code, :compl, :vacant, :place_type_id)
     end
 end

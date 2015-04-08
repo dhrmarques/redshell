@@ -3,8 +3,10 @@
 <table class="table js-data-tables">
   <thead>
     <tr>
+      <th><%= Place.label :vacant %></th>
       <th><%= Place.label :code %></th>
       <th><%= Place.label :compl %></th>
+      <th><%= PlaceType.label %></th>
       <th class="no-order"></th>
       <th class="no-order"></th>
       <th class="no-order"></th>
@@ -14,8 +16,10 @@
   <tbody>
     <% @places.each do |place| %>
       <tr>
+        <td><%= place.vacant? %></td>
         <td><%= place.code %></td>
         <td><%= place.compl %></td>
+        <td><%= link_to place.place_type.title, place_type_path(place.place_type) %></td>
         <td><%= link_to '<i class="fa fa-eye"></i> Ver'.html_safe, place, class: "btn btn-default" %></td>
         <td><%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_place_path(place), class: "btn btn-warning" %></td>
         <td><%= link_to '<i class="fa fa-trash"></i> Remover'.html_safe, place, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>

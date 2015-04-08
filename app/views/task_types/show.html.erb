@@ -1,6 +1,11 @@
 <p id="notice"><%= notice %></p>
 
 <p>
+  <strong><%= TaskDomain.label %></strong>
+  <%= link_to @task_type.task_domain.title, task_domain_path(@task_type.task_domain) %>
+</p>
+
+<p>
   <strong><%= TaskType.label :title %></strong>
   <%= @task_type.title %>
 </p>
@@ -13,6 +18,21 @@
 <p>
   <strong><%= TaskType.label :each_n_weeks %></strong>
   <%= @task_type.each_n_weeks %>
+</p>
+
+<p>
+  <strong><%= TaskType.label :ignore_if_vacant %></strong>
+  <%= @task_type.ignore_if_vacant? %>
+</p>
+
+<p>
+  <strong><%= TaskType.label :after_in_minutes %></strong>
+  <%= @task_type.after_in_minutes %>
+</p>
+
+<p>
+  <strong><%= TaskType.label :before_in_minutes %></strong>
+  <%= @task_type.before_in_minutes %>
 </p>
 
 <p>

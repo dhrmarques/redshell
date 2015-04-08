@@ -2,12 +2,12 @@
 
 <p>
   <strong><%= TaskDomain.label %></strong>
-  <%= @responsibility.task_domain.title %>
+  <%= link_to @responsibility.task_domain.title, task_domain_path(@responsibility.task_domain) %>
 </p>
 
 <p>
   <strong><%= EmployeeType.label %></strong>
-  <%= @responsibility.employee_type.title %>
+  <%= link_to @responsibility.employee_type.title, employee_type_path(@responsibility.employee_type) %>
 </p>
 
 <%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_responsibility_path(@responsibility), class: "btn btn-warning" %> |

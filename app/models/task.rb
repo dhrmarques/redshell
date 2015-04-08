@@ -5,9 +5,12 @@ class Task < RedShellModel
   belongs_to :task_type
   has_many :tools
   
-  validate :start_task_time_and_after_validation
-  validate :after_validation
-  validate :checkin_start_validation
+#  validate :start_task_time_and_after_validation
+  validate :after_vs_before_validation
+  validate :negative_time_validation
+#  validate :checkin_start_validation
+  validates :task_type_id, presence: true
+  validates :place_id, presence: true
 
   def start_task_time_and_after_validation
     if checkin_start != nil && after != nil
@@ -17,11 +20,17 @@ class Task < RedShellModel
     end
   end
 
-  def after_validation
+  def after_vs_before_validation
     if after != nil && before != nil
       if before < after
         errors[:base] << "Não é possível criar tarefas com data de término antes de data de início!"
       end
+    end
+  end
+
+  def negative_time_validation
+    if after < DateTime.now || before < DateTime.now
+      errors[:base] << "Não é possível indicar que a tarefa seja feita no passado!"
     end
   end
 
