@@ -1,11 +1,13 @@
 <h1>Listando <%= (:task_domains).to_s.classify.constantize.label %></h1>
 
-<table class="table">
+<table class="table js-data-tables">
   <thead>
     <tr>
       <th><%= TaskDomain.label :title %></th>
       <th><%= TaskDomain.label :description %></th>
-      <th colspan="3"></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
     </tr>
   </thead>
 

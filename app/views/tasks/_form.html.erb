@@ -41,7 +41,67 @@
     <%= f.label :details, Task.label(:details) %><br>
     <%= f.text_area :details %>
   </div>
+  <div class="field">
+    <%= f.label :employee_id, Task.label(:employee_id) %><br>
+    <%= f.select :employee_id, @employees.collect { |employee| [employee.name, employee.id] }, {}, :include_blank => true %>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-5">
+      <%= f.label :tools, Task.label(:tools) %><br>
+      <table id="js-selected-tools" class="table table-condensed table-bordered">
+        <% @task.tools.each do |t| %>
+          <tr id="<%= t.id %>">
+            <td>
+              <%= check_box(:task, :tool_ids, {class: "js-each-tool", id: "task_tool_#{t.id}", data:{id: t.id}, include_hidden: false, multiple: true}, t.id) %>
+            </td>
+            <td><%= t.title %></td>
+            <td><%= t.description %></td>
+          </tr> 
+        <% end %>
+      </table>
+    </div>
+    <div class="col-lg-7">
+      <table class="table table-condensed js-data-tables">
+        <thead>
+          <tr>
+            <th class="no-order"></th>
+            <th>Nome</th>
+            <th>Descrição</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @general_tools.each do |t| %>
+            <tr id="<%= t.id %>">
+              <td>
+                <%= check_box(:task, :tool_ids, {class: "js-each-tool",id: "task_tool_#{t.id}", data:{id: t.id}, multiple: true, include_hidden: false}, t.id) %>
+              </td>
+              <td><%= t.title %></td>
+              <td><%= t.description %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
   <div class="actions">
     <%= f.submit "Criar #{Task.label}", class: 'btn btn-success' %>
   </div>
 <% end %>
+
+<script type="text/javascript">
+  $("form").on("click", ".js-each-tool", function(){
+    if($(this).is(':checked')) {
+      $("#js-selected-tools").append($(this).parents("tr"));
+      var row = dataTable.row("#"+$(this).data("id")).remove().draw();
+    } else {
+      var tds = $(this).parents("tr").children();
+      tds.children("input[type='checkbox']").removeAttr("checked");
+      var elemArray = $.map(tds, function(val, i) {
+        return(tds.eq(i).html());
+      });
+      dataTable.row.add(elemArray).draw();
+      $(this).parents("tr").remove();
+    }
+  });
+</script>

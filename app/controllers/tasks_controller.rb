@@ -1,10 +1,11 @@
 class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
+  before_action :set_general_tools, only: [:new, :edit, :update]
 
   # GET /tasks
   # GET /tasks.json
   def index
-    @tasks = Task.where(active: true).includes(:employee, :task_type, :place)
+    @tasks = Task.where(active: true).includes(:employee, :task_type, :place, :tools)
   end
 
   # GET /tasks/1
@@ -42,7 +43,8 @@ class TasksController < ApplicationController
 
   # PATCH/PUT /tasks/1
   # PATCH/PUT /tasks/1.json
-  def update
+  def update    
+    load_needed_resources
     respond_to do |format|
       if @task.update(task_params)
         format.html { redirect_to @task, notice: 'Task was successfully updated.' }
@@ -103,9 +105,13 @@ class TasksController < ApplicationController
       @task = Task.find(params[:id])
     end
 
+    def set_general_tools
+      @general_tools = Tool.where(active: true).where.not(id: @task.tools.map {|t| t.id})
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def task_params
-      params.require(:task).permit(:after, :before, :checkin_start, :checkin_finish, :details, :employee_id, :place_id, :task_type_id)
+      params.require(:task).permit(:after, :before, :checkin_start, :checkin_finish, :details, :employee_id, :place_id, :task_type_id, tool_ids: [])
     end
 
     def load_needed_resources

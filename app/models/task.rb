@@ -3,6 +3,7 @@ class Task < RedShellModel
 	belongs_to :employee
 	belongs_to :place
   belongs_to :task_type
+  has_many :tools
   
 #  validate :start_task_time_and_after_validation
   validate :after_vs_before_validation
@@ -53,6 +54,10 @@ class Task < RedShellModel
       'Iniciada em'
     when :checkin_finish
       'Finalizada em'
+    when :tools
+      'Ferramentas'
+    when :employee_id
+      'Funcionário'
     when :details
       'Detalhes'
     when :json
@@ -64,6 +69,11 @@ class Task < RedShellModel
 
   def self.icon
     'clock-o'
+  end
+
+  def tool_list
+    tools = self.tools.map {|t| t.title}
+    tools.join(", ")
   end
 
 end
