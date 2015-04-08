@@ -6,11 +6,15 @@ class Task < RedShellModel
   has_many :tools
   
 #  validate :start_task_time_and_after_validation
-  validate :after_vs_before_validation
-  validate :negative_time_validation
+  validate :after_vs_before_validation, :on => :create
+  validate :negative_time_validation, :on => :create
 #  validate :checkin_start_validation
   validates :task_type_id, presence: true
   validates :place_id, presence: true
+
+  def elapsed_time_since_checkin
+    Time.now - checkin_start
+  end
 
   def start_task_time_and_after_validation
     if checkin_start != nil && after != nil

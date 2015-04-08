@@ -15,7 +15,7 @@ exec_list = [
 	# :employees,
 	# :task_domains,
 	# :task_types,
-	# :tasks,
+	:tasks,
 	# :responsibilities,
 	# :place_types_task_types
 ]
