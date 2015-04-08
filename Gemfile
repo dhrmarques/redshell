@@ -40,6 +40,9 @@ gem 'font-awesome-sass', '~> 4.3.2.1'
 # Using byebug because debugger doesn't work with Ruby 2.0 and higher
 gem 'byebug', '~> 3.5.1', group: [:development, :test]
 
+# silence irritating assets on prompt
+gem 'quiet_assets', '~> 1.1.0'
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin]
 gem 'delayed_job_active_record'

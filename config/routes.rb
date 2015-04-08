@@ -12,6 +12,9 @@ Rails.application.routes.draw do
   resources :tasks do
     get 'pick_domain', on: :collection
     get 'pick_type',   on: :collection
+    get 'checkin',   on: :member
+    get 'checkout',   on: :member
+    get 'reset',   on: :member
   end
 
   resources :place_types
