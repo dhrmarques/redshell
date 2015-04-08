@@ -12,10 +12,6 @@ class Task < RedShellModel
   validates :task_type_id, presence: true
   validates :place_id, presence: true
 
-  def elapsed_time_since_checkin
-    Time.now - checkin_start
-  end
-
   def start_task_time_and_after_validation
     if checkin_start != nil && after != nil
       if checkin_start < after

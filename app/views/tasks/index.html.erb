@@ -1,12 +1,8 @@
-<div class="col-lg-12">
-
 <h1>Tarefas a Terminar</h1>
-<div class="js-timer"></div>
 
 <table class="table">
   <thead>
     <tr>
-      <th>Tempo decorrido</th>
       <th><%= TaskType.label %></th>
       <th><%= Place.label %></th>
       <th><%= Task.label :details %></th>
@@ -21,7 +17,6 @@
   <tbody>
     <% @tasks_for_checkout.each do |task_for_checkout| %>
       <tr>
-        <td class="js-timer" data-time="<%= task_for_checkout.elapsed_time_since_checkin %>"></td>
         <td><%= task_for_checkout.task_type.title %></td>
         <td><%= task_for_checkout.place.code %></td>
         <td><%= task_for_checkout.details %></td>
@@ -110,50 +105,3 @@
 <br>
 
 <%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{Task.label}".html_safe, new_task_path, class: "btn btn-primary" %>
-
-<script type="text/javascript">
-  //  function get_elapsed_time_string(total_seconds) {
-  //   function pretty_time_string(num) {
-  //     return ( num < 10 ? "0" : "" ) + num;
-  //   }
-
-  //   var hours = Math.floor(total_seconds / 3600);
-  //   total_seconds = total_seconds % 3600;
-
-  //   var minutes = Math.floor(total_seconds / 60);
-  //   total_seconds = total_seconds % 60;
-
-  //   var seconds = Math.floor(total_seconds);
-
-  //   // Pad the minutes and seconds with leading zeros, if required
-  //   hours = pretty_time_string(hours);
-  //   minutes = pretty_time_string(minutes);
-  //   seconds = pretty_time_string(seconds);
-
-  //   // Compose the string for display
-  //   var currentTimeString = hours + ":" + minutes + ":" + seconds;
-
-  //   return currentTimeString;
-  // }
-
-  // $(".js-timer").each(function(){
-  //   var elapsed_seconds = parseInt($(this).data("time"));
-  //   var timeInterval = setInterval(function() {
-  //     elapsed_seconds = elapsed_seconds + 1;
-  //     $(this).text(get_elapsed_time_string(elapsed_seconds));
-  //   }, 1000);
-  // });
-
-  $({countNum: 8000}).animate({countNum: 0}, {
-    duration: 8000,
-    easing:'linear',
-    step: function() {
-      // What todo on every count
-      $(".js-timer").text(Math.floor(this.countNum));
-    },
-    complete: function() {
-      $(".js-timer").text('finished');
-    }
-  });
-
-</script>
