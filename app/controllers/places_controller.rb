@@ -4,7 +4,7 @@ class PlacesController < ApplicationController
   # GET /places
   # GET /places.json
   def index
-    @places = Place.all
+    @places = Place.where(active: true).includes(:place_type)
   end
 
   # GET /places/1
@@ -15,10 +15,12 @@ class PlacesController < ApplicationController
   # GET /places/new
   def new
     @place = Place.new
+    @place_types = PlaceType.where(active: true)
   end
 
   # GET /places/1/edit
   def edit
+    @place_types = PlaceType.where(active: true)
   end
 
   # POST /places
@@ -54,10 +56,16 @@ class PlacesController < ApplicationController
   # DELETE /places/1
   # DELETE /places/1.json
   def destroy
-    @place.destroy
+    @place.active = false
+
     respond_to do |format|
-      format.html { redirect_to places_url, notice: 'Place was successfully destroyed.' }
-      format.json { head :no_content }
+      if @place.save
+        format.html { redirect_to places_url, notice: 'Place was successfully deactivated.' }
+        format.json { head :no_content }
+      else
+        format.html { render :index }
+        format.json { render json: @place.errors, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -69,6 +77,6 @@ class PlacesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def place_params
-      params.require(:place).permit(:code, :compl)
+      params.require(:place).permit(:code, :compl, :vacant, :place_type_id)
     end
 end

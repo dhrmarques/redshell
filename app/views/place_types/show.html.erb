@@ -1,24 +1,24 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Title:</strong>
+  <strong><%= PlaceType.label :title %></strong>
   <%= @place_type.title %>
 </p>
 
 <p>
-  <strong>Description:</strong>
+  <strong><%= PlaceType.label :description %></strong>
   <%= @place_type.description %>
 </p>
 
 <p>
-  <strong>Restricted:</strong>
+  <strong><%= PlaceType.label :restricted %></strong>
   <%= @place_type.restricted %>
 </p>
 
 <p>
-  <strong>Common:</strong>
+  <strong><%= PlaceType.label :common %></strong>
   <%= @place_type.common %>
 </p>
 
-<%= link_to 'Edit', edit_place_type_path(@place_type) %> |
-<%= link_to 'Back', place_types_path %>
+<%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_place_type_path(@place_type), class: "btn btn-warning" %> |
+<%= link_to '<i class="fa fa-arrow-left"></i> Voltar'.html_safe, place_types_path, class: "btn btn-default" %>

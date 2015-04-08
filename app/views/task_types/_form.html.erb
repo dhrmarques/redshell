@@ -12,22 +12,38 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :title %><br>
+    <%= f.label :task_domain_id, TaskDomain.label %><br>
+    <%= f.select(:task_domain_id, options_for_select(@task_domains.collect { |tdom| [tdom.title, tdom.id] }, @task_type.task_domain_id), prompt: "Escolha um #{TaskDomain.label.downcase}")%>
+  </div>
+  <div class="field">
+    <%= f.label :title, TaskType.label(:title) %><br>
     <%= f.text_field :title %>
   </div>
   <div class="field">
-    <%= f.label :week_days %><br>
+    <%= f.label :week_days, TaskType.label(:week_days) %><br>
     <%= f.text_field :week_days %>
   </div>
   <div class="field">
-    <%= f.label :each_n_weeks %><br>
+    <%= f.label :each_n_weeks, TaskType.label(:each_n_weeks) %><br>
     <%= f.text_field :each_n_weeks %>
   </div>
   <div class="field">
-    <%= f.label :description %><br>
+    <%= f.label :after_in_minutes, TaskType.label(:after_in_minutes) %><br>
+    <%= f.text_field :after_in_minutes %>
+  </div>
+  <div class="field">
+    <%= f.label :before_in_minutes, TaskType.label(:before_in_minutes) %><br>
+    <%= f.text_field :before_in_minutes %>
+  </div>
+  <div class="field">
+    <%= f.label :ignore_if_vacant, TaskType.label(:ignore_if_vacant) %><br>
+    <%= f.check_box :ignore_if_vacant %>
+  </div>
+  <div class="field">
+    <%= f.label :description, TaskType.label(:description) %><br>
     <%= f.text_area :description %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit "Criar #{TaskType.label}", class: 'btn btn-success' %>
   </div>
 <% end %>

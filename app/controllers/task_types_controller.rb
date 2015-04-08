@@ -4,7 +4,7 @@ class TaskTypesController < ApplicationController
   # GET /task_types
   # GET /task_types.json
   def index
-    @task_types = TaskType.all
+    @task_types = TaskType.where(active: true)
   end
 
   # GET /task_types/1
@@ -15,17 +15,19 @@ class TaskTypesController < ApplicationController
   # GET /task_types/new
   def new
     @task_type = TaskType.new
+    @task_domains = TaskDomain.where(active: true)
   end
 
   # GET /task_types/1/edit
   def edit
+    @task_domains = TaskDomain.where(active: true)
   end
 
   # POST /task_types
   # POST /task_types.json
   def create
     @task_type = TaskType.new(task_type_params)
-
+    Recurring::DailyTest.schedule!
     respond_to do |format|
       if @task_type.save
         format.html { redirect_to @task_type, notice: 'Task type was successfully created.' }
@@ -54,10 +56,16 @@ class TaskTypesController < ApplicationController
   # DELETE /task_types/1
   # DELETE /task_types/1.json
   def destroy
-    @task_type.destroy
+    @task_type.active = false
+
     respond_to do |format|
-      format.html { redirect_to task_types_url, notice: 'Task type was successfully destroyed.' }
-      format.json { head :no_content }
+      if @task_type.save
+        format.html { redirect_to task_types_url, notice: 'Task type was successfully deactivated.' }
+        format.json { head :no_content }
+      else
+        format.html { render :index }
+        format.json { render json: @task_type.errors, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -69,6 +77,6 @@ class TaskTypesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def task_type_params
-      params.require(:task_type).permit(:title, :week_days, :each_n_weeks, :description)
+      params.require(:task_type).permit(:title, :week_days, :each_n_weeks, :description, :task_domain_id, :ignore_if_vacant, :after_in_minutes, :before_in_minutes)
     end
 end

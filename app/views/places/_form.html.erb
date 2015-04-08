@@ -12,14 +12,22 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :code %><br>
+    <%= f.label :place_type_id, PlaceType.label %><br>
+    <%= f.select(:place_type_id, options_for_select(@place_types.collect { |et| [et.title, et.id] }, @place.place_type_id), prompt: "Escolha um #{PlaceType.label.downcase}")%>
+  </div>
+  <div class="field">
+    <%= f.label :code, Place.label(:code) %><br>
     <%= f.text_field :code %>
   </div>
   <div class="field">
-    <%= f.label :compl %><br>
+    <%= f.label :compl, Place.label(:compl) %><br>
     <%= f.text_field :compl %>
   </div>
+  <div class="field">
+    <%= f.check_box :vacant, checked: true %>
+    <%= f.label :vacant, Place.label(:vacant) %>
+  </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit "Criar #{Place.label}", class: 'btn btn-success' %>
   </div>
 <% end %>

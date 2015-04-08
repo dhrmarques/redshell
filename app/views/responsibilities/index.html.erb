@@ -1,0 +1,29 @@
+<h1>Lista de Responsabilidades</h1>
+
+<table class="table js-data-tables">
+  <thead>
+    <tr>
+      <th><%= TaskDomain.label %></th>
+      <th><%= EmployeeType.label %></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @responsibilities.each do |responsibility| %>
+      <tr>
+        <td><%= link_to responsibility.task_domain.title, task_domain_path(responsibility.task_domain) %></td>
+        <td><%= link_to responsibility.employee_type.title, employee_type_path(responsibility.employee_type) %></td>
+        <td><%= link_to '<i class="fa fa-eye"></i> Ver'.html_safe, responsibility, class: "btn btn-default" %></td>
+        <td><%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_responsibility_path(responsibility), class: "btn btn-warning" %></td>
+        <td><%= link_to '<i class="fa fa-trash"></i> Remover'.html_safe, responsibility, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{Responsibility.label}".html_safe, new_responsibility_path, class: "btn btn-primary" %>

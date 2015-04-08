@@ -1,28 +1,38 @@
 <h1>Lista de Tarefas</h1>
 
-<table>
+<table class="table js-data-tables">
   <thead>
     <tr>
-      <th>Data de Início</th>
-      <th>Data de Término</th>
-      <th>Data de Check-in</th>
-      <th>Data de Check-out</th>
-      <th>Detalhes</th>
-      <th colspan="3"></th>
+      <th><%= TaskType.label %></th>
+      <th><%= Place.label %></th>
+      <th><%= Task.label :after %></th>
+      <th><%= Task.label :before %></th>
+      <th><%= Employee.label %></th>
+      <th><%= Task.label :checkin_start %></th>
+      <th><%= Task.label :checkin_finish %></th>
+      <th><%= Task.label :details %></th>
+      <th><%= Task.label :tools %></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @tasks.each do |task| %>
       <tr>
+        <td><%= link_to task.task_type.title, task_type_path(task.task_type) %></td>
+        <td><%= link_to task.place.code, place_path(task.place) %></td>
         <td><%= task.after %></td>
         <td><%= task.before %></td>
+        <td><%= link_to task.employee.fullname, employee_path(task.employee) unless task.employee.nil?%></td>
         <td><%= task.checkin_start %></td>
         <td><%= task.checkin_finish %></td>
         <td><%= task.details %></td>
-        <td><%= link_to 'Exibir', task %></td>
-        <td><%= link_to 'Editar', edit_task_path(task) %></td>
-        <td><%= link_to 'Remover', task, method: :delete, data: { confirm: 'Você deseja remover esta tarefa?' } %></td>
+        <td><%= task.tool_list %></td>
+        <td><%= link_to '<i class="fa fa-eye"></i> Ver'.html_safe, task, class: "btn btn-default" %></td>
+        <td><%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_task_path(task), class: "btn btn-warning" %></td>
+        <td><%= link_to '<i class="fa fa-trash"></i> Remover'.html_safe, task, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
       </tr>
     <% end %>
   </tbody>
@@ -30,4 +40,4 @@
 
 <br>
 
-<%= link_to 'Nova Tarefa', new_task_path %>
+<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{Task.label}".html_safe, new_task_path, class: "btn btn-primary" %>

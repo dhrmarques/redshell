@@ -1,29 +1,21 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Qty:</strong>
-  <%= @tool.qty %>
-</p>
-
-<p>
-  <strong>Measure unit:</strong>
-  <%= @tool.measure_unit %>
-</p>
-
-<p>
-  <strong>As int:</strong>
-  <%= @tool.as_int %>
-</p>
-
-<p>
-  <strong>Title:</strong>
+  <strong><%= Tool.label :title %></strong>
   <%= @tool.title %>
 </p>
 
 <p>
-  <strong>Description:</strong>
+  <strong><%= Tool.label :description %></strong>
   <%= @tool.description %>
 </p>
 
-<%= link_to 'Edit', edit_tool_path(@tool) %> |
-<%= link_to 'Back', tools_path %>
+<% unless @tool.task_id.nil? %>
+<p>
+  <strong><%= Tool.label :task %></strong>
+  <%= link_to "Tarefa #{@tool.task_id}".html_safe, task_path(@tool.task) %>
+</p>
+<% end %>
+
+<%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_tool_path(@tool), class: "btn btn-warning" %> |
+<%= link_to '<i class="fa fa-arrow-left"></i> Voltar'.html_safe, tools_path, class: "btn btn-default" %>

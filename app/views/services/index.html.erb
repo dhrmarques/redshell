@@ -1,0 +1,28 @@
+<h1>Listando <%= (:services).to_s.classify.constantize.label %></h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th><%= Service.label :after %></th>
+      <th><%= Service.label :before %></th>
+      <th><%= Service.label :created_at %></th>
+      <th><%= TaskType.label :task_type %></th>
+      <th><%= Place.label :place %></th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @services.each do |service| %>
+      <tr>
+        <td><%= service.after %></td>
+        <td><%= service.before %></td>
+        <td><%= service.created_at %></td>
+        <td><%= service.task_type.title %></td>
+        <td><%= service.place.place_type.title %></td>
+        <td><%= link_to '<i class="fa fa-eye"></i> Ver'.html_safe, service, class: "btn btn-default" %></td>
+        <td><%= link_to '<i class="fa fa-trash"></i> Remover'.html_safe, service, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
