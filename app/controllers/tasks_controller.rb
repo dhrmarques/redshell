@@ -4,7 +4,7 @@ class TasksController < ApplicationController
   # GET /tasks
   # GET /tasks.json
   def index
-    @tasks = Task.where(active: true)
+    @tasks = Task.where(active: true).includes(:employee, :task_type, :place)
   end
 
   # GET /tasks/1
@@ -15,17 +15,19 @@ class TasksController < ApplicationController
   # GET /tasks/new
   def new
     @task = Task.new
-    @employees = Employee.where(active: true)
+    load_needed_resources
   end
 
   # GET /tasks/1/edit
   def edit
+    load_needed_resources
   end
 
   # POST /tasks
   # POST /tasks.json
   def create
     @task = Task.new(task_params)
+    load_needed_resources
     
     respond_to do |format|
       if @task.save
@@ -68,6 +70,33 @@ class TasksController < ApplicationController
     end
   end
 
+  # GET /tasks/pick_domain
+  def pick_domain
+    tdid = params[:domain_id]
+    @task_types = TaskType.where(task_domain_id: tdid)
+    employee_type_ids = Responsibility.where(task_domain_id: tdid).pluck(:employee_type_id).uniq
+    @employees = Employee.where(employee_type_id: employee_type_ids).includes(:employee_type).order(:employee_type_id)
+
+    render json: {
+      task_types: @task_types.map { |tt| [tt.id, tt.title, tt.description] },
+      task_types_prompt: "Escolha um #{TaskType.label.downcase}",
+      employees: @employees.map { |emp| [emp.id, "(#{emp.employee_type.title}) - #{emp.fullname}"] },
+      employees_prompt: "Escolha um #{Employee.label.downcase}"
+    } if request.xhr?
+  end
+
+  # GET /tasks/pick_type
+  def pick_type
+    ttid = params[:type_id]
+    place_type_ids = TaskType.find(ttid).place_types.pluck(:id).uniq
+    @places = Place.where(place_type_id: place_type_ids).includes(:place_type).order(:place_type_id)
+
+    render json: {
+      places: @places.map { |pl| [pl.id, "(#{pl.place_type.title}) - #{pl.code}"] },
+      places_prompt: "Escolha um #{Place.label.downcase}"
+    } if request.xhr?
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_task
@@ -76,6 +105,14 @@ class TasksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def task_params
-      params.require(:task).permit(:after, :before, :checkin_start, :checkin_finish, :details)
+      params.require(:task).permit(:after, :before, :checkin_start, :checkin_finish, :details, :employee_id, :place_id, :task_type_id)
+    end
+
+    def load_needed_resources
+      @employees = Employee.where(active: true)
+      @task_domains = TaskDomain.where(active: true)
+      @task_types = TaskType.where(active: true)
+      @place_types = PlaceType.where(active: true)
+      @places = Place.where(active: true)
     end
 end

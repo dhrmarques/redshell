@@ -1,6 +1,16 @@
 <p id="notice"><%= notice %></p>
 
 <p>
+  <strong><%= TaskType.label %></strong>
+  <%= @task.task_type.title %>
+</p>
+
+<p>
+  <strong><%= Place.label %></strong>
+  <%= @task.place.code %>
+</p>
+
+<p>
   <strong><%= Task.label :after %></strong>
   <%= @task.after %>
 </p>
@@ -8,6 +18,11 @@
 <p>
   <strong><%= Task.label :before %></strong>
   <%= @task.before %>
+</p>
+
+<p>
+  <strong><%= Employee.label %></strong>
+  <%= @task.employee.fullname %>
 </p>
 
 <p>

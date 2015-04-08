@@ -5,6 +5,8 @@ class Tool < RedShellModel
 		case field
 		when nil
 			'Ferramenta'
+		when :task
+			'Sendo usado na tarefa'
 		else
 			superclass.label field
 		end
