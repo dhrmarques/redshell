@@ -46,20 +46,42 @@ class Task < RedShellModel
     end
   end
 
-  def start_advices
-    [:not_yet, :no_need_to, :do_it, :urgent, :already_late]
+  def self.advices
+    [:not_yet, :no_need_to, :do_it, :urgent, :already_late, :past]
   end
 
-  def bgcolors
-    ['indianred', 'khaki', 'lawngreen', 'gold', 'firebrick']
+  def self.bgcolors
+    ['indianred', 'khaki', 'lawngreen', 'gold', 'firebrick', 'silver']
   end
 
   def urgency_params
-    x = Random.rand(5)
+    now = Time.now
+    if checkin_start.nil?
+      # next step is CHECKIN
+      diff = now - after
+      if diff < 0
+        advi = (diff.abs > 24.hours) ? 0 : 1
+      elsif now < before
+        lateness = diff / (before - after)
+        advi = (lateness < 0.5) ? 2 : 3
+      else
+        advi = 4
+      end
+      #
+    elsif checkin_finish.nil?
+      # next step is CHECKOUT
+      diff = now - before
+      if diff > 0
+        advi = 4
+      else
+        chill = diff.abs / (before - after)
+        advi = (chill < 0.5) ? 3 : ((chill < 1.0) ? 2 : 1)
+      end
+    end
+    advi ||= 5
     {
-      spotlight: (x > 2),
-      start_advice: start_advices[x],
-      bgcolor: bgcolors[x]
+      start_advice: self.class.advices[advi],
+      bgcolor: self.class.bgcolors[advi]
     }
   end
 
