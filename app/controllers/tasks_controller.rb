@@ -1,10 +1,11 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: [:show, :edit, :update, :destroy]
+  before_action :set_task, only: [:show, :edit, :update, :destroy, :checkin, :checkout, :reset]
+  before_action :set_tasks, only: [:index, :destroy]
+  before_action :set_general_tools, only: [:new, :edit, :update, :create]
 
   # GET /tasks
   # GET /tasks.json
   def index
-    @tasks = Task.where(active: true).includes(:employee, :task_type, :place)
   end
 
   # GET /tasks/1
@@ -42,7 +43,8 @@ class TasksController < ApplicationController
 
   # PATCH/PUT /tasks/1
   # PATCH/PUT /tasks/1.json
-  def update
+  def update    
+    load_needed_resources
     respond_to do |format|
       if @task.update(task_params)
         format.html { redirect_to @task, notice: 'Task was successfully updated.' }
@@ -60,7 +62,7 @@ class TasksController < ApplicationController
     @task.active = false
 
     respond_to do |format|
-      if @task.save
+      if @task.save!
         format.html { redirect_to tasks_url, notice: 'Task was successfully deactivated.' }
         format.json { head :no_content }
       else
@@ -97,15 +99,73 @@ class TasksController < ApplicationController
     } if request.xhr?
   end
 
+  def checkin
+    @task.checkin_start = Time.now
+    respond_to do |format|
+      if @task.save!
+        format.html { redirect_to tasks_url, notice: 'Check-in done for task.' }
+        format.json { head :no_content }
+      else
+        format.html { render :index }
+        format.json { render json: @task.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def checkout
+    @task.checkin_finish = Time.now
+    respond_to do |format|
+      if @task.save!
+        format.html { redirect_to tasks_url, notice: 'Check-out done for task.' }
+        format.json { head :no_content }
+      else
+        format.html { render :index }
+        format.json { render json: @task.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def reset
+    @task.checkin_start = nil
+    @task.checkin_finish = nil
+    respond_to do |format|
+      if @task.save!
+        format.html { redirect_to tasks_url, notice: 'Task reset successfully.' }
+        format.json { head :no_content }
+      else
+        format.html { render :index }
+        format.json { render json: @task.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_task
       @task = Task.find(params[:id])
     end
 
+    def set_tasks
+      if current_employee.is_admin?
+        @tasks = Task.where(active: true).includes(:employee, :task_type, :place, :tools)
+      elsif current_employee
+        @tasks = current_employee.tasks.where(active: true).includes(:employee, :task_type, :place, :tools)
+      end
+      @tasks_for_checkin = Task.where(active: true).where("after >= ? and checkin_start IS NULL", Time.now).includes(:employee, :task_type, :place, :tools)
+      @tasks_for_checkout = Task.where(active: true).where("checkin_start IS NOT NULL and checkin_finish IS NULL").includes(:employee, :task_type, :place, :tools)
+    end
+
+    def set_general_tools
+      if @task
+        @general_tools = Tool.where(active: true).where.not(id: @task.tools.map {|t| t.id})
+      else
+        @general_tools = Tool.where(active: true)
+      end
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def task_params
-      params.require(:task).permit(:after, :before, :checkin_start, :checkin_finish, :details, :employee_id, :place_id, :task_type_id)
+      params.require(:task).permit(:after, :before, :checkin_start, :checkin_finish, :details, :employee_id, :place_id, :task_type_id, tool_ids: [])
     end
 
     def load_needed_resources

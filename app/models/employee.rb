@@ -15,6 +15,10 @@ class Employee < RedShellModel
 		masked_cpf[1] + "." + masked_cpf[2] + "." + masked_cpf[3] + "-" + masked_cpf[4]
 	end
 
+	def is_admin?
+		self.employee_type.code == "admin"
+	end
+
 	def self.label(field = nil)
 		case field
 		when nil

@@ -1,13 +1,15 @@
 <h1>Listando <%= (:places).to_s.classify.constantize.label %></h1>
 
-<table class="table">
+<table class="table js-data-tables">
   <thead>
     <tr>
       <th><%= Place.label :vacant %></th>
       <th><%= Place.label :code %></th>
       <th><%= Place.label :compl %></th>
       <th><%= PlaceType.label %></th>
-      <th colspan="3"></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
     </tr>
   </thead>
 

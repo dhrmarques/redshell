@@ -1,6 +1,73 @@
-<h1>Lista de Tarefas</h1>
+<div class="col-lg-12">
+
+<h1>Tarefas a Terminar</h1>
+<div class="js-timer"></div>
 
 <table class="table">
+  <thead>
+    <tr>
+      <th>Tempo decorrido</th>
+      <th><%= TaskType.label %></th>
+      <th><%= Place.label %></th>
+      <th><%= Task.label :details %></th>
+      <th><%= Task.label :tools %></th>
+      <th><%= Task.label :before %></th>
+      <th><%= Task.label :after %></th>
+      <th><%= Task.label :checkin_start %></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @tasks_for_checkout.each do |task_for_checkout| %>
+      <tr>
+        <td class="js-timer" data-time="<%= task_for_checkout.elapsed_time_since_checkin %>"></td>
+        <td><%= task_for_checkout.task_type.title %></td>
+        <td><%= task_for_checkout.place.code %></td>
+        <td><%= task_for_checkout.details %></td>
+        <td><%= task_for_checkout.tool_list %></td>
+        <td><%= task_for_checkout.before %></td>
+        <td><%= task_for_checkout.after %></td>
+        <td><%= task_for_checkout.checkin_start %></td>
+        <td><%= link_to 'Check-out', checkout_task_path(task_for_checkout), class: "btn btn-warning" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h1>Tarefas a Iniciar</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th><%= TaskType.label %></th>
+      <th><%= Place.label %></th>
+      <th><%= Task.label :details %></th>
+      <th><%= Task.label :tools %></th>
+      <th><%= Task.label :before %></th>
+      <th><%= Task.label :after %></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @tasks_for_checkin.each do |task_for_checkin| %>
+      <tr>
+        <td><%= task_for_checkin.task_type.title %></td>
+        <td><%= task_for_checkin.place.code %></td>
+        <td><%= task_for_checkin.details %></td>
+        <td><%= task_for_checkin.tool_list %></td>
+        <td><%= task_for_checkin.before %></td>
+        <td><%= task_for_checkin.after %></td>
+        <td><%= link_to 'Check-in', checkin_task_path(task_for_checkin), class: "btn btn-success" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h1>Lista de Tarefas</h1>
+
+<table class="table js-data-tables">
   <thead>
     <tr>
       <th><%= TaskType.label %></th>
@@ -11,7 +78,11 @@
       <th><%= Task.label :checkin_start %></th>
       <th><%= Task.label :checkin_finish %></th>
       <th><%= Task.label :details %></th>
-      <th colspan="3"></th>
+      <th><%= Task.label :tools %></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
     </tr>
   </thead>
 
@@ -22,10 +93,12 @@
         <td><%= link_to task.place.code, place_path(task.place) %></td>
         <td><%= task.after %></td>
         <td><%= task.before %></td>
-        <td><%= link_to task.employee.fullname, employee_path(task.employee) %></td>
+        <td><%= link_to task.employee.fullname, employee_path(task.employee) unless task.employee.nil?%></td>
         <td><%= task.checkin_start %></td>
         <td><%= task.checkin_finish %></td>
         <td><%= task.details %></td>
+        <td><%= task.tool_list %></td>
+        <td><%= link_to 'Resetar', reset_task_path(task), class: "btn btn-default" %></td>
         <td><%= link_to '<i class="fa fa-eye"></i> Ver'.html_safe, task, class: "btn btn-default" %></td>
         <td><%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_task_path(task), class: "btn btn-warning" %></td>
         <td><%= link_to '<i class="fa fa-trash"></i> Remover'.html_safe, task, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
@@ -37,3 +110,50 @@
 <br>
 
 <%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{Task.label}".html_safe, new_task_path, class: "btn btn-primary" %>
+
+<script type="text/javascript">
+  //  function get_elapsed_time_string(total_seconds) {
+  //   function pretty_time_string(num) {
+  //     return ( num < 10 ? "0" : "" ) + num;
+  //   }
+
+  //   var hours = Math.floor(total_seconds / 3600);
+  //   total_seconds = total_seconds % 3600;
+
+  //   var minutes = Math.floor(total_seconds / 60);
+  //   total_seconds = total_seconds % 60;
+
+  //   var seconds = Math.floor(total_seconds);
+
+  //   // Pad the minutes and seconds with leading zeros, if required
+  //   hours = pretty_time_string(hours);
+  //   minutes = pretty_time_string(minutes);
+  //   seconds = pretty_time_string(seconds);
+
+  //   // Compose the string for display
+  //   var currentTimeString = hours + ":" + minutes + ":" + seconds;
+
+  //   return currentTimeString;
+  // }
+
+  // $(".js-timer").each(function(){
+  //   var elapsed_seconds = parseInt($(this).data("time"));
+  //   var timeInterval = setInterval(function() {
+  //     elapsed_seconds = elapsed_seconds + 1;
+  //     $(this).text(get_elapsed_time_string(elapsed_seconds));
+  //   }, 1000);
+  // });
+
+  $({countNum: 8000}).animate({countNum: 0}, {
+    duration: 8000,
+    easing:'linear',
+    step: function() {
+      // What todo on every count
+      $(".js-timer").text(Math.floor(this.countNum));
+    },
+    complete: function() {
+      $(".js-timer").text('finished');
+    }
+  });
+
+</script>
