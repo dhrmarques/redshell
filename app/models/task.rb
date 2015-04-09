@@ -24,27 +24,44 @@ class Task < RedShellModel
     end
   end
 
-  # def after_vs_before_validation
-  #   if after != nil && before != nil
-  #     if before < after
-  #       errors[:base] << "Não é possível criar tarefas com data de término antes de data de início!"
-  #     end
-  #   end
-  # end
+  def after_vs_before_validation
+    if after != nil && before != nil
+      if before < after
+        errors[:base] << "Não é possível criar tarefas com data de término antes de data de início!"
+      end
+    end
+  end
 
-  # def negative_time_validation
-  #   if after < DateTime.now || before < DateTime.now
-  #     errors[:base] << "Não é possível indicar que a tarefa seja feita no passado!"
-  #   end
-  # end
+  def negative_time_validation
+    if after < DateTime.now || before < DateTime.now
+      errors[:base] << "Não é possível especificar que a tarefa seja feita no passado!"
+    end
+  end
 
-  # def checkin_start_validation
-  #   if checkin_start != nil && checkin_finish != nil
-  #     if checkin_finish < checkin_start
-  #       errors[:base] << "Não é possível criar tarefas com data de check-in antes de data de check-out!"
-  #     end
-  #   end
-  # end
+  def checkin_start_validation
+    if checkin_start != nil && checkin_finish != nil
+      if checkin_finish < checkin_start
+        errors[:base] << "Não é possível criar tarefas com data de check-in antes de data de check-out!"
+      end
+    end
+  end
+
+  def start_advices
+    [:not_yet, :no_need_to, :do_it, :urgent, :already_late]
+  end
+
+  def bgcolors
+    ['indianred', 'khaki', 'lawngreen', 'gold', 'firebrick']
+  end
+
+  def urgency_params
+    x = Random.rand(5)
+    {
+      spotlight: (x > 2),
+      start_advice: start_advices[x],
+      bgcolor: bgcolors[x]
+    }
+  end
 
   def self.label(field = nil)
     case field

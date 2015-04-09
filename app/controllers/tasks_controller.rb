@@ -99,6 +99,28 @@ class TasksController < ApplicationController
     } if request.xhr?
   end
 
+  # GET /tasks/todo
+  def todo
+    @todos = []
+    tasks = Task.
+        where(active: true, employee_id: current_employee.id, checkin_finish: nil).
+        order(checkin_start: :desc, before: :asc)
+    tasks.each do |tsk|
+      @todos << {task: tsk}.merge(tsk.urgency_params)
+    end
+    render json: @todos
+  end
+
+  # GET /tasks/1/status
+  def status
+    #
+  end
+
+  # GET /tasks/overview
+  def overview
+    #
+  end
+
   def checkin
     @task.checkin_start = Time.now
     respond_to do |format|

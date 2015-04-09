@@ -27,6 +27,10 @@ pt:
       short: "%d/%m"
       shorty: "%d/%m/%y"
       default: "%d de %B de %Y"
+    order:
+      - :day
+      - :month
+      - :year
   time:
     formats:
       short: "%H:%M"
