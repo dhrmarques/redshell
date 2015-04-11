@@ -1,5 +1,7 @@
 class Task < RedShellModel
 
+  require 'json'
+
 	belongs_to :employee
 	belongs_to :place
   belongs_to :task_type
@@ -50,44 +52,49 @@ class Task < RedShellModel
     [:not_yet, :no_need_to, :do_it, :urgent, :already_late, :past]
   end
 
-  def self.bgcolors
-    ['indianred', 'khaki', 'lawngreen', 'gold', 'firebrick', 'silver']
+  def urgency_params    
+    check = checkin_start.nil? ? 
+        "CHECK IN" :
+        (checkin_finish.nil? ? "CHECK OUT" : "Encerrada")
+    adv = calc_advice
+    {
+      start_advice: adv,
+      checkinout: check,
+      spotlight: spotlight?(adv)
+    }
   end
 
-  def urgency_params
-    now = Time.now
-    if checkin_start.nil?
-      # next step is CHECKIN
-      check = "CHECK IN"
-      diff = now - after
+  def spotlight? adv
+    self.class.advices[1..4].include? adv
+  end
+
+  def calc_advice
+    t = Time.now.beginning_of_minute
+    # t = Time.parse('2015-04-09 15:03:04').beginning_of_minute # simulate time
+
+    i = if checkin_start.nil?
+      diff = t - after
       if diff < 0
-        advi = (diff.abs > 24.hours) ? 0 : 1
-      elsif now < before
+        (diff.abs > 24.hours) ? 0 : 1
+      elsif t < before
         lateness = diff / (before - after)
-        advi = (lateness < 0.5) ? 2 : 3
+        (lateness < 0.5) ? 2 : 3
       else
-        advi = 4
+        4
       end
-      #
+      
     elsif checkin_finish.nil?
-      # next step is CHECKOUT
-      check = "CHECK OUT"
-      diff = now - before
+      diff = t - before
       if diff > 0
-        advi = 4
+        4
       else
         chill = diff.abs / (before - after)
-        advi = (chill < 0.5) ? 3 : ((chill < 1.0) ? 2 : 1)
+        (chill < 0.5) ? 3 : ((chill < 1.0) ? 2 : 1)
       end
+    else
+      5
     end
-    advi ||= 5
-    check ||= "Encerrada"
-    {
-      start_advice: self.class.advices[advi],
-      bgcolor: self.class.bgcolors[advi],
-      checkinout: check,
-      spotlight: (after < now)
-    }
+    self.class.advices[i]
   end
 
   def self.label(field = nil)
@@ -122,6 +129,11 @@ class Task < RedShellModel
   def tool_list
     tools = self.tools.map {|t| t.title}
     tools.join(", ")
+  end
+
+  def products
+    return nil if json.nil?
+    JSON.parse(json, symbolize_names: true)
   end
 
 end
