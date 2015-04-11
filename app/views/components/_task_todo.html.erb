@@ -1,0 +1,5 @@
+<div id="<%= task.id %>" class="task-item row">
+  <%= link_to "<i class=\"fa fa-info-circle\"></i>".html_safe, status_task_path(task), class: "btn btn-info pull-right" %>
+  <strong><%= task.task_type.title %></strong> em <strong><%= task.place.code %></strong><br>
+  <strong><%= cool_date_interval(task.after, task.before) %></strong>
+</div>

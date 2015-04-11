@@ -58,6 +58,7 @@ class Task < RedShellModel
     now = Time.now
     if checkin_start.nil?
       # next step is CHECKIN
+      check = "CHECK IN"
       diff = now - after
       if diff < 0
         advi = (diff.abs > 24.hours) ? 0 : 1
@@ -70,6 +71,7 @@ class Task < RedShellModel
       #
     elsif checkin_finish.nil?
       # next step is CHECKOUT
+      check = "CHECK OUT"
       diff = now - before
       if diff > 0
         advi = 4
@@ -79,9 +81,12 @@ class Task < RedShellModel
       end
     end
     advi ||= 5
+    check ||= "Encerrada"
     {
       start_advice: self.class.advices[advi],
-      bgcolor: self.class.bgcolors[advi]
+      bgcolor: self.class.bgcolors[advi],
+      checkinout: check,
+      spotlight: (after < now)
     }
   end
 

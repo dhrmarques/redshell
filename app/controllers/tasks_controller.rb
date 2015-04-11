@@ -104,13 +104,15 @@ class TasksController < ApplicationController
     @todos = []
     tasks = Task.
         where(active: true, employee_id: current_employee.id, checkin_finish: nil).
+        includes(:place, :task_type).
         order(checkin_start: :desc, before: :asc)
+    
     tasks.each do |tsk|
       todo = {task: tsk}.merge(tsk.urgency_params)
-      todo[:spotlight] = true unless @todos.count > 3 || Task.advices[0..1].include?(todo[:start_advice])
       @todos << todo
     end
-    render json: @todos
+
+    render 'todo', layout: 'mobile'
   end
 
   # GET /tasks/1/status

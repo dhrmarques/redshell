@@ -1,0 +1,22 @@
+<div id="<%= task.id %>" class="task-item spotlight row" style="background-color: <%= options[:bgcolor] %>">
+  <strong><%= task.task_type.title %> em <%= task.place.code %></strong><br>
+  <%= cool_date_interval(task.after, task.before) %><br>
+  <% if options[:start_advice]
+    custom = case options[:start_advice]
+    when :not_yet
+      ['frown-o', 'disabled', 4]
+    when :no_need_to
+      ['meh-o', 'btn-default', 6]
+    when :do_it
+      ['smile-o', 'btn-success', 8]
+    when :urgent
+      ['meh-o', 'btn-warning', 10]
+    when :already_late
+      ['frown-o', 'btn-danger', 10]
+    else
+      ['question-circle', 'disabled', 4]
+    end %>
+    <%= link_to "<i class=\"fa fa-#{custom.first}\"></i> #{options[:checkinout]}".html_safe, checkin_task_path(task), class: "btn #{custom.second} col-xs-#{custom.third}" %>
+    <%= link_to "<i class=\"fa fa-info-circle\"></i>".html_safe, status_task_path(task), class: "btn btn-info col-xs-#{12 - custom.third}" %>
+  <% end %>
+</div>

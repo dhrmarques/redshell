@@ -47,3 +47,20 @@ ul, nav {
 		color: crimson;
 	}
 }
+
+#task-list {
+	.task-item {
+		padding: 5px;
+		margin-top: 5px;
+		border-bottom: 1px solid silver;
+	}
+	.task-item.spotlight {
+		color: white;
+		a i {
+			margin-right: 10px;
+		}
+		a.btn-info i {
+			margin-right: 0px !important;
+		}
+	}
+}
