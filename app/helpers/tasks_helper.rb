@@ -18,13 +18,17 @@ module TasksHelper
     return_date
   end
 
-  def get_tasks_to_be_created
-    daily_tasks = TaskType.where("week_days like '%?%'", day).select(:after_in_minutes, :before_in_minutes, :description, :title, :each_n_weeks, :created_at).select do |task_type| 
+  def considered_fields
+    ["after_in_minutes", "before_in_minutes", "description", "title", "each_n_weeks", "created_at"]
+  end
+
+  def get_tasks_to_be_created(day)
+    daily_tasks = TaskType.where("week_days like '%?%'", day).select(considered_fields).select do |task_type| 
       first_runned_day = first_day(task_type, day)
       # p "******* tasks title ************"
       # p task_type.title + " " + (first_day(task_type, day)).to_s + " " + (task_type.each_n_weeks * 7).to_s + "-" + ((Time.zone.now - first_runned_day) / 1.day).to_i.to_s
       # p "********************************"
-      Time.zone.now >= first_runned_day && (((Time.zone.now - first_runned_day) / 1.day).to_i == 0 || (task_type.each_n_weeks * 7) - (((Time.zone.now - first_runned_day) / 1.day).to_i) % (task_type.each_n_weeks * 7) == 0)
+      Time.zone.now >= first_runned_day && ((((Time.zone.now - first_runned_day) / 1.day).to_i) % (task_type.each_n_weeks * 7) == 0)
     end
 
     daily_tasks
