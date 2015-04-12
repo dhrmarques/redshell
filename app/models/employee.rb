@@ -6,6 +6,8 @@ class Employee < RedShellModel
   belongs_to :employee_type
   has_many :tasks
 
+  validates :employee_type, :presence => true
+
 	def fullname
 		self.name + " " + self.last_name
 	end

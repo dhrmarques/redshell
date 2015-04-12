@@ -8,6 +8,9 @@ class Task < RedShellModel
   validate :after_validation
   validate :checkin_start_validation
 
+  validates :task_type, :presence => true
+  validates :task_domain, :presence => true
+
   def start_task_time_and_after_validation
     if checkin_start != nil && after != nil
       if checkin_start < after
