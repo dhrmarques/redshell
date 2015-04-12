@@ -31,8 +31,7 @@ class ServicesController < ApplicationController
   end
 
   def create_task
-    @task = Service.find(params[:id])
-    render 'tasks/form', layout: 'tasks/new'
+    redirect_to :controller => :tasks, :action => :new, :sid => params[:id]
   end
 
   def list

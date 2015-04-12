@@ -15,7 +15,7 @@ class TasksController < ApplicationController
 
   # GET /tasks/new
   def new
-    @task = Task.new
+    @task = Service.exists?(params[:sid]).blank? ? Task.new : Task.new(Service.find(params[:sid]).attributes)
     load_needed_resources
   end
 
