@@ -15,6 +15,9 @@ Rails.application.routes.draw do
     get 'checkin',   on: :member
     get 'checkout',   on: :member
     get 'reset',   on: :member
+    get 'todo', on: :collection
+    get 'status', on: :member
+    get 'overview', on: :collection
   end
 
   resources :place_types
