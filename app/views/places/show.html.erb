@@ -2,7 +2,7 @@
 
 <p>
   <strong><%= Place.label :vacant %></strong>
-  <%= @place.vacant? %>
+  <%= show_checkmark(@place.vacant?) %>
 </p>
 
 <p>

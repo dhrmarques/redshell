@@ -1,0 +1,10 @@
+<% # view for task %>
+<div class="col-md-4" style="padding: 2px;">
+  <div class="task_summary" id="<%= task.id %>">
+    <%= link_to "<i class=\"fa fa-clock-o\"></i> Ver #{Task.label.downcase}".html_safe, task_path(task), class: "btn btn-xs btn-default pull-right" %>
+    <strong><%= task.task_type.title %></strong> em <strong><%= task.place.code %></strong><br>
+    <% unless hide_employee %><strong><%= Employee.label %>:</strong> <%= task.employee_id.nil? ? 'nenhum' : task.employee.fullname %><br><% end %>
+    <u><%= cool_date_interval(task.after, task.before) %></u><br>
+    <% unless task.details.nil? %><em><%= task.details %></em><% end %>
+  </div>
+</div>
