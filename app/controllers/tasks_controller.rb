@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: [:show, :edit, :update, :destroy, :checkin, :checkout, :reset]
+  before_action :set_task, only: [:show, :edit, :update, :destroy, :checkin, :checkout, :status, :reset]
   before_action :set_tasks, only: [:index, :destroy]
   before_action :set_general_tools, only: [:new, :edit, :update, :create]
 
@@ -99,14 +99,47 @@ class TasksController < ApplicationController
     } if request.xhr?
   end
 
+  # GET /tasks/todo
+  def todo
+    @todos = []
+    spotodos, regtodos = [], []
+    tasks = Task.
+        where(active: true, employee_id: current_employee.id, checkin_finish: nil).
+        includes(:place, :task_type).
+        order(checkin_start: :desc, before: :asc)
+    
+    tasks.each do |tsk|
+      todo = {task: tsk}.merge(tsk.urgency_params)
+      if todo[:spotlight]
+        spotodos << todo
+      else
+        regtodos << todo
+      end
+    end
+
+    @todos = spotodos + regtodos
+    render 'todo', layout: 'mobile'
+  end
+
+  # GET /tasks/1/status
+  def status
+    @options = @task.urgency_params
+    render :status, layout: 'mobile'
+  end
+
+  # GET /tasks/overview
+  def overview
+    #
+  end
+
   def checkin
     @task.checkin_start = Time.now
     respond_to do |format|
       if @task.save!
-        format.html { redirect_to tasks_url, notice: 'Check-in done for task.' }
+        format.html { redirect_to status_task_path(@task), notice: 'Check-in done for task.' }
         format.json { head :no_content }
       else
-        format.html { render :index }
+        format.html { render :todo, notice: 'Check-in failed for task.' }
         format.json { render json: @task.errors, status: :unprocessable_entity }
       end
     end
@@ -116,10 +149,10 @@ class TasksController < ApplicationController
     @task.checkin_finish = Time.now
     respond_to do |format|
       if @task.save!
-        format.html { redirect_to tasks_url, notice: 'Check-out done for task.' }
+        format.html { redirect_to todo_tasks_path, notice: 'Check-out done for task.' }
         format.json { head :no_content }
       else
-        format.html { render :index }
+        format.html { render :todo, notice: 'Check-out failed for task.' }
         format.json { render json: @task.errors, status: :unprocessable_entity }
       end
     end
@@ -150,17 +183,20 @@ class TasksController < ApplicationController
         @tasks = Task.where(active: true).includes(:employee, :task_type, :place, :tools)
       elsif current_employee
         @tasks = current_employee.tasks.where(active: true).includes(:employee, :task_type, :place, :tools)
+        @tasks_for_checkin = Task.where(active: true).where("after >= ? and checkin_start IS NULL", Time.now).includes(:employee, :task_type, :place, :tools)
+        @tasks_for_checkout = Task.where(active: true).where("checkin_start IS NOT NULL and checkin_finish IS NULL").includes(:employee, :task_type, :place, :tools)
       end
-      @tasks_for_checkin = Task.where(active: true).where("after >= ? and checkin_start IS NULL", Time.now).includes(:employee, :task_type, :place, :tools)
-      @tasks_for_checkout = Task.where(active: true).where("checkin_start IS NOT NULL and checkin_finish IS NULL").includes(:employee, :task_type, :place, :tools)
     end
 
     def set_general_tools
       if @task
-        @general_tools = Tool.where(active: true).where.not(id: @task.tools.map {|t| t.id})
+        task_tools_ids = @task.tools.map {|t| t.id}
+      elsif params[:task]
+        task_tools_ids = params[:task][:tool_ids]
       else
-        @general_tools = Tool.where(active: true)
+        task_tools_ids = []
       end
+      @general_tools = Tool.where(active: true).where.not(id: task_tools_ids)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

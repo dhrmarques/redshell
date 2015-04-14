@@ -22,11 +22,11 @@
       <tr>
         <td><%= link_to task_type.task_domain.title, task_domain_path(task_type.task_domain) %></td>
         <td><%= task_type.title %></td>
-        <td><%= task_type.week_days %></td>
+        <td><%= readable_weekdays(task_type.week_days) %></td>
         <td><%= task_type.each_n_weeks %></td>
-        <td><%= task_type.ignore_if_vacant %></td>
-        <td><%= task_type.after_in_minutes %></td>
-        <td><%= task_type.before_in_minutes %></td>
+        <td><%= show_checkmark(task_type.ignore_if_vacant) %></td>
+        <td><%= readable_time(task_type.after_in_minutes) %></td>
+        <td><%= readable_time(task_type.before_in_minutes) %></td>
         <td><%= task_type.description %></td>
         <td><%= link_to '<i class="fa fa-eye"></i> Ver'.html_safe, task_type, class: "btn btn-default" %></td>
         <td><%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_task_type_path(task_type), class: "btn btn-warning" %></td>

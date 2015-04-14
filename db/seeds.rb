@@ -218,7 +218,6 @@ if exec_list.include? :employee_types
 	# Employee types creation
 
 	employeetypes = [
-		{title: 'Administrador', code: 'admin', description: 'Administrador do sistema'},
 		{title: 'Camareiro', code: 'camareiro', description: 'Descrição do camareiro'},
 		{title: 'Lavadeiro', code: 'lavadeiro', description: 'Descrição do lavadeiro'},
 		{title: 'Faxineiro', code: 'faxineiro', description: 'Descrição do faxineiro'},
@@ -227,6 +226,7 @@ if exec_list.include? :employee_types
 		{title: 'Técnico Eletricidade', code: 'tecnico_eletricidade', description: 'Descrição do TE'},
 		{title: 'Técnico Construção', code: 'tecnico_construcao', description: 'Descrição do TC'},
 		{title: 'Técnico Hidráulico', code: 'tecnico_hidraulico', description: 'Descrição do TH'},
+		{title: 'Administrador', code: 'admin', description: 'Administrador do sistema'},
 	]
 	
 	ets = EmployeeType.create!(employeetypes)

@@ -12,7 +12,7 @@
 
 <p>
   <strong><%= TaskType.label :week_days %></strong>
-  <%= @task_type.week_days %>
+  <%= readable_weekdays(@task_type.week_days) %>
 </p>
 
 <p>
@@ -22,17 +22,17 @@
 
 <p>
   <strong><%= TaskType.label :ignore_if_vacant %></strong>
-  <%= @task_type.ignore_if_vacant? %>
+  <%= show_checkmark(@task_type.ignore_if_vacant?) %>
 </p>
 
 <p>
   <strong><%= TaskType.label :after_in_minutes %></strong>
-  <%= @task_type.after_in_minutes %>
+  <%= readable_time(@task_type.after_in_minutes) %>
 </p>
 
 <p>
   <strong><%= TaskType.label :before_in_minutes %></strong>
-  <%= @task_type.before_in_minutes %>
+  <%= readable_time(@task_type.before_in_minutes) %>
 </p>
 
 <p>
