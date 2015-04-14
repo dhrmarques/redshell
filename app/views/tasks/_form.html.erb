@@ -12,11 +12,13 @@
   <% end %>
 
 
+
   <div class="field">
     <%= f.label :task_domain, TaskDomain.label %><br>
     <% tdom_id = @task.task_type_id.nil? ? nil : @task.task_type.task_domain_id %>
     <%= select_tag(:task_domain_id, options_for_select(@task_domains.collect { |tdom| [tdom.title, tdom.id] }, tdom_id), prompt: "Escolha um #{TaskDomain.label.downcase}")%>
   </div>
+
   <div class="field">
     <%= f.label :task_type, TaskType.label %><br>
     <%= f.select(:task_type_id, options_for_select(@task_types.collect { |ttyp| [ttyp.title, ttyp.id] }, @task.task_type_id), prompt: "Escolha um #{TaskType.label.downcase}")%>
@@ -80,10 +82,16 @@
       </table>
     </div>
   </div>
+
+  <div class="hidden">
+    <%= hidden_field :extra_field, :service_id, {value: params[:sid]}%>
+  </div>
+
   <div class="actions">
     <%= f.submit "Salvar #{Task.label}", class: 'btn btn-success' %>
   </div>
 <% end %>
+
 
 <script type="text/javascript">
   $("form").on("click", ".js-each-tool", function(){

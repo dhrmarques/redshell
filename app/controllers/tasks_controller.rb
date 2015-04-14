@@ -16,6 +16,7 @@ class TasksController < ApplicationController
   # GET /tasks/new
   def new
     @task = Service.exists?(params[:sid]).blank? ? Task.new : Task.new(Service.find(params[:sid]).attributes)
+    @service = Service.find(params[:sid]) unless Service.exists?(params[:sid]).blank?
     load_needed_resources
   end
 
@@ -32,6 +33,12 @@ class TasksController < ApplicationController
     
     respond_to do |format|
       if @task.save
+        if params["extra_field"]["service_id"]
+          Service.find(params["extra_field"]["service_id"]).delete
+        end
+        if params[:sid]
+          Service.delete(params[:sid])
+        end
         format.html { redirect_to @task, notice: 'Task was successfully created.' }
         format.json { render :show, status: :created, location: @task }
       else
