@@ -40,7 +40,22 @@
   });
   var dataTable = $('.js-data-tables').DataTable( {
     pageLength: 10,
-    "columns": orderingArray
+    "columns": orderingArray,
+    "oLanguage": {
+			"sEmptyTable": "Não há registros.",
+			"sInfo": "Mostrando resultados _START_ até _END_. Total: _TOTAL_",
+			"sInfoEmpty": "Não há resultados.",
+			"sZeroRecords": "Não há registros.",
+			"sInfoFiltered": "Resultados filtrados de _MAX_ registros.",
+			"sLengthMenu": "_MENU_ itens por página",
+			"sLoadingRecords": "Carregando...",
+			"sProcessing": "Os serviços estão ocupados no momento, tente mais tarde.",
+			"sSearch": "Busca _INPUT_",
+			"oPaginate": {
+				"sNext": ">",
+				"sPrevious": "<"
+			}
+		}
   });
 </script>
 

@@ -1,69 +1,68 @@
-<div class="col-lg-12">
+<% if @tasks_for_checkout %>
+  <h1>Tarefas a Terminar</h1>
 
-<h1>Tarefas a Terminar</h1>
-<div class="js-timer"></div>
-
-<table class="table">
-  <thead>
-    <tr>
-      <th>Tempo decorrido</th>
-      <th><%= TaskType.label %></th>
-      <th><%= Place.label %></th>
-      <th><%= Task.label :details %></th>
-      <th><%= Task.label :tools %></th>
-      <th><%= Task.label :before %></th>
-      <th><%= Task.label :after %></th>
-      <th><%= Task.label :checkin_start %></th>
-      <th></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @tasks_for_checkout.each do |task_for_checkout| %>
+  <table class="table">
+    <thead>
       <tr>
-        <td class="js-timer" data-time="<%= task_for_checkout.elapsed_time_since_checkin %>"></td>
-        <td><%= task_for_checkout.task_type.title %></td>
-        <td><%= task_for_checkout.place.code %></td>
-        <td><%= task_for_checkout.details %></td>
-        <td><%= task_for_checkout.tool_list %></td>
-        <td><%= task_for_checkout.before %></td>
-        <td><%= task_for_checkout.after %></td>
-        <td><%= task_for_checkout.checkin_start %></td>
-        <td><%= link_to 'Check-out', checkout_task_path(task_for_checkout), class: "btn btn-warning" %></td>
+        <th><%= TaskType.label %></th>
+        <th><%= Place.label %></th>
+        <th><%= Task.label :details %></th>
+        <th><%= Task.label :tools %></th>
+        <th><%= Task.label :before %></th>
+        <th><%= Task.label :after %></th>
+        <th><%= Task.label :checkin_start %></th>
+        <th></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
 
-<h1>Tarefas a Iniciar</h1>
+    <tbody>
+      <% @tasks_for_checkout.each do |task_for_checkout| %>
+        <tr>
+          <td><%= task_for_checkout.task_type.title %></td>
+          <td><%= task_for_checkout.place.code %></td>
+          <td><%= task_for_checkout.details %></td>
+          <td><%= task_for_checkout.tool_list %></td>
+          <td><%= task_for_checkout.before %></td>
+          <td><%= task_for_checkout.after %></td>
+          <td><%= task_for_checkout.checkin_start %></td>
+          <td><%= link_to 'Check-out', checkout_task_path(task_for_checkout), class: "btn btn-warning" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th><%= TaskType.label %></th>
-      <th><%= Place.label %></th>
-      <th><%= Task.label :details %></th>
-      <th><%= Task.label :tools %></th>
-      <th><%= Task.label :before %></th>
-      <th><%= Task.label :after %></th>
-      <th></th>
-    </tr>
-  </thead>
+<% if @tasks_for_checkin %>
+  <h1>Tarefas a Iniciar</h1>
 
-  <tbody>
-    <% @tasks_for_checkin.each do |task_for_checkin| %>
+  <table class="table">
+    <thead>
       <tr>
-        <td><%= task_for_checkin.task_type.title %></td>
-        <td><%= task_for_checkin.place.code %></td>
-        <td><%= task_for_checkin.details %></td>
-        <td><%= task_for_checkin.tool_list %></td>
-        <td><%= task_for_checkin.before %></td>
-        <td><%= task_for_checkin.after %></td>
-        <td><%= link_to 'Check-in', checkin_task_path(task_for_checkin), class: "btn btn-success" %></td>
+        <th><%= TaskType.label %></th>
+        <th><%= Place.label %></th>
+        <th><%= Task.label :details %></th>
+        <th><%= Task.label :tools %></th>
+        <th><%= Task.label :before %></th>
+        <th><%= Task.label :after %></th>
+        <th></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+
+    <tbody>
+      <% @tasks_for_checkin.each do |task_for_checkin| %>
+        <tr>
+          <td><%= task_for_checkin.task_type.title %></td>
+          <td><%= task_for_checkin.place.code %></td>
+          <td><%= task_for_checkin.details %></td>
+          <td><%= task_for_checkin.tool_list %></td>
+          <td><%= task_for_checkin.before %></td>
+          <td><%= task_for_checkin.after %></td>
+          <td><%= link_to 'Check-in', checkin_task_path(task_for_checkin), class: "btn btn-success" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
 
 <h1>Lista de Tarefas</h1>
 
@@ -108,6 +107,7 @@
 </table>
 
 <br>
+
 
 <%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{Task.label}".html_safe, new_task_path, class: "btn btn-primary" %>
 
