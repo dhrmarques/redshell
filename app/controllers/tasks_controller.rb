@@ -1,3 +1,6 @@
+require "uri"
+# require "resolv-replace.rb"
+
 class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy, :checkin, :checkout, :reset]
   before_action :set_tasks, only: [:index, :destroy]
@@ -6,6 +9,7 @@ class TasksController < ApplicationController
   # GET /tasks
   # GET /tasks.json
   def index
+    @products = list_products
   end
 
   # GET /tasks/1
@@ -28,7 +32,8 @@ class TasksController < ApplicationController
   # POST /tasks.json
   def create
     @task = Task.new(task_params)
-    load_needed_resources
+    consume_products(task_params["tool_ids"])
+    byebug
     
     respond_to do |format|
       if @task.save
@@ -174,5 +179,70 @@ class TasksController < ApplicationController
       @task_types = TaskType.where(active: true)
       @place_types = PlaceType.where(active: true)
       @places = Place.where(active: true)
+    end
+
+    #devolve se deu certo ou nao
+    def consume_products(product_ids)
+      # uri = URI.parse("http://www.google.com")
+      # response = Net::HTTP.get_response(uri)
+      # Net::HTTP.get_print(uri)
+      
+      product_ids.each do |product_id|
+        uri = URI('http://' + STOCK_URL + '/' + STOCK_LIST_PATH)
+        # uri = URI("http://echo.jsontest.com/")
+        request = Net::HTTP::Put.new(uri)
+        request.set_form_data({"ID" => product_id.to_s, "Quantity" => "1"})
+        # Headers
+        request['Content-Type'] = 'application/json'
+        request['Cache-Control'] = 'no-cache'
+        
+        begin
+          response = Net::HTTP.delay.start(uri.hostname, uri.port){|http|
+            http.request(request)
+          }
+
+          product_list = response.body.to_json
+
+          #OK e variaveis
+          if response.kind_of? Net::HTTPSuccess
+            return true
+          else
+            p "Request: " + request.to_s
+            p "Failed with: " + response.code
+            false
+          end
+        rescue SystemCallError, StandardError
+          p "An error occured: " + $!.inspect
+          false
+        end
+      end
+    end
+
+    def list_products
+      uri = URI('http://' + STOCK_URL + '/' + STOCK_LIST_PATH)
+      # uri = URI("http://echo.jsontest.com/")
+      request = Net::HTTP::Get.new(uri)
+      # Headers
+      request['Content-Type'] = 'application/json'
+      request['Cache-Control'] = 'no-cache'
+      
+      begin
+        response = Net::HTTP.start(uri.hostname, uri.port){|http|
+          http.request(request)
+        }
+
+        product_list = response.body.to_json
+
+        #OK e variaveis
+        unless response.code.starts_with?("2")
+          product_list = [].to_json
+        end
+
+        p "product_list"
+        p product_list
+        product_list
+      rescue SystemCallError, StandardError
+        p "An error occured: " + $!.inspect
+      end
     end
 end

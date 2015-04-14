@@ -1,0 +1,4 @@
+STOCK_URL = "172.21.45.97"
+STOCK_LIST_PATH = "/product"
+
+TEST_PORT = 3000
