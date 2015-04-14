@@ -150,17 +150,20 @@ class TasksController < ApplicationController
         @tasks = Task.where(active: true).includes(:employee, :task_type, :place, :tools)
       elsif current_employee
         @tasks = current_employee.tasks.where(active: true).includes(:employee, :task_type, :place, :tools)
+        @tasks_for_checkin = Task.where(active: true).where("after >= ? and checkin_start IS NULL", Time.now).includes(:employee, :task_type, :place, :tools)
+        @tasks_for_checkout = Task.where(active: true).where("checkin_start IS NOT NULL and checkin_finish IS NULL").includes(:employee, :task_type, :place, :tools)
       end
-      @tasks_for_checkin = Task.where(active: true).where("after >= ? and checkin_start IS NULL", Time.now).includes(:employee, :task_type, :place, :tools)
-      @tasks_for_checkout = Task.where(active: true).where("checkin_start IS NOT NULL and checkin_finish IS NULL").includes(:employee, :task_type, :place, :tools)
     end
 
     def set_general_tools
       if @task
-        @general_tools = Tool.where(active: true).where.not(id: @task.tools.map {|t| t.id})
+        task_tools_ids = @task.tools.map {|t| t.id}
+      elsif params[:task]
+        task_tools_ids = params[:task][:tool_ids]
       else
-        @general_tools = Tool.where(active: true)
+        task_tools_ids = []
       end
+      @general_tools = Tool.where(active: true).where.not(id: task_tools_ids)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

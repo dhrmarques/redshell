@@ -17,7 +17,7 @@
       <tr>
         <td><%= tool.title %></td>
         <td><%= tool.description %></td>
-        <td><%= tool.task_id.nil? ? '' : link_to("Tarefa #{tool.task_id}", task_path(tool.task)) %></td>
+        <td><%= tool.task_id.nil? ? '' : link_to("Tarefa #{tool.task_id}", task_path(tool.task_id)) %></td>
         <td><%= link_to '<i class="fa fa-eye"></i> Ver'.html_safe, tool, class: "btn btn-default" %></td>
         <td><%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_tool_path(tool), class: "btn btn-warning" %></td>
         <td><%= link_to '<i class="fa fa-trash"></i> Remover'.html_safe, tool, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
