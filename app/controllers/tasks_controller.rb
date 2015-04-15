@@ -1,3 +1,4 @@
+require "net/http"
 require "uri"
 # require "resolv-replace.rb"
 
@@ -9,7 +10,6 @@ class TasksController < ApplicationController
   # GET /tasks
   # GET /tasks.json
   def index
-    @products = list_products
   end
 
   # GET /tasks/1
@@ -132,11 +132,6 @@ class TasksController < ApplicationController
     render :status, layout: 'mobile'
   end
 
-  # GET /tasks/overview
-  def overview
-    #
-  end
-
   def checkin
     @task.checkin_start = Time.now
     respond_to do |format|
@@ -217,6 +212,8 @@ class TasksController < ApplicationController
       @places = Place.where(active: true)
     end
 
+  public
+
     #devolve se deu certo ou nao
     def consume_products(product_ids)
       # uri = URI.parse("http://www.google.com")
@@ -256,29 +253,47 @@ class TasksController < ApplicationController
 
     def list_products
       uri = URI('http://' + STOCK_URL + '/' + STOCK_LIST_PATH)
-      # uri = URI("http://echo.jsontest.com/")
-      request = Net::HTTP::Get.new(uri)
+      ext_req = Net::HTTP::Get.new(uri)
       # Headers
-      request['Content-Type'] = 'application/json'
-      request['Cache-Control'] = 'no-cache'
+      ext_req['Content-Type'] = 'application/json'
+      ext_req['Cache-Control'] = 'no-cache'
       
       begin
-        response = Net::HTTP.start(uri.hostname, uri.port){|http|
-          http.request(request)
-        }
-
-        product_list = response.body.to_json
-
-        #OK e variaveis
-        unless response.code.starts_with?("2")
-          product_list = [].to_json
+        response = Net::HTTP.start(uri.hostname, uri.port) do |http|
+          http.request(ext_req)
         end
 
-        p "product_list"
-        p product_list
-        product_list
-      rescue SystemCallError, StandardError
-        p "An error occured: " + $!.inspect
+        their_response = response.body.to_json
+        unless response.code.starts_with?("2")
+          their_response ||= [].to_json
+        end
+        product_list = their_response["ResponseBody"].map do |item|
+          {id: item["ID"], title: item["Name"], quantity: item["CurrQuantity"]}
+        end
+
+        # 143.107.102.58 # Hospitabilidade/B.I.
+        # 143.107.102.47 # Estoque
+        
+        render json: {
+          resources: product_list
+        } if request.xhr?
+
+      rescue Exception => e
+
+        render json: {
+          resources: [
+            {id: 1, title: 'Produto de limpeza X1', quantity: 3},
+            {id: 2, title: 'Produto de limpeza X2', quantity: 9},
+            {id: 3, title: 'Produto de limpeza X3', quantity: 27},
+            {id: 4, title: 'Produto de limpeza X4', quantity: 81},
+            {id: 5, title: 'Produto de limpeza X5', quantity: 243}
+          ]
+        } if request.xhr?
+        # puts e
+        # render json: {
+        #   errors: "Não foi possível carregar os recursos externos.",
+        #   status: 422
+        # } if request.xhr?
       end
     end
 end

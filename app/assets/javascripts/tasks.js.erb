@@ -1,8 +1,21 @@
+var resources = [];
+var resourcesCount = 0;
+
 var replaceOptions = function(selectTag, options, prompt) {
   selectTag.empty().append('<option value="">' + prompt + '</option>');
   for (var i = 0 ; i < options.length ; i++) {
     selectTag.append('<option value="' + options[i][0] + '">' + options[i][1] + '</option>');
   }
+}
+
+var replaceResources = function(resourcesArray) {
+  resources = resourcesArray;
+  var selectStr = "<p class='text-center'>\n\t<select id='resource_1'>";
+  for (var i = 0 ; i < resources.length ; i++) {
+    selectStr = selectStr + "\n\t\t<option value='" + resources[i].id + "'>" + resources[i].title + "</option>\n</p>";
+  }
+  $("#resources-select-group").append(selectStr);
+  resourcesCount = 1;
 }
 
 var whenPickingTaskDomain = function() {
@@ -40,5 +53,20 @@ var whenPickingTaskType = function() {
   });
 }
 
-$(document).on("change", "#task_domain_id",    whenPickingTaskDomain)
-$(document).on("change", "#task_task_type_id", whenPickingTaskType)
+var whenUsingResources = function() {
+  alert("Requisitando");
+  $.ajax({
+    url: "<%= Rails.application.routes.url_helpers.list_products_tasks_path %>",
+    type: "GET",
+    success: function(data, textStatus, xhr) {
+      replaceResources(data.resources);
+    },
+    error: function(data, textStatus, xhr) {
+      alert("Erro:\n" + $.parseJSON(xhr.responseText).errors);
+    }
+  });
+}
+
+$(document).on("change", "#task_domain_id",    whenPickingTaskDomain);
+$(document).on("change", "#task_task_type_id", whenPickingTaskType);
+$(document).on("click", "#fetch-resources",    whenUsingResources);
