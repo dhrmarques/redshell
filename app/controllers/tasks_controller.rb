@@ -259,6 +259,7 @@ class TasksController < ApplicationController
       ext_req['Cache-Control'] = 'no-cache'
       
       begin
+        raise "Deu merda."
         response = Net::HTTP.start(uri.hostname, uri.port) do |http|
           http.request(ext_req)
         end

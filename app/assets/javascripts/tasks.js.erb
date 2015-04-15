@@ -8,16 +8,6 @@ var replaceOptions = function(selectTag, options, prompt) {
   }
 }
 
-var replaceResources = function(resourcesArray) {
-  resources = resourcesArray;
-  var selectStr = "<p class='text-center'>\n\t<select id='resource_1'>";
-  for (var i = 0 ; i < resources.length ; i++) {
-    selectStr = selectStr + "\n\t\t<option value='" + resources[i].id + "'>" + resources[i].title + "</option>\n</p>";
-  }
-  $("#resources-select-group").append(selectStr);
-  resourcesCount = 1;
-}
-
 var whenPickingTaskDomain = function() {
   var domainId = $("#task_domain_id option:selected").val();
   if (domainId == "")
@@ -53,13 +43,49 @@ var whenPickingTaskType = function() {
   });
 }
 
+var whenPickingResource = function(params) {
+  var index = params.data;
+  var identifier = "#resource_" + index;
+  var qtyIdentifier = identifier + "_qty";
+  var resourceId = $(identifier).val();
+  if (resourceId == "")
+    return null;
+  var selectQtyStr = "\n\t<select id='" + qtyIdentifier + "'>";
+  var resourceIndex = null;
+  for (var j = 0 ; j < resources.length ; j++)
+    if (resources[j].id == resourceId)
+      resourceIndex = j;
+  for (var j = 0 ; j <= resources[resourceIndex].quantity ; j++) {
+    if (j == 0)
+      selectQtyStr = selectQtyStr + "\n\t\t<option>Quantidade...</option>";
+    else
+      selectQtyStr = selectQtyStr + "\n\t\t<option value='" + j + "'>" + j + "</option>";
+  }
+  if ($(qtyIdentifier).length > 0)
+    $(qtyIdentifier).remove();
+  $(identifier).parent().append(selectQtyStr);
+}
+
+var replaceResources = function(resourcesArray) {
+  resources = resourcesArray;
+  var selectStr = "<p class='text-center'>\n\t<select id='resource_1'>";
+  selectStr += "\n\t\t<option value=''>Escolher um recurso externo...</option>";
+  for (var i = 0 ; i < resources.length ; i++) {
+    selectStr = selectStr + "\n\t\t<option value='" + resources[i].id + "'>" + resources[i].title + "</option>\n</p>";
+  }
+  $("#resources-select-group").append(selectStr);
+  $(document).on("change", "#resource_1", 1, whenPickingResource);
+  resourcesCount = 1;
+}
+
 var whenUsingResources = function() {
-  alert("Requisitando");
+  $("#fetch-resources").append("<i class='fa fa-spinner fa-pulse'></i>");
   $.ajax({
     url: "<%= Rails.application.routes.url_helpers.list_products_tasks_path %>",
     type: "GET",
     success: function(data, textStatus, xhr) {
       replaceResources(data.resources);
+      $("#fetch-resources").hide();
     },
     error: function(data, textStatus, xhr) {
       alert("Erro:\n" + $.parseJSON(xhr.responseText).errors);
