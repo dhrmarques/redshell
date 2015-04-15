@@ -39,6 +39,8 @@ class Employee < RedShellModel
 			'Senha'
 		when :password_confirmation
 			'Confirmação de senha'
+		when :remember_me
+			'Lembrar-me'
 		else
 			superclass.label field
 		end
