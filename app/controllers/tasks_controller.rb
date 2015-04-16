@@ -34,11 +34,10 @@ class TasksController < ApplicationController
   def create
     @task = Task.new(task_params)
     consume_products(task_params["tool_ids"])
-    byebug
     
     respond_to do |format|
       if @task.save
-        if params["extra_field"]["service_id"]
+        unless params["extra_field"]["service_id"].blank?
           Service.find(params["extra_field"]["service_id"]).delete
         end
         if params[:sid]
@@ -244,13 +243,13 @@ class TasksController < ApplicationController
             http.request(request)
           }
 
-          product_list = response.body.to_json
+          product_list = response.to_json
 
           #OK e variaveis
           if response.kind_of? Net::HTTPSuccess
             return true
           else
-            p "Request: " + request.to_s
+            p "Request: " + request.body.to_s
             p "Failed with: " + response.code
             false
           end
