@@ -34,6 +34,8 @@ class TaskTypesController < ApplicationController
         format.html { redirect_to @task_type, notice: 'Task type was successfully created.' }
         format.json { render :show, status: :created, location: @task_type }
       else
+        @task_domains = TaskDomain.where(active: true)
+        @place_types = PlaceType.all
         format.html { render :new }
         format.json { render json: @task_type.errors, status: :unprocessable_entity }
       end

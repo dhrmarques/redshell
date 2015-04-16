@@ -2,6 +2,8 @@ class PlaceType < RedShellModel
 	has_many :places
 	has_and_belongs_to_many :task_types
 
+  validates :title, presence: true
+
 	def self.label(field = nil)
 		case field
 		when nil
