@@ -6,13 +6,16 @@ class Task < RedShellModel
 	belongs_to :place
   belongs_to :task_type
   has_many :tools
-  
+
+  validates_presence_of :employee
+  validates_presence_of :place
+  validates_presence_of :task_type
+
 #  validate :start_task_time_and_after_validation
   validate :after_vs_before_validation, :on => :create
   validate :negative_time_validation, :on => :create
 #  validate :checkin_start_validation
-  validates :task_type_id, presence: true
-  validates :place_id, presence: true
+
 
   def start_task_time_and_after_validation
     if checkin_start != nil && after != nil
