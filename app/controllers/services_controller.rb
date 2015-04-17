@@ -36,8 +36,8 @@ class ServicesController < ApplicationController
   end
 
   def list
-    task_types = TaskType.all
-    places = Place.all
+    task_types = TaskType.all.where(:each_n_weeks => nil).select(:id, :title)
+    places = Place.all.where(:active => true).select(:id, :code, :place_type_id)
     response_json = {"places" => places, "services" => task_types}
     respond_to do |format|
       format.json { render json: response_json, status: 200 }
