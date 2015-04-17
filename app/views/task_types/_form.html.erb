@@ -1,49 +1,13 @@
-<%= form_for(@task_type) do |f| %>
-  <% if @task_type.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@task_type.errors.count, "error") %> prohibited this task_type from being saved:</h2>
-
-      <ul>
-      <% @task_type.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :task_domain_id, TaskDomain.label %><br>
-    <%= f.select(:task_domain_id, options_for_select(@task_domains.collect { |tdom| [tdom.title, tdom.id] }, @task_type.task_domain_id), prompt: "Escolha um #{TaskDomain.label.downcase}")%>
-  </div>
-  <div class="field">
-    <%= f.label :title, TaskType.label(:title) %><br>
-    <%= f.text_field :title %>
-  </div>
-  <div class="field">
-    <%= f.label :week_days, TaskType.label(:week_days) %><br>
-    <%= f.text_field :week_days %>
-  </div>
-  <div class="field">
-    <%= f.label :each_n_weeks, TaskType.label(:each_n_weeks) %><br>
-    <%= f.text_field :each_n_weeks %>
-  </div>
-  <div class="field">
-    <%= f.label :after_in_minutes, TaskType.label(:after_in_minutes) %><br>
-    <%= f.text_field :after_in_minutes %>
-  </div>
-  <div class="field">
-    <%= f.label :before_in_minutes, TaskType.label(:before_in_minutes) %><br>
-    <%= f.text_field :before_in_minutes %>
-  </div>
-  <div class="field">
-    <%= f.label :ignore_if_vacant, TaskType.label(:ignore_if_vacant) %><br>
-    <%= f.check_box :ignore_if_vacant %>
-  </div>
-  <div class="field">
-    <%= f.label :description, TaskType.label(:description) %><br>
-    <%= f.text_area :description %>
-  </div>
+<%= simple_form_for(@task_type) do |f| %>
+  <%= f.association :task_domain, label: TaskDomain.label, collection: @task_domains, prompt: "Escolha um #{TaskDomain.label.downcase}" %>
+  <%= f.input :title, label: TaskType.label(:title) %>
+  <%= f.input :week_days, label: TaskType.label(:week_days) %>
+  <%= f.input :each_n_weeks, label: TaskType.label(:each_n_weeks) %>
+  <%= f.input :after_in_minutes, label: TaskType.label(:after_in_minutes) %>
+  <%= f.input :before_in_minutes, label: TaskType.label(:before_in_minutes) %>
+  <%= f.input :ignore_if_vacant, label: TaskType.label(:ignore_if_vacant), as: :boolean %>
+  <%= f.input :description, label: TaskType.label(:description), as: :text %>
   <div class="actions">
-    <%= f.submit "Salvar #{TaskType.label}", class: 'btn btn-success' %>
+    <%= f.button :submit, "Salvar #{TaskType.label}", class: 'btn btn-success' %>
   </div>
 <% end %>

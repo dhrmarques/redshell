@@ -1,8 +1,6 @@
-<%= form_for(@task) do |f| %>
+<%= simple_form_for(@task) do |f| %>
   <% if @task.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@task.errors.count, "erro") %> impediram esta tarefa de ser criada:</h2>
-
+    <div class="alert alert-danger">
       <ul>
       <% @task.errors.full_messages.each do |message| %>
         <li><%= message %></li>
@@ -11,36 +9,17 @@
     </div>
   <% end %>
 
-
-  <div class="field">
+  <div class="form-group">
     <%= f.label :task_domain, TaskDomain.label %><br>
     <% tdom_id = @task.task_type_id.nil? ? nil : @task.task_type.task_domain_id %>
-    <%= select_tag(:task_domain_id, options_for_select(@task_domains.collect { |tdom| [tdom.title, tdom.id] }, tdom_id), prompt: "Escolha um #{TaskDomain.label.downcase}")%>
+    <%= select_tag(:task_domain_id, options_for_select(@task_domains.collect { |tdom| [tdom.title, tdom.id] }, tdom_id), prompt: "Escolha um #{TaskDomain.label.downcase}", class: "form-control")%>
   </div>
-  <div class="field">
-    <%= f.label :task_type, TaskType.label %><br>
-    <%= f.select(:task_type_id, options_for_select(@task_types.collect { |ttyp| [ttyp.title, ttyp.id] }, @task.task_type_id), prompt: "Escolha um #{TaskType.label.downcase}")%>
-  </div>
-  <div class="field">
-    <%= f.label :place, Place.label %><br>
-    <%= f.select(:place_id, options_for_select(@places.collect { |pl| [pl.code, pl.id] }, @task.place_id), prompt: "Escolha um #{Place.label.downcase}")%>
-  </div>
-  <div class="field">
-    <%= f.label :employee_id, Employee.label %><br>
-    <%= f.select(:employee_id, options_for_select(@employees.collect { |emp| [emp.fullname, emp.id] }, @task.employee_id), prompt: "Escolha um #{Employee.label.downcase}")%>
-  </div>
-  <div class="field">
-    <%= f.label :after, Task.label(:after) %><br>
-    <%= f.datetime_select :after, default: 5.minutes.from_now, discard_year: (Date.current.month < 12) %>
-  </div>
-  <div class="field">
-    <%= f.label :before, Task.label(:before) %><br>
-    <%= f.datetime_select :before, default: 20.minutes.from_now, discard_year: (Date.current.month < 12)  %>
-  </div>
-  <div class="field">
-    <%= f.label :details, Task.label(:details) %><br>
-    <%= f.text_area :details %>
-  </div>
+  <%= f.association :task_type, label: TaskType.label, collection: @task_types, prompt: "Escolha um #{TaskType.label.downcase}" %>
+  <%= f.association :place, label: Place.label, collection: @places, prompt: "Escolha um #{Place.label.downcase}", label_method: :code %>
+  <%= f.association :employee, label: Employee.label, collection: @employees, prompt: "Escolha um #{Employee.label.downcase}", label_method: :fullname %>
+  <%= f.input :after, label: Task.label(:after), default: 5.minutes.from_now, discard_year: (Date.current.month < 12) %>
+  <%= f.input :before, label: Task.label(:before), default: 20.minutes.from_now, discard_year: (Date.current.month < 12) %>
+  <%= f.input :details, label: Task.label(:details), as: :text %><br>
 
   <div class="row">
     <div class="col-lg-5">
@@ -81,7 +60,7 @@
     </div>
   </div>
   <div class="actions">
-    <%= f.submit "Salvar #{Task.label}", class: 'btn btn-success' %>
+    <%= f.button :submit, "Salvar #{Task.label}", class: 'btn btn-success' %>
   </div>
 <% end %>
 

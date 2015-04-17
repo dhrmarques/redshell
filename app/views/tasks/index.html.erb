@@ -1,5 +1,7 @@
 <% if @tasks_for_checkout %>
-  <h1>Tarefas a Terminar</h1>
+  <div class="page-header">
+    <h1>Tarefas a Terminar</h1>
+  </div>
 
   <table class="table">
     <thead>
@@ -33,7 +35,9 @@
 <% end %>
 
 <% if @tasks_for_checkin %>
-  <h1>Tarefas a Iniciar</h1>
+  <div class="page-header">
+    <h1>Tarefas a Iniciar</h1>
+  </div>
 
   <table class="table">
     <thead>
@@ -64,7 +68,11 @@
   </table>
 <% end %>
 
-<h1>Lista de Tarefas</h1>
+<div class="page-header">
+  <h1>Lista de Tarefas</h1>
+</div>
+
+<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Criar #{Task.label}".html_safe, new_task_path, class: "btn btn-primary" %>
 
 <table class="table js-data-tables">
   <thead>
@@ -109,7 +117,6 @@
 <br>
 
 
-<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{Task.label}".html_safe, new_task_path, class: "btn btn-primary" %>
 
 <script type="text/javascript">
   //  function get_elapsed_time_string(total_seconds) {

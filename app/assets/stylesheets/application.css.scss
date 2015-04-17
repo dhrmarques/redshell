@@ -19,16 +19,20 @@
 
 @import "*"; /* */
 
-p#session_context {
-	float: right;
-	padding: 10px;
-	a {
-		margin-left: 10px;
-	}
-}
-
 a.btn.btn-primary {
 	margin: 20px;
+}
+
+.form-group {
+  &.datetime, &.date {
+    select {
+      display: inline;
+      width: auto;
+    }
+    .control-label {
+      width: 100%;
+    }
+  }
 }
 
 ul, nav {
@@ -37,6 +41,17 @@ ul, nav {
 		display: inline-block;
 		padding: 5px 0px 5px 5px;
 	}
+}
+
+.alert {
+  ul {
+    list-style-type: circle;
+    padding-left: 0px;
+    li {
+      display: block;
+      padding: 0px;
+    }
+  }
 }
 
 .task_summary {
