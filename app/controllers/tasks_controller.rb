@@ -31,17 +31,27 @@ class TasksController < ApplicationController
   # POST /tasks
   # POST /tasks.json
   def create
-    @task = Task.new(task_params)
-    consume_products(task_params["tool_ids"])
+    load_needed_resources
+    resource_param_keys = params.keys.select { |k| k =~ /^resource_\d+/ }
+    resource_pairs = params.select { |k, v| resource_param_keys.include? k }
+    tsk_params, req_params = Task.resource_arrays(resource_pairs)
     byebug
-    
-    respond_to do |format|
-      if @task.save
-        format.html { redirect_to @task, notice: 'Task was successfully created.' }
-        format.json { render :show, status: :created, location: @task }
-      else
+    if consume_products(req_params)
+      @task = Task.new(task_params.merge({json: tsk_params.to_json}))
+
+      respond_to do |format|
+        if @task.save
+          format.html { redirect_to @task, notice: 'Task was successfully created.' }
+          format.json { render :show, status: :created, location: @task }
+        else
+          # UNDO consume ???
+          format.html { render :new }
+          format.json { render json: @task.errors, status: :unprocessable_entity }
+        end
+      end
+    else
+      respond_to do |format|
         format.html { render :new }
-        format.json { render json: @task.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -212,35 +222,27 @@ class TasksController < ApplicationController
       @places = Place.where(active: true)
     end
 
-  public
-
     #devolve se deu certo ou nao
-    def consume_products(product_ids)
-      # uri = URI.parse("http://www.google.com")
-      # response = Net::HTTP.get_response(uri)
-      # Net::HTTP.get_print(uri)
+    def consume_products(products_for_request)
       
-      product_ids.each do |product_id|
-        uri = URI('http://' + STOCK_URL + '/' + STOCK_LIST_PATH)
-        # uri = URI("http://echo.jsontest.com/")
-        request = Net::HTTP::Put.new(uri)
-        request.set_form_data({"ID" => product_id.to_s, "Quantity" => "1"})
+      products_for_request.each do |prod|
+        uri = URI('http://' + STOCK_URL + '/' + STOCK_CONSUME_PATH)
+        req_consume = Net::HTTP::Put.new(uri)
+        req_consume.set_form_data(prod)
         # Headers
-        request['Content-Type'] = 'application/json'
-        request['Cache-Control'] = 'no-cache'
+        req_consume['Content-Type'] = 'application/json'
+        req_consume['Cache-Control'] = 'no-cache'
         
         begin
-          response = Net::HTTP.delay.start(uri.hostname, uri.port){|http|
-            http.request(request)
-          }
-
-          product_list = response.body.to_json
+          response = Net::HTTP.delay.start(uri.hostname, uri.port) do |http|
+            http.request(req_consume)
+          end
 
           #OK e variaveis
           if response.kind_of? Net::HTTPSuccess
             return true
           else
-            p "Request: " + request.to_s
+            p "Request: " + req_consume.to_s
             p "Failed with: " + response.code
             false
           end
@@ -251,6 +253,8 @@ class TasksController < ApplicationController
       end
     end
 
+  public
+
     def list_products
       uri = URI('http://' + STOCK_URL + '/' + STOCK_LIST_PATH)
       ext_req = Net::HTTP::Get.new(uri)
@@ -259,7 +263,7 @@ class TasksController < ApplicationController
       ext_req['Cache-Control'] = 'no-cache'
       
       begin
-        raise "Deu merda."
+        raise "Serviço do outro grupo ainda não está disponível."
         response = Net::HTTP.start(uri.hostname, uri.port) do |http|
           http.request(ext_req)
         end
@@ -269,7 +273,7 @@ class TasksController < ApplicationController
           their_response ||= [].to_json
         end
         product_list = their_response["ResponseBody"].map do |item|
-          {id: item["ID"], title: item["Name"], quantity: item["CurrQuantity"]}
+          {id: item["ID"], title: item["Name"], quantity: item["CurrQuantity"], description: item["Description"]}
         end
 
         # 143.107.102.58 # Hospitabilidade/B.I.
@@ -280,7 +284,6 @@ class TasksController < ApplicationController
         } if request.xhr?
 
       rescue Exception => e
-
         render json: {
           resources: [
             {id: 1, title: 'Produto de limpeza X1', quantity: 3},

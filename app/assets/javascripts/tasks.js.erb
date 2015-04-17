@@ -1,5 +1,5 @@
 var resources = [];
-var resourcesCount = 0;
+var nResourceSelectTags = 0;
 
 var replaceOptions = function(selectTag, options, prompt) {
   selectTag.empty().append('<option value="">' + prompt + '</option>');
@@ -43,39 +43,82 @@ var whenPickingTaskType = function() {
   });
 }
 
+var selector = function(n, h, q) {
+  var str = "";
+  if (h)
+    str += "#";
+  str += "resource_" + n;
+  if (q)
+    str += "_qty";
+  return str;
+}
+
+var rollbackSelectTags = function() {
+  var ps = $("#resources-select-group").children();
+  for (var i = 1 ; i <= ps.length ; i++) {
+    $("#" + ps[i - 1].children[0].id).attr("id", selector(i, false, false));
+    $("#" + ps[i - 1].children[1].id).attr("id", selector(i, false, true));
+  }
+}
+
 var whenPickingResource = function(params) {
   var index = params.data;
-  var identifier = "#resource_" + index;
-  var qtyIdentifier = identifier + "_qty";
-  var resourceId = $(identifier).val();
-  if (resourceId == "")
+  var before_change = $(this).data('pre');
+  var i1 = selector(index, true, false);
+  var i1 = selector(index, true, false);
+  var i2 = selector(index, true, true);
+  $(i1).siblings().first().empty();
+
+  var resourceId = $(i1).val();
+  if (resourceId == "") {
+    if (nResourceSelectTags > 1) {
+      nResourceSelectTags -= 1;
+      $(i1).parent().remove();
+    }
+    rollbackSelectTags();
     return null;
-  var selectQtyStr = "\n\t<select id='" + qtyIdentifier + "'>";
+  }
+
   var resourceIndex = null;
+  var selectQtyStr = "";
   for (var j = 0 ; j < resources.length ; j++)
     if (resources[j].id == resourceId)
       resourceIndex = j;
-  for (var j = 0 ; j <= resources[resourceIndex].quantity ; j++) {
-    if (j == 0)
-      selectQtyStr = selectQtyStr + "\n\t\t<option>Quantidade...</option>";
-    else
-      selectQtyStr = selectQtyStr + "\n\t\t<option value='" + j + "'>" + j + "</option>";
-  }
-  if ($(qtyIdentifier).length > 0)
-    $(qtyIdentifier).remove();
-  $(identifier).parent().append(selectQtyStr);
+  for (var j = 1 ; j <= resources[resourceIndex].quantity ; j++)
+    selectQtyStr += "\n\t\t<option value='" + j + "'>" + j + "</option>";
+  
+  $(i2).append(selectQtyStr);
+  if (before_change == "")
+    addResourcesOption([]);
+  $(this).data('pre', $(this).val());
 }
 
-var replaceResources = function(resourcesArray) {
-  resources = resourcesArray;
-  var selectStr = "<p class='text-center'>\n\t<select id='resource_1'>";
+var addResourcesOption = function(resourcesArray) {
+  if (resources.length == 0 && resourcesArray.length > 0)
+    resources = resourcesArray;
+  nResourceSelectTags += 1;
+  var index = nResourceSelectTags;
+
+  var i1 = selector(index, false, false);
+  var i2 = selector(index, false, true);
+  var i3 = selector(index, true, false);
+  var selectStr = "\n\t<select id='" + i1 + "' name='" + i1 + "'>";
   selectStr += "\n\t\t<option value=''>Escolher um recurso externo...</option>";
   for (var i = 0 ; i < resources.length ; i++) {
-    selectStr = selectStr + "\n\t\t<option value='" + resources[i].id + "'>" + resources[i].title + "</option>\n</p>";
+    selectStr = selectStr + "\n\t\t<option value='" + resources[i].id + "'>" + resources[i].title + "</option>";
   }
-  $("#resources-select-group").append(selectStr);
-  $(document).on("change", "#resource_1", 1, whenPickingResource);
-  resourcesCount = 1;
+  selectStr += "\n\t</select>";
+
+  var selectQtyStr = "\n\t<select id='" + i2 + "' name='" + i2 + "'></select>";
+  
+  $("#resources-select-group").append("\n<p>" + selectStr + selectQtyStr + "\n</p>");
+  $(document).on("change", i3, nResourceSelectTags, whenPickingResource);
+  $(i3).data('pre', $(i3).val());
+}
+
+var addResourcesDataToHiddenInput = function() {
+  $("#resources-select-group").prepend("<input type='hidden' value='" +
+      JSON.stringify(resources) + "' name='resource_0_all'/>");
 }
 
 var whenUsingResources = function() {
@@ -84,7 +127,8 @@ var whenUsingResources = function() {
     url: "<%= Rails.application.routes.url_helpers.list_products_tasks_path %>",
     type: "GET",
     success: function(data, textStatus, xhr) {
-      replaceResources(data.resources);
+      addResourcesOption(data.resources);
+      addResourcesDataToHiddenInput();
       $("#fetch-resources").hide();
     },
     error: function(data, textStatus, xhr) {

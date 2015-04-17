@@ -42,7 +42,7 @@
     <%= f.text_area :details %>
   </div>
 
-  <div class="row">
+  <div class="row hidden">
     <div class="col-lg-5">
       <%= f.label :tools, Task.label(:tools) %><br>
       <table id="js-selected-tools" class="table table-condensed table-bordered">
@@ -81,14 +81,14 @@
     </div>
   </div>
 
-  <div class="row">
-    <span id="fetch-resources" class="btn btn-default btn-block">
+  <div class="row text-center">
+    <span id="fetch-resources" class="btn btn-default">
       Carregar recursos externos
     </span>
   </div>
 
-  <div id="resources-select-group" class="row">
-    
+  <div id="resources-select-group" class="text-center">
+
   </div>
 
   <div class="actions">

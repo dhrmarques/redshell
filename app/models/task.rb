@@ -132,4 +132,19 @@ class Task < RedShellModel
     JSON.parse(json, symbolize_names: true)
   end
 
+  def self.resource_arrays hsh
+    resources = JSON.parse hsh["resource_0_all"] # Data on every resource
+    arr_save, arr_req = [], [] # JSON array to save on this object, JSON array to perform request
+    
+    hsh.keys.select { |k| k =~ /^resource_\d+$/ }.each do |k_index|
+      qty = hsh["#{k_index}_qty"]
+      next if qty.nil? # ignore if no quantity selected
+      arr_req << {"ID" => hsh[k_index].to_s, "Quantity" => qty.to_s}
+      res = resources.select { |r| r["id"] == hsh[k_index].to_i }.first # find the resource among the data
+      res["quantity"] = qty.to_i # quantity consumed, not their current quantity
+      arr_save << res
+    end
+    return arr_save, arr_req
+  end
+
 end
