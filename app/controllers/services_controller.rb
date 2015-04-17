@@ -29,8 +29,9 @@ class ServicesController < ApplicationController
     end
   end
 
-  def show
-    
+  def create_task
+    @task = Service.find(params[:id])
+    render 'tasks/form', layout: 'tasks/new'
   end
 
   def list

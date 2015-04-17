@@ -30,6 +30,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :services do
+    member do
+      post 'create_task', controller: :services, action: :create_task
+    end
+  end
+
   resources :employees
   resources :employees do
     member do

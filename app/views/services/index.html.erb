@@ -22,6 +22,7 @@
         <td><%= service.place.place_type.title %></td>
         <td><%= link_to '<i class="fa fa-eye"></i> Ver'.html_safe, service, class: "btn btn-default" %></td>
         <td><%= link_to '<i class="fa fa-trash"></i> Remover'.html_safe, service, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
+        <td><%= link_to '<i class="fa"></i> Criar Tarefa'.html_safe, create_task_service_path(service), method: :create_task, class: "btn" %></td>
       </tr>
     <% end %>
   </tbody>
