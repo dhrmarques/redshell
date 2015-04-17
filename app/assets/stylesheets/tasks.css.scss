@@ -1,0 +1,29 @@
+// Place all the styles related to the tasks controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.task-item {
+  padding: 5px;
+  margin-top: 5px;
+  border-bottom: 1px solid silver;
+
+  &.spotlight {
+    a i {
+      margin-right: 10px;
+    }
+    a.btn-info i {
+      margin-right: 0px !important;
+    }
+
+    &.not_yet       { background-color: silver;       }
+    &.no_need_to    { background-color: khaki;        }
+    &.do_it         { background-color: palegreen;    }
+    &.urgent        { background-color: navajowhite;  }
+    &.already_late  { background-color: lightpink;    }
+    &.past          { background-color: darkseagreen; }
+  }
+}
+
+#task-status p.bg-info {
+  padding: 5px;
+}

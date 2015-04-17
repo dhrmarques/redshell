@@ -1,0 +1,82 @@
+<%= simple_form_for(@task) do |f| %>
+  <% if @task.errors.any? %>
+    <div class="alert alert-danger">
+      <ul>
+      <% @task.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :task_domain, TaskDomain.label %><br>
+    <% tdom_id = @task.task_type_id.nil? ? nil : @task.task_type.task_domain_id %>
+    <%= select_tag(:task_domain_id, options_for_select(@task_domains.collect { |tdom| [tdom.title, tdom.id] }, tdom_id), prompt: "Escolha um #{TaskDomain.label.downcase}", class: "form-control")%>
+  </div>
+  <%= f.association :task_type, label: TaskType.label, collection: @task_types, prompt: "Escolha um #{TaskType.label.downcase}" %>
+  <%= f.association :place, label: Place.label, collection: @places, prompt: "Escolha um #{Place.label.downcase}", label_method: :code %>
+  <%= f.association :employee, label: Employee.label, collection: @employees, prompt: "Escolha um #{Employee.label.downcase}", label_method: :fullname %>
+  <%= f.input :after, label: Task.label(:after), default: 5.minutes.from_now, discard_year: (Date.current.month < 12) %>
+  <%= f.input :before, label: Task.label(:before), default: 20.minutes.from_now, discard_year: (Date.current.month < 12) %>
+  <%= f.input :details, label: Task.label(:details), as: :text %><br>
+
+  <div class="row">
+    <div class="col-lg-5">
+      <%= f.label :tools, Task.label(:tools) %><br>
+      <table id="js-selected-tools" class="table table-condensed table-bordered">
+        <% @task.tools.each do |t| %>
+          <tr id="<%= t.id %>">
+            <td>
+              <%= check_box(:task, :tool_ids, {class: "js-each-tool", id: "task_tool_#{t.id}", data:{id: t.id}, include_hidden: false, multiple: true}, t.id) %>
+            </td>
+            <td><%= t.title %></td>
+            <td><%= t.description %></td>
+          </tr> 
+        <% end %>
+      </table>
+    </div>
+    <div class="col-lg-7">
+      <table class="table table-condensed js-data-tables">
+        <thead>
+          <tr>
+            <th class="no-order"></th>
+            <th>Nome</th>
+            <th>Descrição</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @general_tools.each do |t| %>
+            <tr id="<%= t.id %>">
+              <td>
+                <%= check_box(:task, :tool_ids, {class: "js-each-tool",id: "task_tool_#{t.id}", data:{id: t.id}, multiple: true, include_hidden: false}, t.id) %>
+              </td>
+              <td><%= t.title %></td>
+              <td><%= t.description %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="actions">
+    <%= f.button :submit, "Salvar #{Task.label}", class: 'btn btn-success' %>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  $("form").on("click", ".js-each-tool", function(){
+    if($(this).is(':checked')) {
+      $("#js-selected-tools").append($(this).parents("tr"));
+      var row = dataTable.row("#"+$(this).data("id")).remove().draw();
+    } else {
+      var tds = $(this).parents("tr").children();
+      tds.children("input[type='checkbox']").removeAttr("checked");
+      var elemArray = $.map(tds, function(val, i) {
+        return(tds.eq(i).html());
+      });
+      dataTable.row.add(elemArray).draw();
+      $(this).parents("tr").remove();
+    }
+  });
+</script>

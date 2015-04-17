@@ -1,0 +1,44 @@
+var replaceOptions = function(selectTag, options, prompt) {
+  selectTag.empty().append('<option value="">' + prompt + '</option>');
+  for (var i = 0 ; i < options.length ; i++) {
+    selectTag.append('<option value="' + options[i][0] + '">' + options[i][1] + '</option>');
+  }
+}
+
+var whenPickingTaskDomain = function() {
+  var domainId = $("#task_domain_id option:selected").val();
+  if (domainId == "")
+    return null;
+  $.ajax({
+    url: "<%= Rails.application.routes.url_helpers.pick_domain_tasks_path %>",
+    type: "GET",
+    data: ("domain_id=" + domainId),
+    success: function(data, textStatus, xhr) {
+      replaceOptions($("#task_task_type_id"), data.task_types, data.task_types_prompt);
+      replaceOptions($("#task_employee_id"), data.employees, data.employees_prompt);
+    },
+    error: function() {
+      alert("Erro ao carregar dados relativos ao domínio de tarefa.");
+    }
+  });
+}
+
+var whenPickingTaskType = function() {
+  var typeId = $("#task_task_type_id option:selected").val();
+  if (typeId == "")
+    return null;
+  $.ajax({
+    url: "<%= Rails.application.routes.url_helpers.pick_type_tasks_path %>",
+    type: "GET",
+    data: ("type_id=" + typeId),
+    success: function(data, textStatus, xhr) {
+      replaceOptions($("#task_place"), data.places, data.places_prompt);
+    },
+    error: function() {
+      alert("Erro ao carregar dados relativos ao tipo de tarefa.");
+    }
+  });
+}
+
+$(document).on("change", "#task_domain_id",    whenPickingTaskDomain)
+$(document).on("change", "#task_task_type_id", whenPickingTaskType)

@@ -1,0 +1,33 @@
+<div id="<%= task.id %>" class="task-item spotlight <%= options[:start_advice] %> row">
+  <p>
+    <strong><%= task.task_type.title %> em <%= task.place.code %></strong><br>
+    <%= cool_date_interval(task.after, task.before) %>
+  </p>
+  <% custom = case options[:start_advice]
+    when :not_yet
+      ['frown-o', 'btn-default disabled', 6]
+    when :no_need_to
+      ['meh-o', 'btn-default', 6]
+    when :do_it
+      ['smile-o', 'btn-success', 8]
+    when :urgent
+      ['meh-o', 'btn-warning', 10]
+    when :already_late
+      ['frown-o', 'btn-danger', 10]
+    when :past
+      ['check-square', 'btn-success disabled', 10]
+    else
+      ['question-circle', 'btn-default disabled', 6]
+    end %>
+    <%
+    check_path = options[:checkinout] =~ /OUT/ ? checkout_task_path(task) : checkin_task_path(task)
+    second_btn_cls = "btn btn-info col-xs-#{12 - custom.third}"
+    second_btn = options[:status_page] ?
+        link_to("<i class=\"fa fa-tasks\"></i>".html_safe, todo_tasks_path, class: second_btn_cls) :
+        link_to("<i class=\"fa fa-info-circle\"></i>".html_safe, status_task_path(task), class: second_btn_cls)
+    %>
+    <div class="btn-group btn-block">
+      <%= link_to "<i class=\"fa fa-#{custom.first}\"></i> #{options[:checkinout]}".html_safe, check_path, class: "btn #{custom.second} col-xs-#{custom.third}" %>
+      <%= second_btn %>
+    </div>
+</div>

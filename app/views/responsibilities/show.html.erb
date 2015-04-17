@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong><%= TaskDomain.label %></strong>
+  <%= link_to @responsibility.task_domain.title, task_domain_path(@responsibility.task_domain) %>
+</p>
+
+<p>
+  <strong><%= EmployeeType.label %></strong>
+  <%= link_to @responsibility.employee_type.title, employee_type_path(@responsibility.employee_type) %>
+</p>
+
+<%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_responsibility_path(@responsibility), class: "btn btn-warning" %> |
+<%= link_to '<i class="fa fa-arrow-left"></i> Voltar'.html_safe, responsibilities_path, class: "btn btn-default" %>

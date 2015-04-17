@@ -1,0 +1,66 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ */
+
+@import "bootstrap";
+
+@import "font-awesome-sprockets";
+@import "font-awesome";
+
+@import "*"; /* */
+
+a.btn.btn-primary {
+	margin: 20px;
+}
+
+.form-group {
+  &.datetime, &.date {
+    select {
+      display: inline;
+      width: auto;
+    }
+    .control-label {
+      width: 100%;
+    }
+  }
+}
+
+ul, nav {
+	list-style-type: none;
+	li {
+		display: inline-block;
+		padding: 5px 0px 5px 5px;
+	}
+}
+
+.alert {
+  ul {
+    list-style-type: circle;
+    padding-left: 0px;
+    li {
+      display: block;
+      padding: 0px;
+    }
+  }
+}
+
+.task_summary {
+  padding: 5px;
+  border-radius: 3px;
+  background-color: #eee;
+  border: 1px solid #999;
+  u {
+    text-decoration: none;
+    color: crimson;
+  }
+}

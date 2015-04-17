@@ -1,0 +1,18 @@
+<%= simple_form_for(@employee_type) do |f| %>
+	<% if @employee_type.errors.any? %>
+		<div class="alert alert-danger">
+      <ul>
+      <% @employee_type.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= f.input :title, label: EmployeeType.label(:title) %>
+  <%= f.input :code, label: EmployeeType.label(:code) %>
+  <%= f.input :description, label: EmployeeType.label(:description) %>
+  <div class="actions">
+    <%= f.button :submit, "Salvar #{EmployeeType.label}", class: 'btn btn-success' %>
+  </div>
+<% end %>

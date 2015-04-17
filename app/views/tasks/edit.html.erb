@@ -1,0 +1,8 @@
+<div class="page-header">
+	<h1>Editando <%= (:task).to_s.classify.constantize.label %></h1>
+</div>
+
+<%= render 'form' %>
+
+<%= link_to 'Exibir', @task %> |
+<%= link_to '</i> Voltar'.html_safe, tasks_path %>

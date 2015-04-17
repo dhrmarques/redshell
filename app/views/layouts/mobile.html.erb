@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RedShell mobile</title>
+  <%= stylesheet_link_tag    'application', media: 'all'%>
+  <%= javascript_include_tag 'application'%>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+<%= yield %>
+
+  <br>
+
+  <footer style="padding: 5px;">
+    <%= link_to "<i class=\"fa fa-eye\"></i> Visão geral".html_safe, overview_tasks_path, class: 'btn btn-info btn-xs' %>
+    <p class="pull-right">
+      <%= current_employee.name %>
+      <%= link_to 'Sair', destroy_employee_session_path, method: :delete, class: "btn btn-default btn-xs" %>
+    </p>
+  </footer>
+
+</body>
+</html>

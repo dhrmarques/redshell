@@ -1,0 +1,41 @@
+<div class="page-header">
+  <h1>Listando <%= (:employees).to_s.classify.constantize.label %></h1>
+</div>
+
+<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{Employee.label}".html_safe, new_employee_path, class: "btn btn-primary" %>
+<table class="table js-data-tables">
+  <thead>
+    <tr>
+      <th><%= Employee.label :name %></th>
+      <th><%= Employee.label :last_name %></th>
+      <th><%= Employee.label :cpf %></th>
+      <th><%= Employee.label :email %></th>
+      <th><%= EmployeeType.label %></th>
+      <th><%= Employee.label :rg %></th>
+      <th><%= Employee.label :birth %></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @employees.each do |employee| %>
+      <tr>
+        <td><%= employee.name %></td>
+        <td><%= employee.last_name %></td>
+        <td><%= employee.cpf %></td>
+        <td><%= employee.email %></td>
+        <td><%= employee.employee_type.title %></td>
+        <td><%= employee.rg %></td>
+        <td><%= l employee.birth, format: :shorty %></td>
+        <td><%= link_to '<i class="fa fa-eye"></i> Ver'.html_safe, employee, class: "btn btn-default" %></td>
+        <td><%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_employee_path(employee), class: "btn btn-warning" %></td>
+        <td><%= link_to '<i class="fa fa-trash"></i> Remover'.html_safe, employee, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+

@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong><%= TaskDomain.label :title %></strong>
+  <%= @task_domain.title %>
+</p>
+
+<p>
+  <strong><%= TaskDomain.label :description %></strong>
+  <%= @task_domain.description %>
+</p>
+
+<%= link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_task_domain_path(@task_domain), class: "btn btn-warning" %> |
+<%= link_to '<i class="fa fa-arrow-left"></i> Voltar'.html_safe, task_domains_path, class: "btn btn-default" %>

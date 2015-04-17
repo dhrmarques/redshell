@@ -1,0 +1,17 @@
+<%= simple_form_for(@employee) do |f| %>
+  <%= f.input :name %>
+  <%= f.input :last_name, label: Employee.label(:last_name) %>
+  <%= f.association :employee_type, label: EmployeeType.label, collection: @employee_types, prompt: "Escolha um #{EmployeeType.label.downcase}", include_blank: false %>
+  <%= f.input :email, label: Employee.label(:email), autofocus: true  %><br />
+  <%= f.input :password, label: Employee.label(:password) %>
+  <% if @validatable %>
+    <em>(<%= @minimum_password_length %> characters minimum)</em>
+  <% end %>
+  <%= f.input :password_confirmation, label: Employee.label(:password_confirmation), autocomplete: "off"  %><br />
+  <%= f.input :cpf, label: Employee.label(:cpf) %>
+  <%= f.input :rg, label: Employee.label(:rg) %>
+  <%= f.input :birth, label: Employee.label(:birth), as: :date %>
+  <div class="actions">
+    <%= f.button :submit, "Salvar #{Employee.label}", class: 'btn btn-success'  %>
+  </div>
+<% end %>

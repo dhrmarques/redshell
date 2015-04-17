@@ -1,0 +1,7 @@
+<div class="page-header">
+	<h1>Criando <%= (:task_domain).to_s.classify.constantize.label %></h1>
+</div>
+
+<%= render 'form' %>
+
+<%= link_to '<i class="fa fa-arrow-left"></i> Voltar'.html_safe, task_domains_path, class: "btn btn-default" %>
