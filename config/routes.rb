@@ -22,7 +22,7 @@ Rails.application.routes.draw do
 
   resources :responsibilities
 
-  resources :services, only: [:new, :create, :destroy]
+  resources :services, only: [:index, :new, :create, :destroy]
 
   resources :employees
   resources :employees do
