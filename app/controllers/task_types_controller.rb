@@ -4,7 +4,7 @@ class TaskTypesController < ApplicationController
   # GET /task_types
   # GET /task_types.json
   def index
-    @task_types = TaskType.where(active: true)
+    @task_types = TaskType.where(active: true).includes(:task_domain)
   end
 
   # GET /task_types/1
@@ -14,6 +14,7 @@ class TaskTypesController < ApplicationController
 
   # GET /task_types/new
   def new
+    @place_types = PlaceType.all
     @task_type = TaskType.new
     @task_domains = TaskDomain.where(active: true)
   end
@@ -27,6 +28,7 @@ class TaskTypesController < ApplicationController
   # POST /task_types.json
   def create
     @task_type = TaskType.new(task_type_params)
+    @task_type.place_types = PlaceType.where(:id => params["place_types"])
     respond_to do |format|
       if @task_type.save
         format.html { redirect_to @task_type, notice: 'Task type was successfully created.' }
