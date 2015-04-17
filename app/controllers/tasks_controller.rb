@@ -243,7 +243,7 @@ class TasksController < ApplicationController
             http.request(request)
           }
 
-          product_list = response.to_json
+          product_list = response.body.to_json
 
           #OK e variaveis
           if response.kind_of? Net::HTTPSuccess
