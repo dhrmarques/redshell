@@ -1,4 +1,5 @@
 class ServicesController < ApplicationController
+  protect_from_forgery unless: -> { request.format.json? }
 
   def index
     @services = Service.all.includes(:place, :task_type)
@@ -39,7 +40,7 @@ class ServicesController < ApplicationController
     places = Place.all
     response_json = {"places" => places, "services" => task_types}
     respond_to do |format|
-      format.json { render json: response_json, status: :OK }
+      format.json { render json: response_json, status: 200 }
     end
   end
 
