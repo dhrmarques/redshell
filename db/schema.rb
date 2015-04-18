@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150325201809) do
+ActiveRecord::Schema.define(version: 20150416234447) do
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0, null: false
@@ -106,6 +106,18 @@ ActiveRecord::Schema.define(version: 20150325201809) do
 
   add_index "responsibilities", ["employee_type_id"], name: "index_responsibilities_on_employee_type_id"
   add_index "responsibilities", ["task_domain_id"], name: "index_responsibilities_on_task_domain_id"
+
+  create_table "services", force: true do |t|
+    t.datetime "after"
+    t.datetime "before"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "task_type_id"
+    t.integer  "place_id"
+  end
+
+  add_index "services", ["place_id"], name: "index_services_on_place_id"
+  add_index "services", ["task_type_id"], name: "index_services_on_task_type_id"
 
   create_table "task_domains", force: true do |t|
     t.string   "title"
