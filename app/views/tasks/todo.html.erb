@@ -1,0 +1,14 @@
+<div class="container" id="mobile-layout">
+
+  <div id="task-list">
+    
+    <% @todos.each do |th|
+      view_name = 'components/task_todo'
+      view_name << '_spotlight' if th[:spotlight]
+      options = th.reject { |k, v| k == :task } %>
+      <%= render partial: view_name, locals: {task: th[:task], options: options} %>
+    <% end %>
+
+  </div>
+
+</div>

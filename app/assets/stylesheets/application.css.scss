@@ -17,8 +17,10 @@
 @import "font-awesome-sprockets";
 @import "font-awesome";
 
+@import "*"; /* */
+
 p#session_context {
-	float:right;
+	float: right;
 	padding: 10px;
 	a {
 		margin-left: 10px;
@@ -38,12 +40,12 @@ ul, nav {
 }
 
 .task_summary {
-	padding: 5px;
-	border-radius: 3px;
-	background-color: #eee;
-	border: 1px solid #999;
-	u {
-		text-decoration: none;
-		color: crimson;
-	}
+  padding: 5px;
+  border-radius: 3px;
+  background-color: #eee;
+  border: 1px solid #999;
+  u {
+    text-decoration: none;
+    color: crimson;
+  }
 }

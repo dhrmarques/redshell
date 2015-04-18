@@ -12,6 +12,13 @@ Rails.application.routes.draw do
   resources :tasks do
     get 'pick_domain', on: :collection
     get 'pick_type',   on: :collection
+    get 'checkin',   on: :member
+    get 'checkout',   on: :member
+    get 'reset',   on: :member
+    get 'todo', on: :collection
+    get 'status', on: :member
+    get 'overview', on: :collection
+    get 'list_products', on: :collection
   end
 
   resources :place_types
@@ -21,6 +28,20 @@ Rails.application.routes.draw do
   resources :employee_types
 
   resources :responsibilities
+
+  resources :services, only: [:index, :new, :create, :destroy]
+  resources :services do
+    collection do
+      post 'create', controller: :services, action: :create
+      get 'list', controller: :services, action: :list 
+    end
+  end
+
+  resources :services do
+    member do
+      post 'create_task', controller: :services, action: :create_task
+    end
+  end
 
   resources :employees
   resources :employees do

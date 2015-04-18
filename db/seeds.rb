@@ -8,16 +8,17 @@
 
 # Uncomment the lines you wish to seed
 exec_list = [
-#	:placetypes,
-#	:places,
-#	:tools,
-#	:employee_types,
-#	:employees,
-#	:task_domains,
-#	:task_types,
-#	:tasks,
-#	:responsibilities,
-#	:place_types_task_types,
+	#:placetypes,
+	#:places,
+	#:tools,
+	#:employee_types,
+	#:employees,
+	#:task_domains,
+	:task_types,
+	:tasks,
+	:responsibilities,
+	:place_types_task_types,
+	:services
 ]
 verbose = true
 
@@ -42,7 +43,8 @@ if exec_list.include? :placetypes
 		{title: 'Lazer', description: 'Lugar para atividades de lazer', restricted: false, common: true},
 		{title: 'Corredor', description: 'Dá acesso a outros lugares', restricted: false, common: true},
 		{title: 'Garagem', description: 'Contém vagas para automóveis', restricted: false, common: true},
-		{title: 'Cozinha', description: 'Lugar onde se preparam as refeições', restricted: true, common: true}
+		{title: 'Cozinha', description: 'Lugar onde se preparam as refeições', restricted: true, common: true},
+		{title: 'Escritório', description: 'Sala de um funcionário', restricted: true, common: false}
 	]
 	puts "TIPOS DE LUGAR:\n#{placetypes}" if verbose
 
@@ -61,7 +63,8 @@ if exec_list.include? :places
 	pts_ = {
 		base: pts[0], suite: pts[1], luxo: pts[2],
 		mast: pts[3], lav: pts[4], ref: pts[5],
-		lazer: pts[6], corr: pts[7], gar: pts[8], coz: pts[9]
+		lazer: pts[6], corr: pts[7], gar: pts[8],
+		coz: pts[9], esc: pts[10]
 	}
 
 	alphabet = ('A'..'F').to_a
@@ -208,6 +211,14 @@ if exec_list.include? :tools
 		tools << Tool.create!(title: title, description: desc)
 	end
 
+		# máquinas de lavar
+	desc = "Máquina de lavar roupas com diferentes velocidades de enxágue."
+	(Random.rand(1 + tools.count) + 1).times do |i|
+		title = "Máquina de Lavar #{i + 1}"
+		puts "(#{title}) #{desc}..." if verbose
+		tools << Tool.create!(title: title, description: desc)
+	end
+
 # ======================================================================================================
 end
 
@@ -217,14 +228,15 @@ if exec_list.include? :employee_types
 	# Employee types creation
 
 	employeetypes = [
-		{title: 'Camareiro', description: 'Descrição do camareiro'},
-		{title: 'Lavadeiro', description: 'Descrição do lavadeiro'},
-		{title: 'Faxineiro', description: 'Descrição do faxineiro'},
-		{title: 'Assistente', description: 'Descrição do assistente'},
-		{title: 'Técnico Geral', description: 'Descrição do TG'},
-		{title: 'Técnico Eletricidade', description: 'Descrição do TE'},
-		{title: 'Técnico Construção', description: 'Descrição do TC'},
-		{title: 'Técnico Hidráulico', description: 'Descrição do TH'},
+		{title: 'Camareiro', code: 'camareiro', description: 'Descrição do camareiro'},
+		{title: 'Lavadeiro', code: 'lavadeiro', description: 'Descrição do lavadeiro'},
+		{title: 'Faxineiro', code: 'faxineiro', description: 'Descrição do faxineiro'},
+		{title: 'Assistente', code: 'assistente', description: 'Descrição do assistente'},
+		{title: 'Técnico Geral', code: 'tecnico_geral', description: 'Descrição do TG'},
+		{title: 'Técnico Eletricidade', code: 'tecnico_eletricidade', description: 'Descrição do TE'},
+		{title: 'Técnico Construção', code: 'tecnico_construcao', description: 'Descrição do TC'},
+		{title: 'Técnico Hidráulico', code: 'tecnico_hidraulico', description: 'Descrição do TH'},
+		{title: 'Administrador', code: 'admin', description: 'Administrador do sistema'},
 	]
 	
 	ets = EmployeeType.create!(employeetypes)
@@ -251,7 +263,7 @@ if exec_list.include? :employees
 
 		et_id = ets[i].id
 		et_t = ets[i].title
-		puts "(#{et_t})"
+		puts "(#{et_t})" if verbose
 		(100 * percents[i] / percents.sum).ceil.times do |j|
 			str = et_t[0]
 			str += et_t[8] if et_t =~ /Técnico/
@@ -347,6 +359,7 @@ if exec_list.include? :tasks
 	room_ids.shuffle[0..(Random.rand(room_ids.count))].each do |rid|
 		after = DateTime.now + Random.rand(3 * 60).minutes
 		before = after + 10.minutes + Random.rand(60).minutes
+		# p "before: " + before.to_s + " " + "after: " + after.to_s
 		task = {
 			after: after, before: before, place_id: rid,
 			employee_id: assistant_ids.shuffle.first, task_type_id: tts.fourth.id
@@ -354,6 +367,27 @@ if exec_list.include? :tasks
 		puts "\t#{task}" if verbose
 
 		tasks << Task.create!(task)
+	end
+	
+# ======================================================================================================
+end
+
+if exec_list.include? :services
+# ======================================================================================================
+
+	# Services creation
+
+	tts ||= TaskType.all
+	places_ids ||= Place.all.select(:id)
+
+	places_ids.shuffle[0..(Random.rand(places_ids.count))].each do |pid|
+		after = DateTime.now + Random.rand(3 * 60).minutes
+		before = after + 10.minutes + Random.rand(60).minutes
+		service = {
+			after: after, before: before, place_id: pid.id, task_type_id: tts[Random.rand(tts.count)].id
+		}
+		puts "\t#{service}" if verbose
+		Service.create!(service)
 	end
 	
 # ======================================================================================================
@@ -399,17 +433,16 @@ if exec_list.include? :place_types_task_types
 
 	pts = PlaceType.all
 	ttis = TaskType.pluck(:id).sort
-	byebug
 
-	pts[0].task_types << TaskType.find(ttis - ttis[6..8])
-	pts[1].task_types << TaskType.find(ttis - ttis[6..8])
-	pts[2].task_types << TaskType.find(ttis - ttis[6..8])
-	pts[3].task_types << TaskType.find(ttis - ttis[6..8])
-	pts[4].task_types << TaskType.find(ttis[9..10])
-	pts[6].task_types << TaskType.find(ttis[1..2] + ttis[6..10])
+	pts[0].task_types << TaskType.find(ttis - ttis[6..8]) 				# Quarto Base
+	pts[1].task_types << TaskType.find(ttis - ttis[6..8]) 				# Quarto Suíte
+	pts[2].task_types << TaskType.find(ttis - ttis[6..8]) 				# Quarto Luxo
+	pts[3].task_types << TaskType.find(ttis - ttis[6..8]) 				# Quarto Master
+	pts[4].task_types << TaskType.find(ttis[9..10])								# Lavanderia
+	pts[6].task_types << TaskType.find(ttis[1..2] + ttis[6..10])	# Lazer
+	pts[10].task_types << TaskType.find(ttis[0..2] + ttis[9..10])	# Escritório
 
 	pts.each { |pt| puts "PLACETYPE #{pt.title}\n" ; pt.task_types.each { |tt| puts "\t#{tt.title}" } } if verbose
 
 # ======================================================================================================
 end
-

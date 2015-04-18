@@ -1,6 +1,6 @@
 <h1>Listando <%= (:task_types).to_s.classify.constantize.label %></h1>
 
-<table class="table">
+<table class="table js-data-tables">
   <thead>
     <tr>
       <th><%= TaskDomain.label %></th>
@@ -11,7 +11,9 @@
       <th><%= TaskType.label :after_in_minutes %></th>
       <th><%= TaskType.label :before_in_minutes %></th>
       <th><%= TaskType.label :description %></th>
-      <th colspan="3"></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
     </tr>
   </thead>
 

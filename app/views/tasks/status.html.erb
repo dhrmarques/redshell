@@ -1,0 +1,44 @@
+<div id="task-status" class="container">
+
+  <%= render partial: 'components/task_todo_spotlight', locals: {task: @task, options: @options.merge({status_page: true})} %>
+  <br>
+  <p id="task-details"><%= @task.details || "Sem detalhes" %></p>
+  
+  <% unless @task.checkin_start.nil? %>
+    <p id="task-checkin">
+      <strong><%= Task.label :checkin_start %></strong>
+      <%= cool_date(@task.checkin_start) %>
+    </p>
+    <% unless @task.checkin_finish.nil? %>
+      <p id="task-checkout">
+        <strong><%= Task.label :checkin_finish %></strong>
+        <%= cool_date(@task.checkin_finish) %>
+      </p>
+    <% end %>
+  <% end %>
+
+  <p class="bg-info text-info">
+    <strong><%= TaskDomain.label %>:</strong> <%= @task.task_type.task_domain.title %><br>
+    <strong><%= PlaceType.label %>:</strong> <%= @task.place.place_type.title %>
+  </p>
+
+  <% unless @task.tools.nil? %>
+    <hr>
+    <% @task.tools.each do |tool| %>
+      <p class="task-tool">
+        <strong><%= tool.title %></strong><br>
+        <%= tool.description %>
+      </p>
+    <% end %>
+  <% end %>
+
+  <% unless @task.json.nil? %>
+    <hr>
+    <% @task.products.each do |prod| %>
+      <p class="task-prod">
+        <strong><%= prod[:quantity] %> x</strong> <%= prod[:title] %>
+      </p>
+    <% end %>
+  <% end %>
+
+</div>

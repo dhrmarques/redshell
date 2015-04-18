@@ -6,6 +6,9 @@ class Employee < RedShellModel
   belongs_to :employee_type
   has_many :tasks
 
+  validates :name, :last_name, :cpf, :birth, presence: true
+  validates_presence_of :employee_type
+
 	def fullname
 		self.name + " " + self.last_name
 	end
@@ -13,6 +16,10 @@ class Employee < RedShellModel
 	def masked_cpf
 		masked_cpf = self.cpf.match(/(\d{3})(\d{3})(\d{3})(\d{2})/)
 		masked_cpf[1] + "." + masked_cpf[2] + "." + masked_cpf[3] + "-" + masked_cpf[4]
+	end
+
+	def is_admin?
+		self.employee_type.code == "admin"
 	end
 
 	def self.label(field = nil)
