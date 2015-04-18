@@ -1,56 +1,17 @@
-<%= form_for(@employee) do |f| %>
-  <% if @employee.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@employee.errors.count, "error") %> prohibited this employee from being saved:</h2>
-
-      <ul>
-      <% @employee.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :name, Employee.label(:name) %><br>
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :last_name, Employee.label(:last_name) %><br>
-    <%= f.text_field :last_name %>
-  </div>
-  <div class="field">
-    <%= f.label :employee_type_id, EmployeeType.label %><br>
-    <%= f.select(:employee_type_id, options_for_select(@employee_types.collect { |et| [et.title, et.id] }, @employee.employee_type_id), prompt: "Escolha um #{EmployeeType.label.downcase}")%>
-  </div>
-  <div class="field">
-    <%= f.label :email, Employee.label(:email) %><br />
-    <%= f.email_field :email, autofocus: true %>
-  </div>
-  <div class="field">
-    <%= f.label :password, Employee.label(:password) %>
-    <% if @validatable %>
+<%= simple_form_for(@employee) do |f| %>
+  <%= f.input :name %>
+  <%= f.input :last_name, label: Employee.label(:last_name) %>
+  <%= f.association :employee_type, label: EmployeeType.label, collection: @employee_types, prompt: "Escolha um #{EmployeeType.label.downcase}", include_blank: false %>
+  <%= f.input :email, label: Employee.label(:email), autofocus: true  %><br />
+  <%= f.input :password, label: Employee.label(:password) %>
+  <% if @validatable %>
     <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
-    <%= f.password_field :password, autocomplete: "off" %>
-  </div>
-  <div class="field">
-    <%= f.label :password_confirmation, Employee.label(:password_confirmation) %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "off" %>
-  </div>
-  <div class="field">
-    <%= f.label :cpf, Employee.label(:cpf) %><br>
-    <%= f.text_field :cpf %>
-  </div>
-  <div class="field">
-    <%= f.label :rg, Employee.label(:rg) %><br>
-    <%= f.text_field :rg %>
-  </div>
-  <div class="field">
-    <%= f.label :birth, Employee.label(:birth) %><br>
-    <%= f.date_select :birth %>
-  </div>
+  <% end %>
+  <%= f.input :password_confirmation, label: Employee.label(:password_confirmation), autocomplete: "off"  %><br />
+  <%= f.input :cpf, label: Employee.label(:cpf) %>
+  <%= f.input :rg, label: Employee.label(:rg) %>
+  <%= f.input :birth, label: Employee.label(:birth), as: :date %>
   <div class="actions">
-    <%= f.submit "Salvar #{Employee.label}", class: 'btn btn-success' %>
+    <%= f.button :submit, "Salvar #{Employee.label}", class: 'btn btn-success'  %>
   </div>
 <% end %>

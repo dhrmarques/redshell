@@ -1,5 +1,8 @@
-<h1>Listando <%= (:task_types).to_s.classify.constantize.label %></h1>
+<div class="page-header">
+  <h1>Listando <%= (:task_types).to_s.classify.constantize.label %></h1>
+</div>
 
+<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{TaskType.label}".html_safe, new_task_type_path, class: "btn btn-primary" %>
 <table class="table js-data-tables">
   <thead>
     <tr>
@@ -20,7 +23,7 @@
   <tbody>
     <% @task_types.each do |task_type| %>
       <tr>
-        <td><%= link_to task_type.task_domain.title, task_domain_path(task_type.task_domain) %></td>
+        <td><% if task_type.task_domain %><%= link_to(task_type.task_domain.title, task_domain_path(task_type.task_domain)) %><% else %>-----<% end %></td>
         <td><%= task_type.title %></td>
         <td><%= readable_weekdays(task_type.week_days) %></td>
         <td><%= task_type.each_n_weeks %></td>
@@ -38,4 +41,3 @@
 
 <br>
 
-<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{TaskType.label}".html_safe, new_task_type_path, class: "btn btn-primary" %>

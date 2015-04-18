@@ -1,5 +1,8 @@
-<h1>Listando <%= (:task_domains).to_s.classify.constantize.label %></h1>
+<div class="page-header">
+  <h1>Listando <%= (:task_domains).to_s.classify.constantize.label %></h1>
+</div>
 
+<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{TaskDomain.label}".html_safe, new_task_domain_path, class: "btn btn-primary" %>
 <table class="table js-data-tables">
   <thead>
     <tr>
@@ -26,4 +29,3 @@
 
 <br>
 
-<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{TaskDomain.label}".html_safe, new_task_domain_path, class: "btn btn-primary" %>

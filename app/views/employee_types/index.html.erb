@@ -1,6 +1,9 @@
-<h1>Listando <%= (:employee_types).to_s.classify.constantize.label %></h1>
+<div class="page-header">
+  <h1>Listando <%= (:employee_types).to_s.classify.constantize.label %></h1>
+</div>
 
-<table class="table js-data-tables">
+<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{EmployeeType.label}".html_safe, new_employee_type_path, class: "btn btn-primary" %>
+<table class="table table-rounded js-data-tables">
   <thead>
     <tr>
       <th><%= EmployeeType.label :title %></th>
@@ -27,5 +30,3 @@
 </table>
 
 <br>
-
-<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{EmployeeType.label}".html_safe, new_employee_type_path, class: "btn btn-primary" %>

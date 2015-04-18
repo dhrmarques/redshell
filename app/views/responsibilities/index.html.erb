@@ -1,5 +1,8 @@
-<h1>Lista de Responsabilidades</h1>
+<div class="page-header">
+  <h1>Lista de Responsabilidades</h1>
+</div>
 
+<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{Responsibility.label}".html_safe, new_responsibility_path, class: "btn btn-primary" %>
 <table class="table js-data-tables">
   <thead>
     <tr>
@@ -25,5 +28,3 @@
 </table>
 
 <br>
-
-<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{Responsibility.label}".html_safe, new_responsibility_path, class: "btn btn-primary" %>
