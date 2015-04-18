@@ -136,7 +136,7 @@ class Task < RedShellModel
   end
 
   def self.product_arrays hsh
-    products = JSON.parse hsh["product_0_all"] # Data on every product
+    products = JSON.parse hsh["product_0_all"] unless hsh.empty? # Data on every product
     arr_save, arr_req = [], [] # JSON array to save on this object, JSON array to perform request
     
     hsh.keys.select { |k| k =~ /^product_\d+$/ }.each do |k_index|
