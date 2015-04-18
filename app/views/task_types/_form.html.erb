@@ -20,26 +20,6 @@
     <%= f.text_field :title %>
   </div>
   <div class="field">
-    <%= f.label :week_days, TaskType.label(:week_days) %><br>
-    <%= f.text_field :week_days %>
-  </div>
-  <div class="field">
-    <%= f.label :each_n_weeks, TaskType.label(:each_n_weeks) %><br>
-    <%= f.text_field :each_n_weeks %>
-  </div>
-  <div class="field">
-    <%= f.label :after_in_minutes, TaskType.label(:after_in_minutes) %><br>
-    <%= f.text_field :after_in_minutes %>
-  </div>
-  <div class="field">
-    <%= f.label :before_in_minutes, TaskType.label(:before_in_minutes) %><br>
-    <%= f.text_field :before_in_minutes %>
-  </div>
-  <div class="field">
-    <%= f.label :ignore_if_vacant, TaskType.label(:ignore_if_vacant) %><br>
-    <%= f.check_box :ignore_if_vacant %>
-  </div>
-  <div class="field">
     <%= f.label :description, TaskType.label(:description) %><br>
     <%= f.text_area :description %>
   </div>
@@ -47,8 +27,37 @@
     <!-- select_tag "people", options_from_collection_for_select(@people, "id", "name") -->
     <%= label :place_types, PlaceType.label %><br>
     <%= select_tag :place_types, options_from_collection_for_select(@place_types, :id, :title), prompt: "Escolha um #{PlaceType.label.downcase}", multiple: true%>
-    
   </div>
+
+  <p>Preencha os campos a seguir apenas se a tarefa for periódica</p>
+
+  <div id="periodic-fields" class="bg-info text-info">
+    <div id="week_days" class="field">
+      <%= f.label :week_days, TaskType.label(:week_days) %><br>
+      <% 7.times do |i| %>
+        <li><%= week_day_labels[i] %><br>
+          <%= f.check_box :week_days, {multiple: true}, i.to_s, false %>
+        </li>
+      <% end %>
+    </div>
+    <div class="field">
+      <%= f.label :each_n_weeks, TaskType.label(:each_n_weeks) %><br>
+      <%= f.select :each_n_weeks, TaskType.n_possible_weeks %>
+    </div>
+    <div class="field">
+      <%= f.label :after_in_minutes, TaskType.label(:after_in_minutes) %><br>
+      <%= f.time_select :after_in_minutes, {minute_step: 5, ignore_date: true} %>
+    </div>
+    <div class="field">
+      <%= f.label :before_in_minutes, TaskType.label(:before_in_minutes) %><br>
+      <%= f.time_select :before_in_minutes, {minute_step: 5, ignore_date: true} %>
+    </div>
+    <div class="field">
+      <li><%= f.check_box :ignore_if_vacant %>
+      <%= f.label :ignore_if_vacant, TaskType.label(:ignore_if_vacant) %></li>
+    </div>
+  </div>
+
   <div class="actions">
     <%= f.submit "Salvar #{TaskType.label}", class: 'btn btn-success' %>
   </div>
