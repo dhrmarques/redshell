@@ -15,9 +15,9 @@
   <tbody>
     <% @services.each do |service| %>
       <tr>
-        <td><%= service.after %></td>
-        <td><%= service.before %></td>
-        <td><%= service.created_at %></td>
+        <td><%= cool_date(service.after) %></td>
+        <td><%= cool_date(service.before) %></td>
+        <td><%= cool_date(service.created_at) %></td>
         <td><%= service.task_type.title %></td>
         <td><%= service.place.place_type.title %></td>
         <td><%= link_to '<i class="fa fa-eye"></i> Ver'.html_safe, service, class: "btn btn-default" %></td>

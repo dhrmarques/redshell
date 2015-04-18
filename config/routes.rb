@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     get 'todo', on: :collection
     get 'status', on: :member
     get 'overview', on: :collection
+    get 'list_products', on: :collection
   end
 
   resources :place_types

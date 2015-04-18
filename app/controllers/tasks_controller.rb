@@ -1,3 +1,4 @@
+require "net/http"
 require "uri"
 # require "resolv-replace.rb"
 
@@ -5,11 +6,11 @@ class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy, :checkin, :checkout, :status, :reset]
   before_action :set_tasks, only: [:index, :destroy]
   before_action :set_general_tools, only: [:new, :edit, :update, :create]
+  before_action :load_needed_resources, only: [:new, :edit, :create, :update]
 
   # GET /tasks
   # GET /tasks.json
   def index
-    @products = list_products
   end
 
   # GET /tasks/1
@@ -21,43 +22,49 @@ class TasksController < ApplicationController
   def new
     @task = Service.exists?(params[:sid]).blank? ? Task.new : Task.new(Service.find(params[:sid]).attributes)
     @service = Service.find(params[:sid]) unless Service.exists?(params[:sid]).blank?
-    load_needed_resources
   end
 
   # GET /tasks/1/edit
   def edit
-    load_needed_resources
   end
 
   # POST /tasks
   # POST /tasks.json
   def create
-    @task = Task.new(task_params)
-    unless task_params["tool_ids"].blank?
-      consume_products(task_params["tool_ids"])
-    end
-    respond_to do |format|
-      if @task.save
-        unless params["extra_field"]["service_id"].blank?
-          Service.find(params["extra_field"]["service_id"]).delete
+    resource_param_keys = params.keys.select { |k| k =~ /^resource_\d+/ }
+    resource_pairs = params.select { |k, v| resource_param_keys.include? k }
+    tsk_params, req_params = Task.resource_arrays(resource_pairs)
+    
+    if consume_products(req_params)
+      @task = Task.new(task_params.merge({json: tsk_params.to_json}))
+
+      respond_to do |format|
+        if @task.save
+          unless params["extra_field"]["service_id"].blank?
+            Service.find(params["extra_field"]["service_id"]).delete
+          end
+          if params[:sid]
+            Service.delete(params[:sid])
+          end
+          format.html { redirect_to @task, notice: 'Task was successfully created.' }
+          format.json { render :show, status: :created, location: @task }
+        else
+          # UNDO consume ???
+          format.html { render :new }
+          format.json { render json: @task.errors, status: :unprocessable_entity }
         end
-        if params[:sid]
-          Service.delete(params[:sid])
-        end
-        format.html { redirect_to @task, notice: 'Task was successfully created.' }
-        format.json { render :show, status: :created, location: @task }
-      else
+      end
+    else
+      respond_to do |format|
         load_needed_resources
         format.html { render :new }
-        format.json { render json: @task.errors, status: :unprocessable_entity }
       end
     end
   end
 
   # PATCH/PUT /tasks/1
   # PATCH/PUT /tasks/1.json
-  def update    
-    load_needed_resources
+  def update
     respond_to do |format|
       if @task.update(task_params)
         format.html { redirect_to @task, notice: 'Task was successfully updated.' }
@@ -138,11 +145,6 @@ class TasksController < ApplicationController
   def status
     @options = @task.urgency_params
     render :status, layout: 'mobile'
-  end
-
-  # GET /tasks/overview
-  def overview
-    #
   end
 
   def checkin
@@ -226,32 +228,26 @@ class TasksController < ApplicationController
     end
 
     #devolve se deu certo ou nao
-    def consume_products(product_ids)
-      # uri = URI.parse("http://www.google.com")
-      # response = Net::HTTP.get_response(uri)
-      # Net::HTTP.get_print(uri)
+    def consume_products(products_for_request)
       
-      product_ids.each do |product_id|
-        uri = URI('http://' + STOCK_URL + '/' + STOCK_LIST_PATH)
-        # uri = URI("http://echo.jsontest.com/")
-        request = Net::HTTP::Put.new(uri)
-        request.set_form_data({"ID" => product_id.to_s, "Quantity" => "1"})
+      products_for_request.each do |prod|
+        uri = URI('http://' + STOCK_URL + '/' + STOCK_CONSUME_PATH)
+        req_consume = Net::HTTP::Put.new(uri)
+        req_consume.set_form_data(prod)
         # Headers
-        request['Content-Type'] = 'application/json'
-        request['Cache-Control'] = 'no-cache'
+        req_consume['Content-Type'] = 'application/json'
+        req_consume['Cache-Control'] = 'no-cache'
         
         begin
-          response = Net::HTTP.delay.start(uri.hostname, uri.port){|http|
-            http.request(request)
-          }
-
-          product_list = response.body.to_json
+          response = Net::HTTP.delay.start(uri.hostname, uri.port) do |http|
+            http.request(req_consume)
+          end
 
           #OK e variaveis
           if response.kind_of? Net::HTTPSuccess
             return true
           else
-            p "Request: " + request.body.to_s
+            p "Request: " + req_consume.body.to_s
             p "Failed with: " + response.code
             false
           end
@@ -262,31 +258,51 @@ class TasksController < ApplicationController
       end
     end
 
+  public
+
     def list_products
       uri = URI('http://' + STOCK_URL + '/' + STOCK_LIST_PATH)
-      # uri = URI("http://echo.jsontest.com/")
-      request = Net::HTTP::Get.new(uri)
+      ext_req = Net::HTTP::Get.new(uri)
       # Headers
-      request['Content-Type'] = 'application/json'
-      request['Cache-Control'] = 'no-cache'
+      ext_req['Content-Type'] = 'application/json'
+      ext_req['Cache-Control'] = 'no-cache'
       
       begin
-        response = Net::HTTP.start(uri.hostname, uri.port){|http|
-          http.request(request)
-        }
-
-        product_list = response.body.to_json
-
-        #OK e variaveis
-        unless response.code.starts_with?("2")
-          product_list = [].to_json
+        raise "Serviço do outro grupo ainda não está disponível."
+        response = Net::HTTP.start(uri.hostname, uri.port) do |http|
+          http.request(ext_req)
         end
 
-        p "product_list"
-        p product_list
-        product_list
-      rescue SystemCallError, StandardError
-        p "An error occured: " + $!.inspect
+        their_response = response.body.to_json
+        unless response.code.starts_with?("2")
+          their_response ||= [].to_json
+        end
+        product_list = their_response["ResponseBody"].map do |item|
+          {id: item["ID"], title: item["Name"], quantity: item["CurrQuantity"], description: item["Description"]}
+        end
+
+        # 143.107.102.58 # Hospitabilidade/B.I.
+        # 143.107.102.47 # Estoque
+        
+        render json: {
+          resources: product_list
+        } if request.xhr?
+
+      rescue Exception => e
+        render json: {
+          resources: [
+            {id: 1, title: 'Produto de limpeza X1', quantity: 3},
+            {id: 2, title: 'Produto de limpeza X2', quantity: 9},
+            {id: 3, title: 'Produto de limpeza X3', quantity: 27},
+            {id: 4, title: 'Produto de limpeza X4', quantity: 81},
+            {id: 5, title: 'Produto de limpeza X5', quantity: 243}
+          ]
+        } if request.xhr?
+        # puts e
+        # render json: {
+        #   errors: "Não foi possível carregar os recursos externos.",
+        #   status: 422
+        # } if request.xhr?
       end
     end
 end
