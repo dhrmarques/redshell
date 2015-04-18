@@ -88,11 +88,12 @@
   </div>
 
   <% if @task.new_record? %>
-  <div id="resources-select-group" class="text-center">
+  <div id="products-select-group" class="text-center">
     <br>
+    <% label :json, Task.label(:json) %>
     <div class="row text-center">
-      <span id="fetch-resources" class="btn btn-default">
-        Carregar recursos externos
+      <span id="fetch-products" class="btn btn-default">
+        Carregar produtos externos
       </span>
     </div>
   </div>

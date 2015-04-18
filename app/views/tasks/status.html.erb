@@ -36,7 +36,8 @@
     <hr>
     <% @task.products.each do |prod| %>
       <p class="task-prod">
-        <strong><%= prod[:quantity] %> x</strong> <%= prod[:title] %>
+        <strong><%= prod[:quantity] %> x</strong> <%= prod[:title] %><br>
+        <%= prod[:description] %>
       </p>
     <% end %>
   <% end %>
