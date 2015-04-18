@@ -1,6 +1,8 @@
 class Tool < RedShellModel
 	belongs_to :task
 
+  validates :title, presence: true
+
 	def self.label(field = nil)
 		case field
 		when nil

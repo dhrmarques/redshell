@@ -20,6 +20,7 @@ class TasksController < ApplicationController
   # GET /tasks/new
   def new
     @task = Service.exists?(params[:sid]).blank? ? Task.new : Task.new(Service.find(params[:sid]).attributes)
+    @service = Service.find(params[:sid]) unless Service.exists?(params[:sid]).blank?
     load_needed_resources
   end
 
@@ -32,15 +33,22 @@ class TasksController < ApplicationController
   # POST /tasks.json
   def create
     load_needed_resources
+    
     resource_param_keys = params.keys.select { |k| k =~ /^resource_\d+/ }
     resource_pairs = params.select { |k, v| resource_param_keys.include? k }
     tsk_params, req_params = Task.resource_arrays(resource_pairs)
-    byebug
+    
     if consume_products(req_params)
       @task = Task.new(task_params.merge({json: tsk_params.to_json}))
 
       respond_to do |format|
         if @task.save
+          unless params["extra_field"]["service_id"].blank?
+            Service.find(params["extra_field"]["service_id"]).delete
+          end
+          if params[:sid]
+            Service.delete(params[:sid])
+          end
           format.html { redirect_to @task, notice: 'Task was successfully created.' }
           format.json { render :show, status: :created, location: @task }
         else
@@ -51,6 +59,7 @@ class TasksController < ApplicationController
       end
     else
       respond_to do |format|
+        load_needed_resources
         format.html { render :new }
       end
     end
@@ -242,7 +251,7 @@ class TasksController < ApplicationController
           if response.kind_of? Net::HTTPSuccess
             return true
           else
-            p "Request: " + req_consume.to_s
+            p "Request: " + req_consume.body.to_s
             p "Failed with: " + response.code
             false
           end

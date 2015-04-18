@@ -33,6 +33,7 @@ class PlacesController < ApplicationController
         format.html { redirect_to @place, notice: 'Place was successfully created.' }
         format.json { render :show, status: :created, location: @place }
       else
+        @place_types = PlaceType.where(active: true)
         format.html { render :new }
         format.json { render json: @place.errors, status: :unprocessable_entity }
       end
