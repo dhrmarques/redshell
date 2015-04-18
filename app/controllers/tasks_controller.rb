@@ -6,6 +6,7 @@ class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy, :checkin, :checkout, :status, :reset]
   before_action :set_tasks, only: [:index, :destroy]
   before_action :set_general_tools, only: [:new, :edit, :update, :create]
+  before_action :load_needed_resources, only: [:new, :edit, :create, :update]
 
   # GET /tasks
   # GET /tasks.json
@@ -21,19 +22,15 @@ class TasksController < ApplicationController
   def new
     @task = Service.exists?(params[:sid]).blank? ? Task.new : Task.new(Service.find(params[:sid]).attributes)
     @service = Service.find(params[:sid]) unless Service.exists?(params[:sid]).blank?
-    load_needed_resources
   end
 
   # GET /tasks/1/edit
   def edit
-    load_needed_resources
   end
 
   # POST /tasks
   # POST /tasks.json
   def create
-    load_needed_resources
-    
     resource_param_keys = params.keys.select { |k| k =~ /^resource_\d+/ }
     resource_pairs = params.select { |k, v| resource_param_keys.include? k }
     tsk_params, req_params = Task.resource_arrays(resource_pairs)
@@ -67,8 +64,7 @@ class TasksController < ApplicationController
 
   # PATCH/PUT /tasks/1
   # PATCH/PUT /tasks/1.json
-  def update    
-    load_needed_resources
+  def update
     respond_to do |format|
       if @task.update(task_params)
         format.html { redirect_to @task, notice: 'Task was successfully updated.' }

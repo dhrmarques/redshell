@@ -44,7 +44,7 @@
     <%= f.text_area :details %>
   </div>
 
-  <div class="row hidden">
+  <div class="row">
     <div class="col-lg-5">
       <%= f.label :tools, Task.label(:tools) %><br>
       <table id="js-selected-tools" class="table table-condensed table-bordered">
@@ -87,15 +87,16 @@
     <%= hidden_field :extra_field, :service_id, {value: params[:sid]}%>
   </div>
 
-  <div class="row text-center">
-    <span id="fetch-resources" class="btn btn-default">
-      Carregar recursos externos
-    </span>
-  </div>
-
+  <% if @task.new_record? %>
   <div id="resources-select-group" class="text-center">
-
+    <br>
+    <div class="row text-center">
+      <span id="fetch-resources" class="btn btn-default">
+        Carregar recursos externos
+      </span>
+    </div>
   </div>
+  <% end %>
 
   <div class="actions">
     <%= f.submit "Salvar #{Task.label}", class: 'btn btn-success' %>

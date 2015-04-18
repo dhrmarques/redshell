@@ -12,12 +12,12 @@
 
 <p>
   <strong><%= Task.label :after %></strong>
-  <%= @task.after %>
+  <%= cool_date(@task.after) %>
 </p>
 
 <p>
   <strong><%= Task.label :before %></strong>
-  <%= @task.before %>
+  <%= cool_date(@task.before) %>
 </p>
 
 <p>
@@ -27,12 +27,12 @@
 
 <p>
   <strong><%= Task.label :checkin_start %></strong>
-  <%= @task.checkin_start %>
+  <%= cool_date(@task.checkin_start) %>
 </p>
 
 <p>
   <strong><%= Task.label :checkin_finish %></strong>
-  <%= @task.checkin_finish %>
+  <%= cool_date(@task.checkin_finish) %>
 </p>
 
 <p>
