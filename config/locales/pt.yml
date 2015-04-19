@@ -35,3 +35,96 @@ pt:
     formats:
       short: "%H:%M"
       default: "%d/%m %H:%M"
+  activerecord: 
+    models:
+      employee: 
+        one: "Funcionário"
+        other: "Funcionários"
+      employee_type: "Tipo de Funcionário"
+      place:
+        one: "Lugar"
+        other: "Lugares"
+      place_type: 
+        one: "Tipo de Lugar"
+        other: "Tipos de Lugar"
+      service:
+        one: "Serviço"
+        other: "Serviços"
+      tool: 
+        one: "Ferramenta"
+        other: "Ferramentas"
+      task:
+        one: "Tarefa"
+        other: "Tarefas"
+      task_type: 
+        one: "Tipo de Tarefa"
+        other: "Tipos de Tarefa"
+      task_domain:
+        one: "Domínio de Tarefa"
+        other: "Domínios de Tarefa"
+      responsibility:
+        one: "Responsabilidade"
+        other: "Responsabilidades"
+    attributes:
+      employee:
+        name: "Nome"
+        email: "E-mail"
+        last_name: "Sobrenome"
+        cpf: "CPF"
+        rg: "RG"
+        birth: "Nascimento"
+        email: "E-mail"
+        password: "Senha"
+        password_confirmation: "Confirmação de senha"
+        employee_type_id: "Tipo de Funcionário"
+        active: "Ativo"
+      employee_type:
+        title: "Nome"
+        description: "Descrição" 
+        code: "Código"
+        active: "Ativo"
+      place:
+        code: "Código"
+        compl: "Complemento"
+        vacant: "Vazio?"
+        active: "Ativo"
+      place_type:
+        title: "Nome"
+        description: "Descrição"
+        restricted: "Acesso restrito?"
+        common: "Área comum?"
+      tool: 
+        title: "Nome"
+        description: "Descrição"
+        active: "Ativo"
+      task:
+        after: "Após"
+        before: "Antes de"
+        checkin_start: "Iniciada em"
+        checkin_finish: "Finalizada em"
+        details: "Detalhes"
+        json: "JSON (Recursos)"
+        active: "Ativo"
+        task_type: "Tipo de tarefa"
+        place: "Lugar"
+      task_type: 
+        title: "Título"
+        description: "Descrição"
+        week_days: "Dias da semana"
+        each_n_weeks: "Intervalo de semanas"
+        ignore_if_vacant: "Ignorar se vazio?"
+        after_in_minutes: "Após"
+        before_in_minutes: "Antes de"
+      task_domain:
+        title: "Nome"
+        description: "Descrição"
+        active: "Ativo"
+    errors:
+      messages:
+        blank: "Não pode ficar em branco"
+        record_invalid: "Validation failed: %{errors}"
+        restrict_dependent_destroy:
+          one: "Não foi possível a remoção pois depende de %{record}"
+          many: "Não foi possível a remoção pois depende de %{record}"
+  errors:
+    format: "%{message}"

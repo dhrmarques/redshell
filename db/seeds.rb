@@ -14,11 +14,11 @@ exec_list = [
 	#:employee_types,
 	#:employees,
 	#:task_domains,
-	:task_types,
-	:tasks,
-	:responsibilities,
-	:place_types_task_types,
-	:services
+	#:task_types,
+	#:tasks,
+	#:responsibilities,
+	#:place_types_task_types,
+	#:services
 ]
 verbose = true
 
@@ -258,15 +258,16 @@ if exec_list.include? :employees
 
 	employees = []
 	ntotal = (1.5 * n_places + Random.rand(0.75 * n_places)).ceil
-	percents = [0.35, 0.20, 0.20, 0.10, 0.05, 0.05, 0.05, 0.05]
+	percents = [0.35, 0.20, 0.20, 0.10, 0.05, 0.05, 0.05, 0.05, 0.05]
 	percents.each_index do |i|
 
 		et_id = ets[i].id
 		et_t = ets[i].title
+		str = ets[i].code
 		puts "(#{et_t})" if verbose
 		(100 * percents[i] / percents.sum).ceil.times do |j|
-			str = et_t[0]
-			str += et_t[8] if et_t =~ /Técnico/
+			# str = et_t[0]
+			# str += et_t[8] if et_t =~ /Técnico/
 			str.downcase!
 			e = {
 				name: "#{j} #{et_t}",

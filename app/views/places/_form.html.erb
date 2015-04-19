@@ -1,33 +1,10 @@
-<%= form_for(@place) do |f| %>
-  <% if @place.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@place.errors.count, "error") %> prohibited this place from being saved:</h2>
+<%= simple_form_for(@place) do |f| %>
+  <%= f.association :place_type, label: PlaceType.label, collection: @place_types, prompt: "Escolha um #{PlaceType.label.downcase}", include_blank: false %>
+  <%= f.input :code, label: Place.label(:code) %>
+  <%= f.input :compl, label: Place.label(:compl) %>
+  <%= f.input :vacant, label: Place.label(:vacant) %>
 
-      <ul>
-      <% @place.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :place_type_id, PlaceType.label %><br>
-    <%= f.select(:place_type_id, options_for_select(@place_types.collect { |et| [et.title, et.id] }, @place.place_type_id), prompt: "Escolha um #{PlaceType.label.downcase}")%>
-  </div>
-  <div class="field">
-    <%= f.label :code, Place.label(:code) %><br>
-    <%= f.text_field :code %>
-  </div>
-  <div class="field">
-    <%= f.label :compl, Place.label(:compl) %><br>
-    <%= f.text_field :compl %>
-  </div>
-  <div class="field">
-    <%= f.check_box :vacant, checked: true %>
-    <%= f.label :vacant, Place.label(:vacant) %>
-  </div>
   <div class="actions">
-    <%= f.submit "Salvar #{Place.label}", class: 'btn btn-success' %>
+    <%= f.button :submit, "Salvar #{Place.label}", class: 'btn btn-success' %>
   </div>
 <% end %>

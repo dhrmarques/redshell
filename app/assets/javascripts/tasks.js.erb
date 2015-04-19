@@ -35,7 +35,7 @@ var whenPickingTaskType = function() {
     type: "GET",
     data: ("type_id=" + typeId),
     success: function(data, textStatus, xhr) {
-      replaceOptions($("#task_place_id"), data.places, data.places_prompt);
+      replaceOptions($("#task_place"), data.places, data.places_prompt);
     },
     error: function() {
       alert("Erro ao carregar dados relativos ao tipo de tarefa.");

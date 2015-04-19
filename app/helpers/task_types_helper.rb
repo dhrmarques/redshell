@@ -39,8 +39,8 @@ module TaskTypesHelper
     hsh = {}
     return hsh if ttparams["week_days"].nil?
     hsh["week_days"] = parse_checkmarks ttparams["week_days"]
-    hsh["after_in_minutes"] = parse_hours_and_minutes(ptt["after_in_minutes(4i)"], ptt["after_in_minutes(5i)"])
-    hsh["before_in_minutes"] = parse_hours_and_minutes(ptt["before_in_minutes(4i)"], ptt["before_in_minutes(5i)"])
+    hsh["after_in_minutes"] = parse_hours_and_minutes(ttparams["after_in_minutes(4i)"], ttparams["after_in_minutes(5i)"])
+    hsh["before_in_minutes"] = parse_hours_and_minutes(ttparams["before_in_minutes(4i)"], ttparams["before_in_minutes(5i)"])
     hsh
   end
 

@@ -25,6 +25,8 @@
   </div>
   <div class="field">
     <!-- select_tag "people", options_from_collection_for_select(@people, "id", "name") -->
+
+    <!-- Corrigir bug ao abrir tarefas recém-criadas; não está pegando o place_type corretamente -->
     <%= label :place_types, PlaceType.label %><br>
     <%= select_tag :place_types, options_from_collection_for_select(@place_types, :id, :title), prompt: "Escolha um #{PlaceType.label.downcase}", multiple: true%>
   </div>
@@ -58,7 +60,25 @@
     </div>
   </div>
 
+
+<!-- Página a ser ajustada para SimpleForm
+<%= simple_form_for(@task_type) do |f| %>
+  <%= f.association :task_domain, label: TaskDomain.label, collection: @task_domains, prompt: "Escolha um #{TaskDomain.label.downcase}" %>
+  <%= f.input :title, label: TaskType.label(:title) %>
+  <%= f.input :week_days, label: TaskType.label(:week_days) %>
+  <%= f.input :each_n_weeks, label: TaskType.label(:each_n_weeks) %>
+  <%= f.input :after_in_minutes, label: TaskType.label(:after_in_minutes) %>
+  <%= f.input :before_in_minutes, label: TaskType.label(:before_in_minutes) %>
+  <%= f.input :ignore_if_vacant, label: TaskType.label(:ignore_if_vacant), as: :boolean %>
+  <%= f.input :description, label: TaskType.label(:description), as: :text %>
+
   <div class="actions">
-    <%= f.submit "Salvar #{TaskType.label}", class: 'btn btn-success' %>
+    <%= f.button :submit, "Salvar #{TaskType.label}", class: 'btn btn-success' %>
+  </div>
+<% end %>  
+  -->
+  
+  <div class="actions">
+    <%= f.submit "Salvar #{TaskType.label}" %>
   </div>
 <% end %>
