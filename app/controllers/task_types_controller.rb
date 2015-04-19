@@ -1,5 +1,8 @@
 class TaskTypesController < ApplicationController
+  include TaskTypesHelper
+
   before_action :set_task_type, only: [:show, :edit, :update, :destroy]
+  before_action :parse_params, only: [:create, :update]
 
   # GET /task_types
   # GET /task_types.json
@@ -73,13 +76,22 @@ class TaskTypesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_task_type
-      @task_type = TaskType.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def task_type_params
-      params.require(:task_type).permit(:title, :week_days, :each_n_weeks, :description, :task_domain_id, :ignore_if_vacant, :after_in_minutes, :before_in_minutes)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_task_type
+    @task_type = TaskType.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def task_type_params
+    @modif_params.require(:task_type).permit(:title, :week_days, :each_n_weeks, :description, :task_domain_id, :ignore_if_vacant, :after_in_minutes, :before_in_minutes)
+  end
+
+  def parse_params
+    hsh_extension = parse_form_periodic_params params["task_type"]
+    @modif_params = params.merge hsh_extension
+    @modif_params["task_type"].reject! { |k, v| k =~ /_in_minutes\(\d+i\)/ }
+    @modif_params["task_type"].delete "each_n_weeks" if hsh_extension["week_days"].nil?
+  end
+
 end

@@ -2,7 +2,7 @@
   <h1>Listando <%= (:services).to_s.classify.constantize.label %></h1>
 </div>
 
-<table class="table">
+<table class="table js-data-tables">
   <thead>
     <tr>
       <th><%= Service.label :after %></th>
@@ -10,7 +10,9 @@
       <th><%= Service.label :created_at %></th>
       <th><%= TaskType.label :task_type %></th>
       <th><%= Place.label :place %></th>
-      <th colspan="3"></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
+      <th class="no-order"></th>
     </tr>
   </thead>
 
@@ -24,7 +26,7 @@
         <td><%= service.place.place_type.title %></td>
         <td><%= link_to '<i class="fa fa-eye"></i> Ver'.html_safe, service, class: "btn btn-default" %></td>
         <td><%= link_to '<i class="fa fa-trash"></i> Remover'.html_safe, service, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
-        <td><%= link_to '<i class="fa"></i> Criar Tarefa'.html_safe, create_task_service_path(service), method: :create_task, class: "btn" %></td>
+        <td><%= link_to "<i class=\"fa fa-#{Task.icon}\"></i> Criar Tarefa".html_safe, create_task_service_path(service), method: :create_task, class: "btn btn-success" %></td>
       </tr>
     <% end %>
   </tbody>

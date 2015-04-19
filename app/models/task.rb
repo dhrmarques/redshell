@@ -138,19 +138,29 @@ class Task < RedShellModel
     JSON.parse(json, symbolize_names: true)
   end
 
-  def self.resource_arrays hsh
-    resources = JSON.parse hsh["resource_0_all"] # Data on every resource
+  def self.product_arrays hsh
+    products = JSON.parse hsh["product_0_all"] unless hsh.empty? # Data on every product
     arr_save, arr_req = [], [] # JSON array to save on this object, JSON array to perform request
     
-    hsh.keys.select { |k| k =~ /^resource_\d+$/ }.each do |k_index|
+    hsh.keys.select { |k| k =~ /^product_\d+$/ }.each do |k_index|
       qty = hsh["#{k_index}_qty"]
       next if qty.nil? # ignore if no quantity selected
       arr_req << {"ID" => hsh[k_index].to_s, "Quantity" => qty.to_s}
-      res = resources.select { |r| r["id"] == hsh[k_index].to_i }.first # find the resource among the data
-      res["quantity"] = qty.to_i # quantity consumed, not their current quantity
-      arr_save << res
+      prod = products.select { |r| r["id"] == hsh[k_index].to_i }.first # find the product among the data
+      prod["quantity"] = qty.to_i # quantity consumed, not their current quantity
+      arr_save << prod
     end
     return arr_save, arr_req
+  end
+
+  def self.products_mockup_list
+    [
+      {id: 206, title: 'BrilhoMax',     quantity: 74, description: 'Produto para limpeza de superfícies brilhantes.'},
+      {id: 274, title: 'AlbusBolhas',   quantity: 92, description: 'Sabão em pó que deixa tudo branco.'},
+      {id:  67, title: 'Terra Lustra',  quantity: 29, description: 'Lustra-móveis de origem italiana.'},
+      {id: 106, title: 'AMAciante',     quantity: 17, description: 'O amaciante para quem ama tecidos macios.'},
+      {id: 182, title: 'SupraLimpo',    quantity: 40, description: 'Produto para limpeza de superfícies diversas.'}
+    ]
   end
 
 end

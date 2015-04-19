@@ -1,5 +1,5 @@
-var resources = [];
-var nResourceSelectTags = 0;
+var products = [];
+var nProductSelectTags = 0;
 
 var replaceOptions = function(selectTag, options, prompt) {
   selectTag.empty().append('<option value="">' + prompt + '</option>');
@@ -47,21 +47,21 @@ var selector = function(n, h, q) {
   var str = "";
   if (h)
     str += "#";
-  str += "resource_" + n;
+  str += "product_" + n;
   if (q)
     str += "_qty";
   return str;
 }
 
 var rollbackSelectTags = function() {
-  var ps = $("#resources-select-group").children();
+  var ps = $("#products-select-group").children();
   for (var i = 1 ; i <= ps.length ; i++) {
     $("#" + ps[i - 1].children[0].id).attr("id", selector(i, false, false));
     $("#" + ps[i - 1].children[1].id).attr("id", selector(i, false, true));
   }
 }
 
-var whenPickingResource = function(params) {
+var whenPickingProduct = function(params) {
   var index = params.data;
   var before_change = $(this).data('pre');
   var i1 = selector(index, true, false);
@@ -69,67 +69,67 @@ var whenPickingResource = function(params) {
   var i2 = selector(index, true, true);
   $(i1).siblings().first().empty();
 
-  var resourceId = $(i1).val();
-  if (resourceId == "") {
-    if (nResourceSelectTags > 1) {
-      nResourceSelectTags -= 1;
+  var productId = $(i1).val();
+  if (productId == "") {
+    if (nProductSelectTags > 1) {
+      nProductSelectTags -= 1;
       $(i1).parent().remove();
     }
     rollbackSelectTags();
     return null;
   }
 
-  var resourceIndex = null;
+  var productIndex = null;
   var selectQtyStr = "";
-  for (var j = 0 ; j < resources.length ; j++)
-    if (resources[j].id == resourceId)
-      resourceIndex = j;
-  for (var j = 1 ; j <= resources[resourceIndex].quantity ; j++)
+  for (var j = 0 ; j < products.length ; j++)
+    if (products[j].id == productId)
+      productIndex = j;
+  for (var j = 1 ; j <= products[productIndex].quantity ; j++)
     selectQtyStr += "\n\t\t<option value='" + j + "'>" + j + "</option>";
   
   $(i2).append(selectQtyStr);
   if (before_change == "")
-    addResourcesOption([]);
+    addProductsOption([]);
   $(this).data('pre', $(this).val());
 }
 
-var addResourcesOption = function(resourcesArray) {
-  if (resources.length == 0 && resourcesArray.length > 0)
-    resources = resourcesArray;
-  nResourceSelectTags += 1;
-  var index = nResourceSelectTags;
+var addProductsOption = function(productsArray) {
+  if (products.length == 0 && productsArray.length > 0)
+    products = productsArray;
+  nProductSelectTags += 1;
+  var index = nProductSelectTags;
 
   var i1 = selector(index, false, false);
   var i2 = selector(index, false, true);
   var i3 = selector(index, true, false);
   var selectStr = "\n\t<select id='" + i1 + "' name='" + i1 + "'>";
-  selectStr += "\n\t\t<option value=''>Escolher um recurso externo...</option>";
-  for (var i = 0 ; i < resources.length ; i++) {
-    selectStr = selectStr + "\n\t\t<option value='" + resources[i].id + "'>" + resources[i].title + "</option>";
+  selectStr += "\n\t\t<option value=''>Escolher um produto externo...</option>";
+  for (var i = 0 ; i < products.length ; i++) {
+    selectStr = selectStr + "\n\t\t<option value='" + products[i].id + "'>" + products[i].title + "</option>";
   }
   selectStr += "\n\t</select>";
 
   var selectQtyStr = "\n\t<select id='" + i2 + "' name='" + i2 + "'></select>";
   
-  $("#resources-select-group").append("\n<p>" + selectStr + selectQtyStr + "\n</p>");
-  $(document).on("change", i3, nResourceSelectTags, whenPickingResource);
+  $("#products-select-group").append("\n<p>" + selectStr + selectQtyStr + "\n</p>");
+  $(document).on("change", i3, nProductSelectTags, whenPickingProduct);
   $(i3).data('pre', $(i3).val());
 }
 
-var addResourcesDataToHiddenInput = function() {
-  $("#resources-select-group").prepend("<input type='hidden' value='" +
-      JSON.stringify(resources) + "' name='resource_0_all'/>");
+var addProductsDataToHiddenInput = function() {
+  $("#products-select-group").prepend("<input type='hidden' value='" +
+      JSON.stringify(products) + "' name='product_0_all'/>");
 }
 
-var whenUsingResources = function() {
-  $("#fetch-resources").append("<i class='fa fa-spinner fa-pulse'></i>");
+var whenUsingProducts = function() {
+  $("#fetch-products").append("<i class='fa fa-spinner fa-pulse'></i>");
   $.ajax({
     url: "<%= Rails.application.routes.url_helpers.list_products_tasks_path %>",
     type: "GET",
     success: function(data, textStatus, xhr) {
-      addResourcesOption(data.resources);
-      addResourcesDataToHiddenInput();
-      $("#fetch-resources").hide();
+      addProductsOption(data.products);
+      addProductsDataToHiddenInput();
+      $("#fetch-products").hide();
     },
     error: function(data, textStatus, xhr) {
       alert("Erro:\n" + $.parseJSON(xhr.responseText).errors);
@@ -139,4 +139,4 @@ var whenUsingResources = function() {
 
 $(document).on("change", "#task_domain_id",    whenPickingTaskDomain);
 $(document).on("change", "#task_task_type_id", whenPickingTaskType);
-$(document).on("click", "#fetch-resources",    whenUsingResources);
+$(document).on("click", "#fetch-products",    whenUsingProducts);

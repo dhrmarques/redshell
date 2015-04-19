@@ -31,9 +31,9 @@ class TasksController < ApplicationController
   # POST /tasks
   # POST /tasks.json
   def create
-    resource_param_keys = params.keys.select { |k| k =~ /^resource_\d+/ }
-    resource_pairs = params.select { |k, v| resource_param_keys.include? k }
-    tsk_params, req_params = Task.resource_arrays(resource_pairs)
+    product_param_keys = params.keys.select { |k| k =~ /^product_\d+/ }
+    product_pairs = params.select { |k, v| product_param_keys.include? k }
+    tsk_params, req_params = Task.product_arrays(product_pairs)
     
     if consume_products(req_params)
       @task = Task.new(task_params.merge({json: tsk_params.to_json}))
@@ -56,7 +56,6 @@ class TasksController < ApplicationController
       end
     else
       respond_to do |format|
-        load_needed_resources
         format.html { render :new }
       end
     end
@@ -147,6 +146,7 @@ class TasksController < ApplicationController
     render :status, layout: 'mobile'
   end
 
+  # GET /tasks/1/checkin
   def checkin
     @task.checkin_start = Time.now
     respond_to do |format|
@@ -160,6 +160,7 @@ class TasksController < ApplicationController
     end
   end
 
+  # GET /tasks/1/checkout
   def checkout
     @task.checkin_finish = Time.now
     respond_to do |format|
@@ -173,6 +174,7 @@ class TasksController < ApplicationController
     end
   end
 
+  # GET /tasks/1/reset
   def reset
     @task.checkin_start = nil
     @task.checkin_finish = nil
@@ -187,122 +189,119 @@ class TasksController < ApplicationController
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_task
-      @task = Task.find(params[:id])
-    end
-
-    def set_tasks
-      if current_employee.is_admin?
-        @tasks = Task.where(active: true).includes(:employee, :task_type, :place, :tools)
-      elsif current_employee
-        @tasks = current_employee.tasks.where(active: true).includes(:employee, :task_type, :place, :tools)
-        @tasks_for_checkin = Task.where(active: true).where("after >= ? and checkin_start IS NULL", Time.now).includes(:employee, :task_type, :place, :tools)
-        @tasks_for_checkout = Task.where(active: true).where("checkin_start IS NOT NULL and checkin_finish IS NULL").includes(:employee, :task_type, :place, :tools)
+  # GET /tasks/list_products
+  def list_products
+    uri = URI('http://' + STOCK_URL + '/' + STOCK_LIST_PATH)
+    ext_req = Net::HTTP::Get.new(uri)
+    # Headers
+    ext_req['Content-Type'] = 'application/json'
+    ext_req['Cache-Control'] = 'no-cache'
+    
+    begin
+      raise "Serviço do outro grupo ainda não está disponível."
+      response = Net::HTTP.start(uri.hostname, uri.port) do |http|
+        http.request(ext_req)
       end
-    end
 
-    def set_general_tools
-      if @task
-        task_tools_ids = @task.tools.map {|t| t.id}
-      elsif params[:task]
-        task_tools_ids = params[:task][:tool_ids]
-      else
-        task_tools_ids = []
+      their_response = response.body.to_json
+      unless response.code.starts_with?("2")
+        their_response ||= [].to_json
       end
-      @general_tools = Tool.where(active: true).where.not(id: task_tools_ids)
-    end
+      product_list = their_response["ResponseBody"].map do |item|
+        {id: item["ID"], title: item["Name"], quantity: item["CurrQuantity"], description: item["Description"]}
+      end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def task_params
-      params.require(:task).permit(:after, :before, :checkin_start, :checkin_finish, :details, :employee_id, :place_id, :task_type_id, tool_ids: [])
-    end
-
-    def load_needed_resources
-      @employees = Employee.where(active: true)
-      @task_domains = TaskDomain.where(active: true)
-      @task_types = TaskType.where(active: true)
-      @place_types = PlaceType.where(active: true)
-      @places = Place.where(active: true)
-    end
-
-    #devolve se deu certo ou nao
-    def consume_products(products_for_request)
+      # 143.107.102.58 # Hospitabilidade/B.I.
+      # 143.107.102.47 # Estoque
       
-      products_for_request.each do |prod|
-        uri = URI('http://' + STOCK_URL + '/' + STOCK_CONSUME_PATH)
-        req_consume = Net::HTTP::Put.new(uri)
-        req_consume.set_form_data(prod)
-        # Headers
-        req_consume['Content-Type'] = 'application/json'
-        req_consume['Cache-Control'] = 'no-cache'
-        
-        begin
-          response = Net::HTTP.delay.start(uri.hostname, uri.port) do |http|
-            http.request(req_consume)
-          end
+      render json: {
+        products: product_list
+      } if request.xhr?
 
-          #OK e variaveis
-          if response.kind_of? Net::HTTPSuccess
-            return true
-          else
-            p "Request: " + req_consume.body.to_s
-            p "Failed with: " + response.code
-            false
-          end
-        rescue SystemCallError, StandardError
-          p "An error occured: " + $!.inspect
-          false
+    rescue Exception => e
+      assume_mockup = true # !!!!!!!!!!!!!!!!!!
+      puts e
+      if request.xhr?
+        json_response = if assume_mockup
+          {products: Task.products_mockup_list}
+        else
+          {errors: "Não foi possível carregar os produtos externos. #{e.message}", status: 422}
         end
+        render json: json_response
       end
     end
+  end
 
-  public
+  private
+  
+  # Use callbacks to share common setup or constraints between actions.
+  def set_task
+    @task = Task.find(params[:id])
+  end
 
-    def list_products
-      uri = URI('http://' + STOCK_URL + '/' + STOCK_LIST_PATH)
-      ext_req = Net::HTTP::Get.new(uri)
+  def set_tasks
+    if current_employee.is_admin?
+      @tasks = Task.where(active: true).includes(:employee, :task_type, :place, :tools)
+    elsif current_employee
+      @tasks = current_employee.tasks.where(active: true).includes(:employee, :task_type, :place, :tools)
+      @tasks_for_checkin = Task.where(active: true).where("after >= ? and checkin_start IS NULL", Time.now).includes(:employee, :task_type, :place, :tools)
+      @tasks_for_checkout = Task.where(active: true).where("checkin_start IS NOT NULL and checkin_finish IS NULL").includes(:employee, :task_type, :place, :tools)
+    end
+  end
+
+  def set_general_tools
+    if @task
+      task_tools_ids = @task.tools.map {|t| t.id}
+    elsif params[:task]
+      task_tools_ids = params[:task][:tool_ids]
+    else
+      task_tools_ids = []
+    end
+    @general_tools = Tool.where(active: true).where.not(id: task_tools_ids)
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def task_params
+    params.require(:task).permit(:after, :before, :checkin_start, :checkin_finish, :details, :employee_id, :place_id, :task_type_id, tool_ids: [])
+  end
+
+  def load_needed_resources
+    @employees = Employee.where(active: true)
+    @task_domains = TaskDomain.where(active: true)
+    @task_types = TaskType.where(active: true)
+    @place_types = PlaceType.where(active: true)
+    @places = Place.where(active: true)
+  end
+
+  #devolve se deu certo ou nao
+  def consume_products(products_for_request)
+    
+    products_for_request.each do |prod|
+      uri = URI('http://' + STOCK_URL + '/' + STOCK_CONSUME_PATH)
+      req_consume = Net::HTTP::Put.new(uri)
+      req_consume.set_form_data(prod)
       # Headers
-      ext_req['Content-Type'] = 'application/json'
-      ext_req['Cache-Control'] = 'no-cache'
+      req_consume['Content-Type'] = 'application/json'
+      req_consume['Cache-Control'] = 'no-cache'
       
       begin
-        raise "Serviço do outro grupo ainda não está disponível."
-        response = Net::HTTP.start(uri.hostname, uri.port) do |http|
-          http.request(ext_req)
+        response = Net::HTTP.delay.start(uri.hostname, uri.port) do |http|
+          http.request(req_consume)
         end
 
-        their_response = response.body.to_json
-        unless response.code.starts_with?("2")
-          their_response ||= [].to_json
+        #OK e variaveis
+        if response.kind_of? Net::HTTPSuccess
+          return true
+        else
+          p "Request: " + req_consume.body.to_s
+          p "Failed with: " + response.code
+          false
         end
-        product_list = their_response["ResponseBody"].map do |item|
-          {id: item["ID"], title: item["Name"], quantity: item["CurrQuantity"], description: item["Description"]}
-        end
-
-        # 143.107.102.58 # Hospitabilidade/B.I.
-        # 143.107.102.47 # Estoque
-        
-        render json: {
-          resources: product_list
-        } if request.xhr?
-
-      rescue Exception => e
-        render json: {
-          resources: [
-            {id: 1, title: 'Produto de limpeza X1', quantity: 3},
-            {id: 2, title: 'Produto de limpeza X2', quantity: 9},
-            {id: 3, title: 'Produto de limpeza X3', quantity: 27},
-            {id: 4, title: 'Produto de limpeza X4', quantity: 81},
-            {id: 5, title: 'Produto de limpeza X5', quantity: 243}
-          ]
-        } if request.xhr?
-        # puts e
-        # render json: {
-        #   errors: "Não foi possível carregar os recursos externos.",
-        #   status: 422
-        # } if request.xhr?
+      rescue SystemCallError, StandardError
+        p "An error occured: " + $!.inspect
+        false
       end
     end
+  end
+
 end
