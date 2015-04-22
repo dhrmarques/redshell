@@ -1,6 +1,6 @@
 <%= simple_form_for(@tool) do |f| %>
-  <%= f.input :title, label: Tool.label(:title) %>
-  <%= f.input :description, label: Tool.label(:description) %>
+  <%= f.input :title %>
+  <%= f.input :description %>
 
   <div class="actions">
     <%= f.button :submit, "Salvar #{Tool.label}", class: 'btn btn-success' %>
