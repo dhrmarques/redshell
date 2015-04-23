@@ -8,23 +8,23 @@
 
 # Uncomment the lines you wish to seed
 exec_list = [
-	:placetypes,
-	:places,
-	:tools,
-	:employee_types,
-	:employees,
-	:task_domains,
-	:task_types,
-	:tasks,
-	:responsibilities,
-	:place_types_task_types,
-	:services
+	#:placetypes,
+	#:places,
+	#:tools,
+	#:employee_types,
+	#:employees,
+	#:task_domains,
+	#:task_types,
+	#:tasks,
+	#:responsibilities,
+	#:place_types_task_types,
+	#:services
 ]
 verbose = true
 
 if verbose
-	# puts "Criando os seguintes modelos:\n\n#{exec_list}"
-	# puts "\nOk? Interrompa (Ctrl+C) enquanto pode"
+	puts "Criando os seguintes modelos:\n\n#{exec_list}"
+	puts "\nOk? Interrompa (Ctrl+C) enquanto pode"
 	5.times { print '.' ; sleep(0.5) }
 end
 
@@ -43,9 +43,10 @@ if exec_list.include? :placetypes
 		{title: 'Lazer', description: 'Lugar para atividades de lazer', restricted: false, common: true},
 		{title: 'Corredor', description: 'Dá acesso a outros lugares', restricted: false, common: true},
 		{title: 'Garagem', description: 'Contém vagas para automóveis', restricted: false, common: true},
-		{title: 'Cozinha', description: 'Lugar onde se preparam as refeições', restricted: true, common: true}
+		{title: 'Cozinha', description: 'Lugar onde se preparam as refeições', restricted: true, common: true},
+		{title: 'Escritório', description: 'Sala de um funcionário', restricted: true, common: false}
 	]
-	# puts "TIPOS DE LUGAR:\n#{placetypes}" if verbose
+	puts "TIPOS DE LUGAR:\n#{placetypes}" if verbose
 
 	pts = PlaceType.create!(placetypes)
 
@@ -62,7 +63,8 @@ if exec_list.include? :places
 	pts_ = {
 		base: pts[0], suite: pts[1], luxo: pts[2],
 		mast: pts[3], lav: pts[4], ref: pts[5],
-		lazer: pts[6], corr: pts[7], gar: pts[8], coz: pts[9]
+		lazer: pts[6], corr: pts[7], gar: pts[8],
+		coz: pts[9], esc: pts[10]
 	}
 
 	alphabet = ('A'..'F').to_a
@@ -71,17 +73,17 @@ if exec_list.include? :places
 	# Criando os quartos em cada construção
 	buildings.each do |letter|
 
-		# puts "CONSTRUÇÃO #{letter}" if verbose
+		puts "CONSTRUÇÃO #{letter}" if verbose
 		floors = 1 + Random.rand(7)
 		rooms_per_floor = [3, Random.rand(18)].max
 		washing_machine_rooms_per_floor = Random.rand(1 + (rooms_per_floor * 0.1).ceil)
 		corridors_per_floor = 1 + Random.rand(1 + Math.sqrt(rooms_per_floor).ceil)
-		# puts "#{floors} ANDARES, #{rooms_per_floor} Quartos por andar" if verbose
+		puts "#{floors} ANDARES, #{rooms_per_floor} Quartos por andar" if verbose
 		
 		# Cada construção tem vários andares
 		floors.times do |i|
 
-			# puts "\t#{i}º ANDAR" if verbose
+			puts "\t#{i}º ANDAR" if verbose
 			pt = if i == floors - 1 # último andar
 				Random.rand(10) < 2 ? pts_[:mast] : pts_[:luxo]
 			elsif i % 5 == 3 # alguns outros andares podem ser quartos de luxo
@@ -103,21 +105,21 @@ if exec_list.include? :places
 				end
 				vacant = Random.rand(100) > 60
 
-				# puts "\t\t(#{code}) #{compl} #{pt.title}..." if verbose
+				puts "\t\t(#{code}) #{compl} #{pt.title}..." if verbose
 				places << Place.create!(code: code, compl: compl, vacant: vacant, place_type_id: pt.id)
 			end
 
 			pt = pts_[:lav]
 			washing_machine_rooms_per_floor.times do |j|
 				code = "%s.L%02d" % [letter, 10 * i + j]
-				# puts "\t\t(#{code}) #{pt.title}..." if verbose
+				puts "\t\t(#{code}) #{pt.title}..." if verbose
 				places << Place.create!(code: code, place_type_id: pt.id)
 			end
 
 			pt = pts_[:corr]
 			corridors_per_floor.times do |j|
 				code = "|%s.C%02d|" % [letter, 10 * i + j]
-				# puts "\t\t(#{code}) #{pt.title}..." if verbose
+				puts "\t\t(#{code}) #{pt.title}..." if verbose
 				places << Place.create!(code: code, place_type_id: pt.id)
 			end
 		end
@@ -125,14 +127,14 @@ if exec_list.include? :places
 		pt = pts_[:gar]
 		Random.rand(1 + (floors * rooms_per_floor * 0.05).ceil).times do |i|
 			code = "%s.G%02d" % [letter, i]
-			# puts "\t(#{code}) #{pt.title}..." if verbose
+			puts "\t(#{code}) #{pt.title}..." if verbose
 			places << Place.create!(code: code, place_type_id: pt.id)
 		end
 
 		pt = pts_[:ref]
 		Random.rand(1 + (floors * rooms_per_floor * 0.01).ceil).times do |i|
 			code = "%s.R%d" % [letter, i]
-			# puts "\t(#{code}) #{pt.title}..." if verbose
+			puts "\t(#{code}) #{pt.title}..." if verbose
 			places << Place.create!(code: code, place_type_id: pt.id)
 		end
 	end
@@ -142,25 +144,25 @@ if exec_list.include? :places
 	pt = pts_[:lazer]
 	(Random.rand(1 + (places.count * 0.03).ceil) % 100).times do |l|
 		code = "Acad.%02d" % l
-		# puts "(#{code}) #{pt.title}..." if verbose
+		puts "(#{code}) #{pt.title}..." if verbose
 		places << Place.create!(code: code, place_type_id: pt.id)
 	end
 
 	(Random.rand(1 + (places.count * 0.015).ceil) % 100).times do |l|
 		code = "Bosq.%02d" % l
-		# puts "(#{code}) #{pt.title}..." if verbose
+		puts "(#{code}) #{pt.title}..." if verbose
 		places << Place.create!(code: code, place_type_id: pt.id)
 	end
 
 	(Random.rand(1 + (places.count * 0.05).ceil) % 100).times do |l|
 		code = "Pisc.%02d" % l
-		# puts "(#{code}) #{pt.title}..." if verbose
+		puts "(#{code}) #{pt.title}..." if verbose
 		places << Place.create!(code: code, place_type_id: pt.id)
 	end
 
 	(Random.rand(1 + (places.count * 0.04).ceil) % 100).times do |l|
 		code = "Saun.%02d" % l
-		# puts "(#{code}) #{pt.title}..." if verbose
+		puts "(#{code}) #{pt.title}..." if verbose
 		places << Place.create!(code: code, place_type_id: pt.id)
 	end
 
@@ -179,7 +181,7 @@ if exec_list.include? :tools
 	(Random.rand(1 + (Place.all.count * 0.3).ceil) + 1).times do |i|
 		title = "Carrinho de Limpeza #{i + 1}"
 		description = desc % Random.rand(16)
-		# puts "(#{title}) #{description}..." if verbose
+		puts "(#{title}) #{description}..." if verbose
 		tools << Tool.create!(title: title, description: description)
 	end
 
@@ -188,7 +190,7 @@ if exec_list.include? :tools
 	(Random.rand(1 + 2 * tools.count) + 1).times do |i|
 		title = "Vassoura #{i + 1}"
 		description = desc % Random.rand(16)
-		# puts "(#{title}) #{description}..." if verbose
+		puts "(#{title}) #{description}..." if verbose
 		tools << Tool.create!(title: title, description: description)
 	end
 
@@ -197,7 +199,7 @@ if exec_list.include? :tools
 	(Random.rand(1 + tools.count) + 1).times do |i|
 		title = "Escada #{i + 1}"
 		description = desc % (0.1 * Random.rand(60) + 1)
-		# puts "(#{title}) #{description}..." if verbose
+		puts "(#{title}) #{description}..." if verbose
 		tools << Tool.create!(title: title, description: description)
 	end
 
@@ -205,7 +207,15 @@ if exec_list.include? :tools
 	desc = "Caixa contendo diversas ferramentas para conserto e manutenção em geral."
 	(Random.rand(1 + tools.count) + 1).times do |i|
 		title = "Caixa de Ferramentas #{i + 1}"
-		# puts "(#{title}) #{desc}..." if verbose
+		puts "(#{title}) #{desc}..." if verbose
+		tools << Tool.create!(title: title, description: desc)
+	end
+
+		# máquinas de lavar
+	desc = "Máquina de lavar roupas com diferentes velocidades de enxágue."
+	(Random.rand(1 + tools.count) + 1).times do |i|
+		title = "Máquina de Lavar #{i + 1}"
+		puts "(#{title}) #{desc}..." if verbose
 		tools << Tool.create!(title: title, description: desc)
 	end
 
@@ -230,7 +240,7 @@ if exec_list.include? :employee_types
 	]
 	
 	ets = EmployeeType.create!(employeetypes)
-	# puts "\n\nTIPOS DE FUNCIONÁRIO:\n#{employeetypes}\n\n" if verbose
+	puts "\n\nTIPOS DE FUNCIONÁRIO:\n#{employeetypes}\n\n" if verbose
 
 		
 	
@@ -258,15 +268,16 @@ if exec_list.include? :employees
 	# Employees creation
 	employees = []
 	ntotal = (1.5 * n_places + Random.rand(0.75 * n_places)).ceil
-	percents = [0.35, 0.20, 0.20, 0.10, 0.05, 0.05, 0.05, 0.05]
+	percents = [0.35, 0.20, 0.20, 0.10, 0.05, 0.05, 0.05, 0.05, 0.05]
 	percents.each_index do |i|
 
 		et_id = ets[i].id
 		et_t = ets[i].title
-		# puts "(#{et_t})"
+		str = ets[i].code
+		puts "(#{et_t})" if verbose
 		(100 * percents[i] / percents.sum).ceil.times do |j|
-			str = et_t[0]
-			str += et_t[8] if et_t =~ /Técnico/
+			# str = et_t[0]
+			# str += et_t[8] if et_t =~ /Técnico/
 			str.downcase!
 			e = {
 				name: "#{j} #{et_t}",
@@ -277,7 +288,7 @@ if exec_list.include? :employees
 				password: "senha123",
 				employee_type_id: et_id
 			}
-			# puts "\t#{e}" if verbose
+			puts "\t#{e}" if verbose
 			employees << Employee.create!(e)
 		end
 	end		
@@ -301,7 +312,7 @@ if exec_list.include? :task_domains
 		{title: 'Encanamento', description: 'Serviços relacionados à manutenção de encanamentos.'}
 	]
 	tds = TaskDomain.create!(task_domains)
-	# puts "\n\nDOMÍNIOS DE TAREFA:\n#{task_domains}\n\n" if verbose
+	puts "\n\nDOMÍNIOS DE TAREFA:\n#{task_domains}\n\n" if verbose
 
 	
 # ======================================================================================================
@@ -339,7 +350,7 @@ if exec_list.include? :task_types
 	]
 	tts = TaskType.create!(task_types)
 
-	# puts "\n\nTIPOS DE TAREFA:\n#{task_types}\n\n" if verbose
+	puts "\n\nTIPOS DE TAREFA:\n#{task_types}\n\n" if verbose
 
 	
 # ======================================================================================================
@@ -359,12 +370,12 @@ if exec_list.include? :tasks
 	room_ids.shuffle[0..(Random.rand(room_ids.count))].each do |rid|
 		after = DateTime.now + Random.rand(3 * 60).minutes
 		before = after + 10.minutes + Random.rand(60).minutes
-		p "before: " + before.to_s + " " + "after: " + after.to_s
+		# p "before: " + before.to_s + " " + "after: " + after.to_s
 		task = {
 			after: after, before: before, place_id: rid,
 			employee_id: assistant_ids.shuffle.first, task_type_id: tts.fourth.id
 		}
-		# puts "\t#{task}" if verbose
+		puts "\t#{task}" if verbose
 
 		tasks << Task.create!(task)
 	end
@@ -377,18 +388,16 @@ if exec_list.include? :services
 
 	# Services creation
 
-	task_types ||= TaskType.all
+	tts ||= TaskType.all
 	places_ids ||= Place.all.select(:id)
-
-	tasks = []
 
 	places_ids.shuffle[0..(Random.rand(places_ids.count))].each do |pid|
 		after = DateTime.now + Random.rand(3 * 60).minutes
 		before = after + 10.minutes + Random.rand(60).minutes
 		service = {
-			after: after, before: before, place_id: pid.id, task_type_id: tts.fourth.id
+			after: after, before: before, place_id: pid.id, task_type_id: tts[Random.rand(tts.count)].id
 		}
-		# puts "\t#{task}" if verbose
+		puts "\t#{service}" if verbose
 		Service.create!(service)
 	end
 	
@@ -419,7 +428,7 @@ if exec_list.include? :responsibilities
 		hsh[etid].each do |tdid|
 
 			resp = {employee_type_id: etid, task_domain_id: tdid}
-			# puts "\t#{resp}" if verbose
+			puts "\t#{resp}" if verbose
 
 			responsibilities << Responsibility.create!(resp)
 		end
@@ -436,12 +445,13 @@ if exec_list.include? :place_types_task_types
 	pts = PlaceType.all
 	ttis = TaskType.pluck(:id).sort
 
-	pts[0].task_types << TaskType.find(ttis - ttis[6..8])
-	pts[1].task_types << TaskType.find(ttis - ttis[6..8])
-	pts[2].task_types << TaskType.find(ttis - ttis[6..8])
-	pts[3].task_types << TaskType.find(ttis - ttis[6..8])
-	pts[4].task_types << TaskType.find(ttis[9..10])
-	pts[6].task_types << TaskType.find(ttis[1..2] + ttis[6..10])
+	pts[0].task_types << TaskType.find(ttis - ttis[6..8]) 				# Quarto Base
+	pts[1].task_types << TaskType.find(ttis - ttis[6..8]) 				# Quarto Suíte
+	pts[2].task_types << TaskType.find(ttis - ttis[6..8]) 				# Quarto Luxo
+	pts[3].task_types << TaskType.find(ttis - ttis[6..8]) 				# Quarto Master
+	pts[4].task_types << TaskType.find(ttis[9..10])								# Lavanderia
+	pts[6].task_types << TaskType.find(ttis[1..2] + ttis[6..10])	# Lazer
+	pts[10].task_types << TaskType.find(ttis[0..2] + ttis[9..10])	# Escritório
 
 	pts.each { |pt| puts "PLACETYPE #{pt.title}\n" ; pt.task_types.each { |tt| puts "\t#{tt.title}" } } if verbose
 

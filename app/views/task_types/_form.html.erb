@@ -1,4 +1,69 @@
+<%= form_for(@task_type) do |f| %>
+  <% if @task_type.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@task_type.errors.count, "error") %> prohibited this task_type from being saved:</h2>
+
+      <ul>
+      <% @task_type.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :task_domain_id, TaskDomain.label %><br>
+    <%= f.select(:task_domain_id, options_for_select(@task_domains.collect { |tdom| [tdom.title, tdom.id] }, @task_type.task_domain_id), prompt: "Escolha um #{TaskDomain.label.downcase}")%>
+  </div>
+  <div class="field">
+    <%= f.label :title, TaskType.label(:title) %><br>
+    <%= f.text_field :title %>
+  </div>
+  <div class="field">
+    <%= f.label :description, TaskType.label(:description) %><br>
+    <%= f.text_area :description %>
+  </div>
+  <div class="field">
+    <!-- select_tag "people", options_from_collection_for_select(@people, "id", "name") -->
+
+    <!-- Corrigir bug ao abrir tarefas recém-criadas; não está pegando o place_type corretamente -->
+    <%= label :place_types, PlaceType.label %><br>
+    <%= select_tag :place_types, options_from_collection_for_select(@place_types, :id, :title), prompt: "Escolha um #{PlaceType.label.downcase}", multiple: true%>
+  </div>
+
+  <p>Preencha os campos a seguir apenas se a tarefa for periódica</p>
+
+  <div id="periodic-fields" class="bg-info text-info">
+    <div id="week_days" class="field">
+      <%= f.label :week_days, TaskType.label(:week_days) %><br>
+      <% 7.times do |i| %>
+        <li><%= week_day_labels[i] %><br>
+          <%= f.check_box :week_days, {multiple: true}, i.to_s, false %>
+        </li>
+      <% end %>
+    </div>
+    <div class="field">
+      <%= f.label :each_n_weeks, TaskType.label(:each_n_weeks) %><br>
+      <%= f.select :each_n_weeks, TaskType.n_possible_weeks %>
+    </div>
+    <div class="field">
+      <%= f.label :after_in_minutes, TaskType.label(:after_in_minutes) %><br>
+      <%= f.time_select :after_in_minutes, {minute_step: 5, ignore_date: true} %>
+    </div>
+    <div class="field">
+      <%= f.label :before_in_minutes, TaskType.label(:before_in_minutes) %><br>
+      <%= f.time_select :before_in_minutes, {minute_step: 5, ignore_date: true} %>
+    </div>
+    <div class="field">
+      <li><%= f.check_box :ignore_if_vacant %>
+      <%= f.label :ignore_if_vacant, TaskType.label(:ignore_if_vacant) %></li>
+    </div>
+  </div>
+
+
+<!-- Página a ser ajustada para SimpleForm
 <%= simple_form_for(@task_type) do |f| %>
+<<<<<<< HEAD
   <%= f.association :task_domain, collection: @task_domains, prompt: "Escolha um #{TaskDomain.label.downcase}" %>
   <%= f.input :title %>
   <%= f.input :week_days %>
@@ -9,5 +74,11 @@
   <%= f.input :description, as: :text %>
   <div class="actions">
     <%= f.button :submit, "Salvar #{TaskType.label}", class: 'btn btn-success' %>
+  </div>
+<% end %>  
+  -->
+  
+  <div class="actions">
+    <%= f.submit "Salvar #{TaskType.label}" %>
   </div>
 <% end %>

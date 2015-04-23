@@ -24,9 +24,9 @@
           <td><%= task_for_checkout.place.code %></td>
           <td><%= task_for_checkout.details %></td>
           <td><%= task_for_checkout.tool_list %></td>
-          <td><%= task_for_checkout.before %></td>
-          <td><%= task_for_checkout.after %></td>
-          <td><%= task_for_checkout.checkin_start %></td>
+          <td><%= cool_date(task_for_checkout.before) %></td>
+          <td><%= cool_date(task_for_checkout.after) %></td>
+          <td><%= cool_date(task_for_checkout.checkin_start) %></td>
           <td><%= link_to 'Check-out', checkout_task_path(task_for_checkout), class: "btn btn-warning" %></td>
         </tr>
       <% end %>
@@ -59,8 +59,8 @@
           <td><%= task_for_checkin.place.code %></td>
           <td><%= task_for_checkin.details %></td>
           <td><%= task_for_checkin.tool_list %></td>
-          <td><%= task_for_checkin.before %></td>
-          <td><%= task_for_checkin.after %></td>
+          <td><%= cool_date(task_for_checkin.before) %></td>
+          <td><%= cool_date(task_for_checkin.after) %></td>
           <td><%= link_to 'Check-in', checkin_task_path(task_for_checkin), class: "btn btn-success" %></td>
         </tr>
       <% end %>
@@ -98,11 +98,11 @@
       <tr>
         <td><%= link_to task.task_type.title, task_type_path(task.task_type) %></td>
         <td><%= link_to task.place.code, place_path(task.place) %></td>
-        <td><%= task.after %></td>
-        <td><%= task.before %></td>
+        <td><%= cool_date(task.after) %></td>
+        <td><%= cool_date(task.before) %></td>
         <td><%= link_to task.employee.fullname, employee_path(task.employee) unless task.employee.nil?%></td>
-        <td><%= task.checkin_start %></td>
-        <td><%= task.checkin_finish %></td>
+        <td><%= cool_date(task.checkin_start) %></td>
+        <td><%= cool_date(task.checkin_finish) %></td>
         <td><%= task.details %></td>
         <td><%= task.tool_list %></td>
         <td><%= link_to 'Resetar', reset_task_path(task), class: "btn btn-default" %></td>

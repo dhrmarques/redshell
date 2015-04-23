@@ -10,18 +10,15 @@ Rails.application.routes.draw do
   resources :task_types
 
   resources :tasks do
-    member do
-      get 'checkin'
-      get 'checkout'
-      get 'reset'
-      get 'status'
-    end
-    collection do 
-      get 'pick_domain'
-      get 'pick_type'
-      get 'todo'
-      get 'overview'
-    end
+    get 'pick_domain', on: :collection
+    get 'pick_type',   on: :collection
+    get 'checkin',   on: :member
+    get 'checkout',   on: :member
+    get 'reset',   on: :member
+    get 'todo', on: :collection
+    get 'status', on: :member
+    get 'overview', on: :collection
+    get 'list_products', on: :collection
   end
 
   resources :place_types

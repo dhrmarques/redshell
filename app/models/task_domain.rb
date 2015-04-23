@@ -2,6 +2,8 @@ class TaskDomain < RedShellModel
 	has_many :task_types
 	has_many :employee_types, through: :responsiblities
 
+  validates :title,  presence: true
+
 	def self.label(field = nil)
 		case field
 		when nil

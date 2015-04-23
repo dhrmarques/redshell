@@ -6,11 +6,16 @@ class Task < RedShellModel
 	belongs_to :place
   belongs_to :task_type
   has_many :tools
-  
+
+  validates_presence_of :employee
+  validates_presence_of :place
+  validates_presence_of :task_type
+
 #  validate :start_task_time_and_after_validation
   validate :after_vs_before_validation, :on => :create
   validate :negative_time_validation, :on => :create
 #  validate :checkin_start_validation
+
   validates :task_type_id, :presence => true 
   validates :place_id, :presence => true
   validates :employee_id, :presence => true
@@ -131,6 +136,31 @@ class Task < RedShellModel
   def products
     return nil if json.nil?
     JSON.parse(json, symbolize_names: true)
+  end
+
+  def self.product_arrays hsh
+    products = JSON.parse hsh["product_0_all"] unless hsh.empty? # Data on every product
+    arr_save, arr_req = [], [] # JSON array to save on this object, JSON array to perform request
+    
+    hsh.keys.select { |k| k =~ /^product_\d+$/ }.each do |k_index|
+      qty = hsh["#{k_index}_qty"]
+      next if qty.nil? # ignore if no quantity selected
+      arr_req << {"ID" => hsh[k_index].to_s, "Quantity" => qty.to_s}
+      prod = products.select { |r| r["id"] == hsh[k_index].to_i }.first # find the product among the data
+      prod["quantity"] = qty.to_i # quantity consumed, not their current quantity
+      arr_save << prod
+    end
+    return arr_save, arr_req
+  end
+
+  def self.products_mockup_list
+    [
+      {id: 206, title: 'BrilhoMax',     quantity: 74, description: 'Produto para limpeza de superfícies brilhantes.'},
+      {id: 274, title: 'AlbusBolhas',   quantity: 92, description: 'Sabão em pó que deixa tudo branco.'},
+      {id:  67, title: 'Terra Lustra',  quantity: 29, description: 'Lustra-móveis de origem italiana.'},
+      {id: 106, title: 'AMAciante',     quantity: 17, description: 'O amaciante para quem ama tecidos macios.'},
+      {id: 182, title: 'SupraLimpo',    quantity: 40, description: 'Produto para limpeza de superfícies diversas.'}
+    ]
   end
 
 end
