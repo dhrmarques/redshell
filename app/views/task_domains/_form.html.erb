@@ -1,6 +1,6 @@
 <%= simple_form_for(@task_domain) do |f| %>
-  <%= f.input :title, label: TaskDomain.label(:title) %>
-  <%= f.input :description, label: TaskDomain.label(:description) %>
+  <%= f.input :title %>
+  <%= f.input :description %>
 
   <div class="actions">
     <%= f.button :submit, "Salvar #{TaskDomain.label}", class: 'btn btn-success' %>

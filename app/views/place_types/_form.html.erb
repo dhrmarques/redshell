@@ -1,8 +1,8 @@
 <%= simple_form_for(@place_type) do |f| %>
-  <%= f.input :title, label: PlaceType.label(:title) %>
-  <%= f.input :description, label: PlaceType.label(:description) %>
-  <%= f.input :restricted, label: PlaceType.label(:restricted), as: :boolean %>
-  <%= f.input :common, label: PlaceType.label(:common), as: :boolean %>
+  <%= f.input :title %>
+  <%= f.input :description %>
+  <%= f.input :restricted, as: :boolean %>
+  <%= f.input :common, as: :boolean %>
 
   <div class="actions">
     <%= f.button :submit, "Salvar #{PlaceType.label}", class: 'btn btn-success'  %>

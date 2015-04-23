@@ -1,6 +1,6 @@
 <%= simple_form_for(@responsibility) do |f| %>
-  <%= f.association :task_domain, label: TaskDomain.label, collection: @task_domains, prompt: 'Escolha um domínio de tarefa', include_blank: false %>
-  <%= f.association :employee_type, label: EmployeeType.label, collection: @employee_types, prompt: 'Escolha um tipo de funcionário', include_blank: false  %>
+  <%= f.association :task_domain, collection: @task_domains, prompt: 'Escolha um domínio de tarefa', include_blank: false %>
+  <%= f.association :employee_type, collection: @employee_types, prompt: 'Escolha um tipo de funcionário', include_blank: false  %>
   
   <div class="actions">
     <%= f.button :submit, "Salvar #{Responsibility.label}", class: 'btn btn-success' %>

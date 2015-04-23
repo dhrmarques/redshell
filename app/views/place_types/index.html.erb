@@ -2,7 +2,7 @@
   <h1>Listando <%= (:place_types).to_s.classify.constantize.label %></h1>
 </div>
 
-<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{PlaceType.label}".html_safe, new_place_type_path, class: "btn btn-primary" %>
+<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Criar #{PlaceType.label}".html_safe, new_place_type_path, class: "btn btn-primary" %>
 <table class="table js-data-tables">
   <thead>
     <tr>

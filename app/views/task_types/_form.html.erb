@@ -63,15 +63,15 @@
 
 <!-- Página a ser ajustada para SimpleForm
 <%= simple_form_for(@task_type) do |f| %>
-  <%= f.association :task_domain, label: TaskDomain.label, collection: @task_domains, prompt: "Escolha um #{TaskDomain.label.downcase}" %>
-  <%= f.input :title, label: TaskType.label(:title) %>
-  <%= f.input :week_days, label: TaskType.label(:week_days) %>
-  <%= f.input :each_n_weeks, label: TaskType.label(:each_n_weeks) %>
-  <%= f.input :after_in_minutes, label: TaskType.label(:after_in_minutes) %>
-  <%= f.input :before_in_minutes, label: TaskType.label(:before_in_minutes) %>
-  <%= f.input :ignore_if_vacant, label: TaskType.label(:ignore_if_vacant), as: :boolean %>
-  <%= f.input :description, label: TaskType.label(:description), as: :text %>
-
+<<<<<<< HEAD
+  <%= f.association :task_domain, collection: @task_domains, prompt: "Escolha um #{TaskDomain.label.downcase}" %>
+  <%= f.input :title %>
+  <%= f.input :week_days %>
+  <%= f.input :each_n_weeks %>
+  <%= f.input :after_in_minutes %>
+  <%= f.input :before_in_minutes %>
+  <%= f.input :ignore_if_vacant, as: :boolean %>
+  <%= f.input :description, as: :text %>
   <div class="actions">
     <%= f.button :submit, "Salvar #{TaskType.label}", class: 'btn btn-success' %>
   </div>

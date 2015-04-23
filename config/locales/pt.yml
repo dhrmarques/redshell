@@ -35,6 +35,7 @@ pt:
     formats:
       short: "%H:%M"
       default: "%d/%m %H:%M"
+  employee_type: "Tipo de Funcionário"
   activerecord: 
     models:
       employee: 
@@ -76,7 +77,7 @@ pt:
         email: "E-mail"
         password: "Senha"
         password_confirmation: "Confirmação de senha"
-        employee_type_id: "Tipo de Funcionário"
+        employee_type: "Tipo de Funcionário"
         active: "Ativo"
       employee_type:
         title: "Nome"
@@ -85,6 +86,7 @@ pt:
         active: "Ativo"
       place:
         code: "Código"
+        place_type: "Tipo de Lugar"
         compl: "Complemento"
         vacant: "Vazio?"
         active: "Ativo"
@@ -93,6 +95,9 @@ pt:
         description: "Descrição"
         restricted: "Acesso restrito?"
         common: "Área comum?"
+      responsibility:
+        task_domain: "Domínio de Tarefa"
+        employee_type: "Tipo de Funcionário"
       tool: 
         title: "Nome"
         description: "Descrição"
@@ -105,10 +110,13 @@ pt:
         details: "Detalhes"
         json: "JSON (Recursos)"
         active: "Ativo"
+        employee: "Funcionário"
+        task_domain: "Domínio de Tarefa"
         task_type: "Tipo de tarefa"
         place: "Lugar"
       task_type: 
         title: "Título"
+        task_domain: "Domínio de Tarefa"
         description: "Descrição"
         week_days: "Dias da semana"
         each_n_weeks: "Intervalo de semanas"
@@ -116,7 +124,7 @@ pt:
         after_in_minutes: "Após"
         before_in_minutes: "Antes de"
       task_domain:
-        title: "Nome"
+        title: "Título"
         description: "Descrição"
         active: "Ativo"
     errors:

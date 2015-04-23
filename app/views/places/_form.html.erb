@@ -1,8 +1,8 @@
 <%= simple_form_for(@place) do |f| %>
-  <%= f.association :place_type, label: PlaceType.label, collection: @place_types, prompt: "Escolha um #{PlaceType.label.downcase}", include_blank: false %>
-  <%= f.input :code, label: Place.label(:code) %>
-  <%= f.input :compl, label: Place.label(:compl) %>
-  <%= f.input :vacant, label: Place.label(:vacant) %>
+  <%= f.association :place_type, collection: @place_types, prompt: "Escolha um #{PlaceType.label.downcase}", include_blank: false %>
+  <%= f.input :code %>
+  <%= f.input :compl %>
+  <%= f.input :vacant %>
 
   <div class="actions">
     <%= f.button :submit, "Salvar #{Place.label}", class: 'btn btn-success' %>
