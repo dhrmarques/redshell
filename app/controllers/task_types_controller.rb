@@ -24,6 +24,7 @@ class TaskTypesController < ApplicationController
 
   # GET /task_types/1/edit
   def edit
+    @place_types = PlaceType.all
     @task_domains = TaskDomain.where(active: true)
   end
 
