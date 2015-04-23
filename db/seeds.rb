@@ -8,17 +8,17 @@
 
 # Uncomment the lines you wish to seed
 exec_list = [
-	# :placetypes,
-	# :places,
-	# :tools,
-	# :employee_types,
-	# :employees,
-	# :task_domains,
-	# :task_types,
+	:placetypes,
+	:places,
+	:tools,
+	:employee_types,
+	:employees,
+	:task_domains,
+	:task_types,
 	:tasks,
-	# :responsibilities,
-	# :place_types_task_types,
-	# :services
+	:responsibilities,
+	:place_types_task_types,
+	:services
 ]
 verbose = true
 
@@ -240,12 +240,22 @@ end
 if exec_list.include? :employees
 # ======================================================================================================
 
-	# Employees creation
-
 	ets ||= EmployeeType.all
 	n_places = Place.all.count
 	alphabet = ('a'..'z').to_a
 
+	#admin creation
+	aet_id = EmployeeType.where(code: "admin").first().id
+	admin = Employee.create!({
+		name: "Admin",
+		last_name: "Admin",
+		cpf: "123.123.123-12",
+		birth: Date.today - 20.years,
+		email: "admin@coopel.com.br",
+		password: "senha123",
+		employee_type_id: aet_id})
+
+	# Employees creation
 	employees = []
 	ntotal = (1.5 * n_places + Random.rand(0.75 * n_places)).ceil
 	percents = [0.35, 0.20, 0.20, 0.10, 0.05, 0.05, 0.05, 0.05]

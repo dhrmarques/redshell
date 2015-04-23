@@ -2,7 +2,7 @@
   <h1>Listando <%= (:employee_types).to_s.classify.constantize.label %></h1>
 </div>
 
-<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Novo #{EmployeeType.label}".html_safe, new_employee_type_path, class: "btn btn-primary" %>
+<%= link_to "<i class=\"fa fa-plus-circle fa-lg\"></i> Criar #{EmployeeType.label}".html_safe, new_employee_type_path, class: "btn btn-primary" %>
 <table class="table table-rounded js-data-tables">
   <thead>
     <tr>
