@@ -1,5 +1,6 @@
 class ServicesController < ApplicationController
   protect_from_forgery unless: -> { request.format.json? }
+  skip_before_action :verify_permissions, only: [:list, :create]
 
   def index
     @services = Service.all.includes(:place, :task_type)
