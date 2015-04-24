@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150416234447) do
+ActiveRecord::Schema.define(version: 20150416234451) do
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0, null: false
@@ -56,7 +56,7 @@ ActiveRecord::Schema.define(version: 20150416234447) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.integer  "employee_type_id"
+    t.integer  "employee_type_id",                      null: false
     t.boolean  "active",                 default: true
   end
 
@@ -88,7 +88,7 @@ ActiveRecord::Schema.define(version: 20150416234447) do
     t.string   "compl"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "place_type_id"
+    t.integer  "place_type_id",                null: false
     t.boolean  "vacant"
     t.boolean  "active",        default: true
   end
@@ -134,7 +134,7 @@ ActiveRecord::Schema.define(version: 20150416234447) do
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "task_domain_id"
+    t.integer  "task_domain_id",                   null: false
     t.boolean  "ignore_if_vacant"
     t.integer  "after_in_minutes"
     t.integer  "before_in_minutes"
@@ -154,9 +154,9 @@ ActiveRecord::Schema.define(version: 20150416234447) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "json"
-    t.integer  "place_id"
-    t.integer  "employee_id"
-    t.integer  "task_type_id"
+    t.integer  "place_id",                      null: false
+    t.integer  "employee_id",                   null: false
+    t.integer  "task_type_id",                  null: false
     t.boolean  "active",         default: true
   end
 
