@@ -86,3 +86,8 @@ instantiate a running app:
 ```
 heroku ps:scale web=1
 ```
+###Debugging it
+```
+heroku logs
+```
+it shows the servers messages (what it got, posted, etc)
